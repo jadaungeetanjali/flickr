@@ -3,8 +3,6 @@ package com.example.pc.flickr;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -22,7 +20,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.security.AccessController.getContext;
 
 public class MoviesDetails extends AppCompatActivity {
     public ArrayAdapter<String> movieAdapter;
@@ -50,7 +47,7 @@ public class MoviesDetails extends AppCompatActivity {
                 String title = popularMovie.get("title").toString();
                 String release_date = popularMovie.get("release_date").toString();
                 String vote_count = popularMovie.get("vote_count").toString();
-                movieArray.add(title + "" + release_date + "" + vote_count);
+                movieArray.add(title + " " + release_date + " " + vote_count);
             }
             return movieArray;
         }
