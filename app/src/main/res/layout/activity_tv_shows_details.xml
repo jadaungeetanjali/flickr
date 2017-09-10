@@ -3,13 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.pc.flickr.MoviesDetails"
+    tools:context="com.example.pc.flickr.TvShowsDetails"
     android:orientation="vertical">
 
     <ListView
+        android:id="@+id/tvShowsList"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/movieList">
+        android:layout_height="wrap_content">
+
     </ListView>
 
 </LinearLayout>
