@@ -1,9 +1,12 @@
 package com.example.pc.flickr;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import org.json.JSONArray;
@@ -20,51 +23,55 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class MoviesDetails extends AppCompatActivity {
-    public ArrayAdapter<String> movieAdapter;
+public class TvShowsDetails extends AppCompatActivity {
+    public ArrayAdapter<String> tvShowsAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_movies_details);
-        ListView list = (ListView) findViewById(R.id.movieList);
+        setContentView(R.layout.activity_tv_shows_details);
+
+        ListView list = (ListView) findViewById(R.id.tvShowsList);
         List<String> arrayList = new ArrayList<String>();
-        movieAdapter = new ArrayAdapter<String>(this, R.layout.movies_textview, arrayList);
-        list.setAdapter(movieAdapter);
-        String url = "https://api.themoviedb.org/3/movie/popular?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US&page=1";
-        MovieData callMovieData = new MovieData();
-        callMovieData.execute(url);
+        for (int i = 0; i < 10; i++){
+            arrayList.add("TV SHOW = " +i);
+        }
+        tvShowsAdapter = new ArrayAdapter<String>(this, R.layout.tv_shows_textview, arrayList);
+        list.setAdapter(tvShowsAdapter);
+
+        TvShowsData callTvShowsData = new TvShowsData();
+        callTvShowsData.execute();
     }
-    public class  MovieData extends AsyncTask<String, Void, String>{
-        private ArrayList<String> jsonMovieParser(String jsonMovie)throws JSONException{
-            ArrayList<String> movieArray = new ArrayList<>();
-            JSONObject movieObject = new JSONObject(jsonMovie);
-            JSONArray list = movieObject.getJSONArray("results");
+    public class  TvShowsData extends AsyncTask<Void, Void, String> {
+        private ArrayList<String> jsonTvShowsParser(String jsontvShows)throws JSONException {
+            ArrayList<String> tvShowsArray = new ArrayList<>();
+            JSONObject tvShowsObject = new JSONObject(jsontvShows);
+            JSONArray list = tvShowsObject.getJSONArray("results");
+
             for (int i = 0; i < list.length();i++){
-                JSONObject popularMovie = list.getJSONObject(i);
-                String title = popularMovie.get("title").toString();
-                String release_date = popularMovie.get("release_date").toString();
-                String vote_average = popularMovie.get("vote_average").toString();
-                movieArray.add(title + "\n" + release_date + "\n" + vote_average + "\n");
+                JSONObject populartvShows = list.getJSONObject(i);
+                String title = populartvShows.get("name").toString();
+                String release_date = populartvShows.get("overview").toString();
+                String vote_average = populartvShows.get("vote_average").toString();
+                tvShowsArray.add(title + "\n" + release_date + "\n" + vote_average);
             }
-            return movieArray;
+            return tvShowsArray;
         }
 
         @Override
-        protected String doInBackground(String... params) {
+        protected String doInBackground(Void... params) {
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
-            String jsonMovie = null;
+            String jsonTvShows = null;
             try {
 
-                URL url = new URL(params[0]);
+                URL url = new URL("https://api.themoviedb.org/3/tv/popular?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US&page=1");
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();
 
                 InputStream stream = urlConnection.getInputStream();
                 if (stream == null){
-                    jsonMovie = null;
+                    jsonTvShows = null;
                 }
                 StringBuffer stringBuffer = new StringBuffer();
                 reader = new BufferedReader(new InputStreamReader(stream));
@@ -73,9 +80,9 @@ public class MoviesDetails extends AppCompatActivity {
                     stringBuffer.append(inputLine + "\n");
                 }
                 if (stringBuffer.length() == 0){
-                    jsonMovie = null;
+                    jsonTvShows = null;
                 }
-                jsonMovie = stringBuffer.toString();
+                jsonTvShows = stringBuffer.toString();
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -93,20 +100,19 @@ public class MoviesDetails extends AppCompatActivity {
                     }
                 }
             }
-            return jsonMovie;
+            return jsonTvShows;
         }
-        protected void onPostExecute(String jsonMovie){
-            ArrayList<String> movieList = null;
+        protected void onPostExecute(String jsonTvShows){
+            ArrayList<String> tvShowsList = null;
             try {
-                movieList = jsonMovieParser(jsonMovie);
+                tvShowsList = jsonTvShowsParser(jsonTvShows);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            if (movieList.size() != 0){
-                movieAdapter.clear();
-                movieAdapter.addAll(movieList);
+            if (tvShowsList.size() != 0){
+                tvShowsAdapter.clear();
+                tvShowsAdapter.addAll(tvShowsList);
             }
         }
     }
 }
-

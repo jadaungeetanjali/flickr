@@ -20,5 +20,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        Button tvShowsButton = (Button) findViewById(R.id.tv_shows);
+        tvShowsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, TvShowsDetails.class);
+                startActivity(intent);
+            }
+        });
     }
 }
