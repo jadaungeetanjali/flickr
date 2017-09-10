@@ -15,9 +15,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-/**
- * Created by deepn on 9/10/2017.
- */
+
 
 public class FetchTask extends AsyncTask<String, Void, String>{
 
@@ -25,7 +23,7 @@ public class FetchTask extends AsyncTask<String, Void, String>{
     protected String doInBackground(String... params) {
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
-        String jsonMovie = null;
+        String jsonData = null;
         try {
 
             URL url = new URL(params[0]);
@@ -35,7 +33,7 @@ public class FetchTask extends AsyncTask<String, Void, String>{
 
             InputStream stream = urlConnection.getInputStream();
             if (stream == null){
-                jsonMovie = null;
+                jsonData = null;
             }
             StringBuffer stringBuffer = new StringBuffer();
             reader = new BufferedReader(new InputStreamReader(stream));
@@ -44,9 +42,9 @@ public class FetchTask extends AsyncTask<String, Void, String>{
                 stringBuffer.append(inputLine + "\n");
             }
             if (stringBuffer.length() == 0){
-                jsonMovie = null;
+                jsonData = null;
             }
-            jsonMovie = stringBuffer.toString();
+            jsonData = stringBuffer.toString();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -64,9 +62,9 @@ public class FetchTask extends AsyncTask<String, Void, String>{
                 }
             }
         }
-        return jsonMovie;
+        return jsonData;
     }
-    protected void onPostExecute(String jsonMovie) {
-        super.onPostExecute(jsonMovie);
+    protected void onPostExecute(String jsonData) {
+        super.onPostExecute(jsonData);
     }
 }

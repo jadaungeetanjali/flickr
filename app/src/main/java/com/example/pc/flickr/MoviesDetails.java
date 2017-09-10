@@ -24,7 +24,6 @@ public class MoviesDetails extends AppCompatActivity {
         List<String> arrayList = new ArrayList<String>();
         String url = "https://api.themoviedb.org/3/movie/popular?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US&page=1";
         FetchTask callMovieData = new FetchTask();
-
         callMovieData.execute(url);
         try {
             String data = callMovieData.get().toString();
