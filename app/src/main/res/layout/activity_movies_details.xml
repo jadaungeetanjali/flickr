@@ -12,6 +12,4 @@
         android:id="@+id/movieList">
     </ListView>
 
-    </LinearLayout>
-
-
+</LinearLayout>
