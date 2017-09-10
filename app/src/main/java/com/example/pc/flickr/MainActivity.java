@@ -28,5 +28,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        Button celebritiesButton = (Button) findViewById(R.id.celebrities);
+        celebritiesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, Celebrities.class);
+                startActivity(intent);
+            }
+        });
     }
 }

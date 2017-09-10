@@ -50,9 +50,9 @@ public class TvShowsDetails extends AppCompatActivity {
         for (int i = 0; i < list.length();i++){
             JSONObject populartvShows = list.getJSONObject(i);
             String title = populartvShows.get("name").toString();
-            String release_date = populartvShows.get("overview").toString();
+            String first_air_date = populartvShows.get("first_air_date").toString();
             String vote_average = populartvShows.get("vote_average").toString();
-            tvShowsArray.add(title + "\n" + release_date + "\n" + vote_average);
+            tvShowsArray.add(title + "\n" + first_air_date + "\n" + vote_average);
         }
         return tvShowsArray;
     }
