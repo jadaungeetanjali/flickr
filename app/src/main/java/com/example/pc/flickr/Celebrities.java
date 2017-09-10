@@ -45,7 +45,7 @@ public class Celebrities extends AppCompatActivity {
         for (int i = 0; i < list.length();i++){
             JSONObject popularCelebrities = list.getJSONObject(i);
             String name = popularCelebrities.get("name").toString();
-            JSONObject known_for = (JSONObject) popularCelebrities.get("known_for");
+            JSONObject known_for = popularCelebrities.getJSONArray("known_for").getJSONObject(0);
             String movie = known_for.get("title").toString();
             String vote_average = known_for.get("vote_average").toString();
             celebritiesArray.add(name + "\n" + movie + "\n" + vote_average + "\n");
