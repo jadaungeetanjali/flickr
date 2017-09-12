@@ -38,13 +38,13 @@ public class MainActivity extends AppCompatActivity {
 
         Bundle tvBundle = new Bundle();
         String[] tvUrls = {
-                "https://api.themoviedb.org/3/tv/airing_today?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US&page=1",
                 "https://api.themoviedb.org/3/tv/popular?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US&page=1",
+                "https://api.themoviedb.org/3/tv/airing_today?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US&page=1",
                 "https://api.themoviedb.org/3/tv/top_rated?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US&page=1",
                 "https://api.themoviedb.org/3/tv/on_the_air?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US&page=1"
         };
         String[] tvHeading = {"Airing Today", "Popular", "Top Rated", "On The Air"};
-        moviesBundle.putString("type","tv");
+        tvBundle.putString("type","tv");
         tvBundle.putStringArray("urls", tvUrls);
         tvBundle.putStringArray("urlHeading", tvHeading);
         final HorizontalListFragment tvFragment =new HorizontalListFragment();
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                 "https://api.themoviedb.org/3/person/popular?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US&page=1"
         };
         String[] celebsHeading = {"Popular"};
-        moviesBundle.putString("type","celebs");
+        celebsBundle.putString("type","celebs");
         celebsBundle.putStringArray("urls", celebsUrls);
         celebsBundle.putStringArray("urlHeading", celebsHeading);
         final HorizontalListFragment celebsFragment =new HorizontalListFragment();
