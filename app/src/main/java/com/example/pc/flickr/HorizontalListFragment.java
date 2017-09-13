@@ -3,6 +3,7 @@ package com.example.pc.flickr;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -17,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +26,7 @@ import android.widget.Toast;
 import com.example.pc.flickr.R;
 import com.example.pc.flickr.data.MovieDbApiContract;
 import com.example.pc.flickr.data.MovieDbHelper;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -135,7 +138,8 @@ public class HorizontalListFragment extends Fragment {
             }*/
             holder.childRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
             recyclerView.setItemAnimator(new DefaultItemAnimator());
-            childAdapter = new HorizontalListFragment.ChildMainAdapter(childArrayList);
+            Cursor cursor = getData(type,str);
+            childAdapter = new HorizontalListFragment.ChildMainAdapter(cursor, cursor.getCount());
             holder.childRecyclerView.setAdapter(childAdapter);
 
         }
@@ -147,21 +151,38 @@ public class HorizontalListFragment extends Fragment {
     }
     private class ChildMainAdapter extends RecyclerView.Adapter<ChildMainAdapter.MyViewHolder> {
 
-        private ArrayList<String> arrayList;
+        private Cursor cursor;
+        private int mCount;
+        private List<DataModel> list;
+
 
         class MyViewHolder extends RecyclerView.ViewHolder{
             TextView childViewTitle;
+            TextView childViewVote;
+            TextView childViewPopularity;
+            ImageView childImageView;
             public MyViewHolder(View itemview){
                 super(itemview);
                 childViewTitle = (TextView) itemview.findViewById(R.id.main_child_title_textView);
-
+                childViewVote = (TextView) itemview.findViewById(R.id.main_child_vote_textView);
+                childViewPopularity = (TextView) itemview.findViewById(R.id.main_child_popularity_textView);
+                childImageView = (ImageView) itemview.findViewById(R.id.main_child_imageView);
             }
         }
 
-        public ChildMainAdapter(ArrayList<String> arrayList){
-            this.arrayList = arrayList;
+        public ChildMainAdapter(Cursor cursor, int mCount){
+            this.mCount = mCount;
+            this.cursor = cursor;
+            dataProvider();
         }
 
+        public void dataProvider(){
+            list = new ArrayList<>();
+            while (cursor.moveToNext()){
+                DataModel dataModel = new DataModel(cursor.getString(2),cursor.getString(3),cursor.getString(6),cursor.getString(8));
+                list.add(dataModel);
+            }
+        }
         @Override
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
@@ -171,16 +192,64 @@ public class HorizontalListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
-            String str = arrayList.get(position);
-            holder.childViewTitle.setText(str);
-
+            DataModel dataModel = list.get(position);
+            holder.childViewTitle.setText(dataModel.getName());
+            holder.childViewVote.setText(dataModel.getVote_avg());
+            holder.childViewPopularity.setText(dataModel.getPopularity());
+            Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w500"+dataModel.getImg_url()).resize(150, 170)
+                    .centerCrop()
+                    .into(holder.childImageView);
         }
 
         @Override
         public int getItemCount() {
-            return arrayList.size();
+            return mCount;
         }
     }
+    private class DataModel{
+        public String name;
+        public String popularity;
+        public String vote_avg;
+        public String img_url;
+        public DataModel(String name,String popularity,String vote_avg,String img_url){
+            this.img_url = img_url;
+            this.name = name;
+            this.vote_avg = vote_avg;
+            this.popularity = popularity;
+        }
+
+        public String getName(){
+            return name;
+        }
+        public String getPopularity(){
+            return popularity;
+        }
+
+        public String getImg_url() {
+            return img_url;
+        }
+
+        public String getVote_avg() {
+            return vote_avg;
+        }
+    }
+    private Cursor getData(String type, String sub_type){
+        MovieDbHelper movieDbHelper = new MovieDbHelper(getContext());
+        SQLiteDatabase db = movieDbHelper.getReadableDatabase();
+        String WHERE = "type=? AND type_sub=?";
+        String args[] = {type,sub_type};
+        return db.query(MovieDbApiContract.ApiData.TABLE_NAME,
+                null,
+                WHERE,
+                args,
+                null,
+                null,
+                MovieDbApiContract.ApiData._ID
+                );
+    }
+
+
+
 /*
     private ArrayList<String> jsonMovieParser(String jsonMovie, String type)throws JSONException {
 
