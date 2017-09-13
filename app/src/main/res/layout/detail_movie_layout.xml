@@ -13,12 +13,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
         <TextView
+            android:id="@+id/main_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="It"
             android:textSize="50sp"
             android:paddingLeft="16dp"
-            android:id="@+id/title"/>
+            />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -65,11 +66,12 @@
         android:orientation="horizontal"
         android:layout_marginTop="16dp">
         <ImageView
+            android:id="@+id/poster"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:src="@drawable/movie_poster"
-            android:id="@+id/poster"/>
+           />
         <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="2"
@@ -83,13 +85,14 @@
                 android:layout_weight="1"
                 android:id="@+id/overview"/>
            <Button
+               android:id="@+id/wishlist"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:text="ADD TO WISHLISHT"
                android:background="@color/colorAccent"
                android:layout_marginBottom="10dp"
                android:layout_marginTop="10dp"
-               android:id="@+id/wishlist"/>
+              />
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
@@ -110,12 +113,13 @@
                 android:numStars="1"
                 android:rating="1" />
             <TextView
+                android:id="@+id/vote_average"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="8.2/10"
                 android:textSize="20sp"
                 android:paddingBottom="10dp"
-                android:id="@+id/vote_average"/>
+                />
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
@@ -164,7 +168,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
                 <TextView
                     android:id="@+id/textView2"
                     android:layout_width="match_parent"
@@ -185,13 +188,14 @@
                 android:layout_marginLeft="10dp"
                 android:padding="10dp"/>
             <TextView
+                android:id="@+id/tagline"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="You'll float too"
                 android:textSize="16sp"
                 android:layout_marginLeft="10dp"
                 android:padding="10dp"
-                android:id="@+id/tagline"/>
+                />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -216,19 +220,21 @@
                 android:paddingBottom="16dp"
                 android:paddingTop="16dp">
                 <Button
+                    android:id="@+id/genres1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Drama"
                     android:background="@color/colorAccent"
                     android:layout_marginRight="16dp"
                     android:layout_marginLeft="16dp"
-                    android:id="@+id/genres1"/>
+                    />
                 <Button
+                    android:id="@+id/genres2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Horror"
                     android:background="@color/colorAccent"
-                    android:id="@+id/genres2"/>
+                   />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
@@ -245,7 +251,7 @@
                 android:layout_height="match_parent"
                 android:text="Details"
                 android:textSize="40sp"
-                android:padding="16dp"/>
+                android:padding="10dp"/>
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
@@ -264,13 +270,14 @@
                 android:layout_marginLeft="10dp"
                 android:padding="10dp"/>
             <TextView
+                android:id="@+id/release_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="September 24,2017"
                 android:textSize="16sp"
                 android:layout_marginLeft="10dp"
                 android:padding="10dp"
-                android:id="@+id/release_date"/>
+                />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -284,13 +291,14 @@
                 android:layout_marginLeft="10dp"
                 android:padding="10dp"/>
             <TextView
+                android:id="@+id/production_companies"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="United State"
                 android:textSize="16sp"
                 android:layout_marginLeft="10dp"
                 android:padding="10dp"
-                android:id="@+id/production_companies"/>
+                />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -304,6 +312,7 @@
                 android:layout_marginLeft="10dp"
                 android:padding="10dp"/>
             <TextView
+                android:id="@+id/language"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="English"
@@ -311,7 +320,7 @@
                 android:layout_marginLeft="10dp"
                 android:padding="10dp"
                 android:paddingTop="0dp"
-                android:id="@+id/language"/>
+               />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -325,13 +334,14 @@
                 android:layout_marginLeft="10dp"
                 android:padding="10dp"/>
             <TextView
+                android:id="@+id/known_as"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="English"
                 android:textSize="16sp"
                 android:layout_marginLeft="10dp"
                 android:padding="10dp"
-                android:id="@+id/known_as"/>
+                />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

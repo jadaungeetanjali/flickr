@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,10 +20,10 @@ public class MoviesDetails extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_movies_details);
-        ListView list = (ListView) findViewById(R.id.movieList);
+        setContentView(R.layout.detail_movie_layout);
+        TextView title = (TextView) findViewById(R.id.main_title);
         List<String> arrayList = new ArrayList<String>();
-        String url = "https://api.themoviedb.org/3/movie/popular?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US&page=1";
+        String url = "https://api.themoviedb.org/3/movie/400?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US";
         FetchTask callMovieData = new FetchTask();
         callMovieData.execute(url);
         try {
@@ -41,14 +42,12 @@ public class MoviesDetails extends AppCompatActivity {
     private ArrayList<String> jsonMovieParser(String jsonMovie)throws JSONException {
         ArrayList<String> movieArray = new ArrayList<>();
         JSONObject movieObject = new JSONObject(jsonMovie);
-        JSONArray list = movieObject.getJSONArray("results");
-        for (int i = 0; i < list.length();i++){
-            JSONObject popularMovie = list.getJSONObject(i);
-            String title = popularMovie.get("title").toString();
-            String release_date = popularMovie.get("release_date").toString();
-            String vote_average = popularMovie.get("vote_average").toString();
+
+            String title = movieObject.get("title").toString();
+            String release_date = movieObject.get("release_date").toString();
+            String vote_average = movieObject.get("vote_average").toString();
             movieArray.add(title + "\n" + release_date + "\n" + vote_average + "\n");
-        }
+
         return movieArray;
     }
 
