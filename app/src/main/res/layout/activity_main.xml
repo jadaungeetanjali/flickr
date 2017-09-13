@@ -14,10 +14,10 @@
         android:background="@color/colorDanger"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        android:elevation="4dp"/>
+        android:elevation="6dp"/>
 
     <android.support.design.widget.TabLayout
-        android:elevation="4dp"
+        android:elevation="6dp"
         android:id="@+id/main_tablayout"
         android:layout_width="match_parent"
         style="@style/customTabLayout"
