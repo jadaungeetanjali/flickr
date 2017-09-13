@@ -17,6 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="It"
+            android:textStyle="bold"
             android:textSize="50sp"
             android:paddingLeft="16dp"
             />
@@ -117,6 +118,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="8.2/10"
+                android:textStyle="bold"
                 android:textSize="20sp"
                 android:paddingBottom="10dp"
                 />
@@ -138,6 +140,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Rate this"
+                android:textStyle="bold"
                 android:textSize="20sp"
                 android:paddingBottom="10dp"/>
         </LinearLayout>
@@ -157,6 +160,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Critics"
+                android:textStyle="bold"
                 android:textSize="20sp"
                 android:paddingBottom="10dp"/>
         </LinearLayout>
@@ -173,6 +177,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Storyline"
+                    android:textStyle="bold"
                     android:textSize="34sp"
                     android:paddingLeft="16dp"/>
             </LinearLayout>
@@ -185,6 +190,7 @@
                 android:layout_height="wrap_content"
                 android:text="Tagline"
                 android:textSize="20sp"
+                android:textStyle="bold"
                 android:layout_marginLeft="10dp"
                 android:padding="10dp"/>
             <TextView
@@ -192,7 +198,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="You'll float too"
-                android:textSize="16sp"
+                android:textSize="20sp"
                 android:layout_marginLeft="10dp"
                 android:padding="10dp"
                 />
@@ -210,6 +216,7 @@
                     android:layout_height="wrap_content"
                     android:text="Genres"
                     android:textSize="20sp"
+                    android:textStyle="bold"
                     android:layout_marginLeft="10dp"
                     android:padding="10dp"/>
             </LinearLayout>
@@ -251,6 +258,7 @@
                 android:layout_height="match_parent"
                 android:text="Details"
                 android:textSize="40sp"
+                android:textStyle="bold"
                 android:padding="10dp"/>
         </LinearLayout>
     </LinearLayout>
@@ -267,6 +275,7 @@
                 android:layout_height="wrap_content"
                 android:text="Release Date"
                 android:textSize="20sp"
+                android:textStyle="bold"
                 android:layout_marginLeft="10dp"
                 android:padding="10dp"/>
             <TextView
@@ -288,6 +297,7 @@
                 android:layout_height="wrap_content"
                 android:text="Country of origin"
                 android:textSize="20sp"
+                android:textStyle="bold"
                 android:layout_marginLeft="10dp"
                 android:padding="10dp"/>
             <TextView
@@ -308,6 +318,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Language spoken"
+                android:textStyle="bold"
                 android:textSize="20sp"
                 android:layout_marginLeft="10dp"
                 android:padding="10dp"/>
@@ -331,6 +342,7 @@
                 android:layout_height="wrap_content"
                 android:text="Also known as"
                 android:textSize="20sp"
+                android:textStyle="bold"
                 android:layout_marginLeft="10dp"
                 android:padding="10dp"/>
             <TextView
