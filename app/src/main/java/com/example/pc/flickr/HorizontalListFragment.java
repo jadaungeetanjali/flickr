@@ -27,6 +27,7 @@ import com.example.pc.flickr.R;
 import com.example.pc.flickr.data.MovieDbApiContract;
 import com.example.pc.flickr.data.MovieDbHelper;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,6 +44,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -107,8 +110,8 @@ public class HorizontalListFragment extends Fragment {
             String str = arrayList.get(position);
             holder.parentCardViewHeading.setText(str);
 
-            FetchTask fetchTask = new FetchTask();
-            ArrayList<String> childArrayList = new ArrayList<>();
+            //FetchTask fetchTask = new FetchTask();
+            //ArrayList<String> childArrayList = new ArrayList<>();
             //ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
             //NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
             /*if ((networkInfo != null) && networkInfo.isConnected()){
@@ -196,8 +199,10 @@ public class HorizontalListFragment extends Fragment {
             holder.childViewTitle.setText(dataModel.getName());
             holder.childViewVote.setText(dataModel.getVote_avg());
             holder.childViewPopularity.setText(dataModel.getPopularity());
-            Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w500"+dataModel.getImg_url()).resize(150, 170)
-                    .centerCrop()
+            final int radius = 10;
+            final int margin = 5;
+            final Transformation transformation = new RoundedCornersTransformation(radius, margin);
+            Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w500"+dataModel.getImg_url()).transform(transformation)
                     .into(holder.childImageView);
         }
 
