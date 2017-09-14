@@ -12,10 +12,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // using setOnclickListener on button click
         Button movieButton = (Button) findViewById(R.id.movie);
         movieButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //using intents to move from MainActivity to MoviesDetails on button click
                 Intent intent = new Intent(MainActivity.this, MoviesDetails.class);
                 startActivity(intent);
             }
@@ -24,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         tvShowsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //using intents to move from MainActivity to TvShowsDetails on button click
                 Intent intent = new Intent(MainActivity.this, TvShowsDetails.class);
                 startActivity(intent);
             }
@@ -32,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         celebritiesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //using intents to move from MainActivity to Celebrities on button click
                 Intent intent = new Intent(MainActivity.this, Celebrities.class);
                 startActivity(intent);
             }

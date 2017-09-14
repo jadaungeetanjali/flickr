@@ -1,6 +1,7 @@
 package com.example.pc.flickr;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,19 +14,18 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 
 
-
+//AsyncTask to fetch data from API
 public class FetchTask extends AsyncTask<String, Void, String>{
-
+    //doInBackground method to set up url connection and return jsondata
     @Override
     protected String doInBackground(String... params) {
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
         String jsonData = null;
         try {
-
+            //setting the urlconnection
             URL url = new URL(params[0]);
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");

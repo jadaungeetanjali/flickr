@@ -1,174 +1,178 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"
-    android:weightSum="1">
+    android:layout_width="match_parent">
     <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:weightSum="1">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
-        <TextView
-            android:id="@+id/main_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="It"
-            android:textStyle="bold"
-            android:textSize="50sp"
-            android:paddingLeft="16dp"
-            />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_weight="0">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="16dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2017"
-                android:textSize="16sp"
-                android:id="@+id/year"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="A"
-                android:textSize="16sp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2h 15min"
-                android:textSize="16sp"
-                android:layout_marginRight="16dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Drama, Horror"
-                android:textSize="16sp"
-                android:id="@+id/genres"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="220dp"
-        android:orientation="horizontal"
-        android:layout_marginTop="16dp">
-        <ImageView
-            android:id="@+id/poster"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:src="@drawable/movie_poster"
-           />
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="2"
-            android:layout_height="match_parent"
             android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="A group of bullied kids band together when a shapeshift in demon, taking the appearance of clown, begins hunting children"
-                android:textSize="20sp"
+                android:layout_weight="1">
+                <TextView
+                    android:id="@+id/main_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="It"
+                    android:textStyle="bold"
+                    android:textSize="22sp"
+                    android:paddingLeft="16dp"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_weight="0">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2017"
+                    android:textSize="16sp"
+                    android:id="@+id/year"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="A"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2h 15min"
+                    android:textSize="16sp"
+                    android:layout_marginRight="16dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Drama, Horror"
+                    android:textSize="16sp"
+                    android:id="@+id/genres"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp">
+            <ImageView
+                android:id="@+id/poster"
+                android:layout_width="0dp"
                 android:layout_weight="1"
-                android:id="@+id/overview"/>
-           <Button
-               android:id="@+id/wishlist"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:text="ADD TO WISHLISHT"
-               android:background="@color/colorAccent"
-               android:layout_marginBottom="10dp"
-               android:layout_marginTop="10dp"
-              />
-        </LinearLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight="1"
-            android:layout_gravity="center_horizontal"
-            android:paddingLeft="16dp"
-            android:gravity="center_horizontal">
-            <RatingBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:numStars="1"
-                android:rating="1" />
-            <TextView
-                android:id="@+id/vote_average"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="8.2/10"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:paddingBottom="10dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/movie_poster"
                 />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="A group of bullied kids band together when a shapeshift in demon, taking the appearance of clown, begins hunting children"
+                    android:textSize="16sp"
+                    android:layout_weight="1"
+                    android:id="@+id/overview"/>
+                <Button
+                    android:id="@+id/wishlist"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="ADD TO WISHLISHT"
+                    android:background="@color/colorAccent"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    />
+            </LinearLayout>
         </LinearLayout>
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight="1"
-            android:layout_gravity="center_horizontal"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:gravity="center_horizontal">
-            <RatingBar
-                android:layout_width="wrap_content"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:numStars="1" />
-            <TextView
-                android:layout_width="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_gravity="center_horizontal"
+                android:paddingLeft="16dp"
+                android:gravity="center_horizontal">
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:numStars="1"
+                    android:rating="1" />
+                <TextView
+                    android:id="@+id/vote_average"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="8.2/10"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:paddingBottom="10dp"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Rate this"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:paddingBottom="10dp"/>
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_gravity="center_horizontal"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:gravity="center_horizontal">
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:numStars="1" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rate this"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:paddingBottom="10dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_gravity="center_horizontal"
+                android:paddingLeft="16dp"
+                android:gravity="center_horizontal">
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:numStars="1"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Critics"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:paddingBottom="10dp"/>
+            </LinearLayout>
         </LinearLayout>
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight="1"
-            android:layout_gravity="center_horizontal"
-            android:paddingLeft="16dp"
-            android:gravity="center_horizontal">
-            <RatingBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:numStars="1"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Critics"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:paddingBottom="10dp"/>
-        </LinearLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+            android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -178,182 +182,185 @@
                     android:layout_height="wrap_content"
                     android:text="Storyline"
                     android:textStyle="bold"
-                    android:textSize="34sp"
+                    android:textSize="22sp"
                     android:paddingLeft="16dp"/>
             </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Tagline"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginLeft="10dp"
-                android:padding="10dp"/>
-            <TextView
-                android:id="@+id/tagline"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="You'll float too"
-                android:textSize="20sp"
-                android:layout_marginLeft="10dp"
-                android:padding="10dp"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
                 <TextView
-                    android:id="@+id/textView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Genres"
-                    android:textSize="20sp"
+                    android:text="Tagline"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     android:layout_marginLeft="10dp"
                     android:padding="10dp"/>
+                <TextView
+                    android:id="@+id/tagline"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="You'll float too"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="10dp"
+                    android:padding="10dp"
+                    />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingBottom="16dp"
-                android:paddingTop="16dp">
-                <Button
-                    android:id="@+id/genres1"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Genres"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="10dp"
+                        android:padding="10dp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingBottom="16dp"
+                    android:paddingTop="16dp">
+                    <Button
+                        android:id="@+id/genres1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Drama"
+                        android:background="@color/colorAccent"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginLeft="16dp"
+                        />
+                    <Button
+                        android:id="@+id/genres2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Horror"
+                        android:background="@color/colorAccent"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Details"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:padding="10dp"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Drama"
-                    android:background="@color/colorAccent"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginLeft="16dp"
+                    android:text="Release Date"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="10dp"
+                    android:padding="10dp"/>
+                <TextView
+                    android:id="@+id/release_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="September 24,2017"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="10dp"
+                    android:padding="10dp"
                     />
-                <Button
-                    android:id="@+id/genres2"
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Horror"
-                    android:background="@color/colorAccent"
-                   />
+                    android:text="Country of origin"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="10dp"
+                    android:padding="10dp"/>
+                <TextView
+                    android:id="@+id/production_companies"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="United State"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="10dp"
+                    android:padding="10dp"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Language spoken"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="10dp"
+                    android:padding="10dp"/>
+                <TextView
+                    android:id="@+id/language"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="English"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="10dp"
+                    android:padding="10dp"
+                    android:paddingTop="0dp"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Also known as"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="10dp"
+                    android:padding="10dp"/>
+                <TextView
+                    android:id="@+id/known_as"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="English"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="10dp"
+                    android:padding="10dp"
+                    />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Details"
-                android:textSize="40sp"
-                android:textStyle="bold"
-                android:padding="10dp"/>
-        </LinearLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Release Date"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginLeft="10dp"
-                android:padding="10dp"/>
-            <TextView
-                android:id="@+id/release_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="September 24,2017"
-                android:textSize="16sp"
-                android:layout_marginLeft="10dp"
-                android:padding="10dp"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Country of origin"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginLeft="10dp"
-                android:padding="10dp"/>
-            <TextView
-                android:id="@+id/production_companies"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="United State"
-                android:textSize="16sp"
-                android:layout_marginLeft="10dp"
-                android:padding="10dp"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Language spoken"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:layout_marginLeft="10dp"
-                android:padding="10dp"/>
-            <TextView
-                android:id="@+id/language"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="English"
-                android:textSize="16sp"
-                android:layout_marginLeft="10dp"
-                android:padding="10dp"
-                android:paddingTop="0dp"
-               />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Also known as"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginLeft="10dp"
-                android:padding="10dp"/>
-            <TextView
-                android:id="@+id/known_as"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="English"
-                android:textSize="16sp"
-                android:layout_marginLeft="10dp"
-                android:padding="10dp"
-                />
-        </LinearLayout>
-    </LinearLayout>
-</LinearLayout>
+
+</ScrollView>
+
