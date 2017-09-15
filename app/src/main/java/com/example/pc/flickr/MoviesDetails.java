@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,15 +30,14 @@ public class MoviesDetails extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_movie_layout);
-        // to set the horizontal linear layout for recycler view
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+
 
         recyclerView = (RecyclerView) findViewById(R.id.detail_recycler_view);
-        recyclerView.setLayoutManager(layoutManager);
+
 
         ArrayList<String> recyclerArrayList = new ArrayList<String>();
 
-        TextView title, overview, vote_average, tagline, release_date, language;
+        /*TextView title, overview, vote_average, tagline, release_date, language;
         title = (TextView) findViewById(R.id.main_title);
         overview = (TextView) findViewById(R.id.overview);
         vote_average = (TextView) findViewById(R.id.vote_average);
@@ -45,9 +45,10 @@ public class MoviesDetails extends AppCompatActivity {
         release_date = (TextView) findViewById(R.id.release_date);
         language = (TextView) findViewById(R.id.language);
         List<String> arrayList = new ArrayList<String>();
-        String url = "https://api.themoviedb.org/3/movie/400?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US";
+        /*String url = "https://api.themoviedb.org/3/movie/400?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US";*/
+        String url1 = "https://api.themoviedb.org/3/movie/400/credits?api_key=fe56cdee4dfea0c18403e0965acfa23b";
         FetchTask callMovieData = new FetchTask();
-        callMovieData.execute(url);
+        /*callMovieData.execute(url);
 
         try {
             //fetching data from FetchTask to populate textViews
@@ -60,19 +61,32 @@ public class MoviesDetails extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        //to populate the data in recyclerView
-        mAdapter = new MovieAdapter(recyclerArrayList);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(mAdapter);
         //populating data in particular text views
-        title.setText(arrayList.get(0));
+        /*title.setText(arrayList.get(0));
         overview.setText(arrayList.get(1));
         vote_average.setText(arrayList.get(2));
         tagline.setText(arrayList.get(3));
         release_date.setText(arrayList.get(4));
-        language.setText(arrayList.get(5));
+        language.setText(arrayList.get(5));*/
+        callMovieData.execute(url1);
+        try {
+            String data = callMovieData.get().toString();
+            recyclerArrayList = jsonCastParser(data);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        //to populate the data in recyclerView
+        mAdapter = new MovieAdapter(recyclerArrayList);
+        // to set the horizontal linear layout for recycler view
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(mAdapter);
+
     }
 
     private class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.movieViewHolder> {
@@ -82,7 +96,7 @@ public class MoviesDetails extends AppCompatActivity {
 
             public movieViewHolder(View itemView) {
                 super(itemView);
-                listItemTextView = (TextView) itemView.findViewById(R.id.moviesTextView);
+                listItemTextView = (TextView) itemView.findViewById(R.id.castTextView);
             }
         }
         public MovieAdapter(ArrayList<String> arrayList) {
@@ -105,6 +119,7 @@ public class MoviesDetails extends AppCompatActivity {
             return recyclerArrayList.size();
         }
         }
+        /*
     private ArrayList<String> jsonMovieParser(String jsonMovie)throws JSONException {
         // fetching data in json
         JSONObject movieObject = new JSONObject(jsonMovie);
@@ -118,6 +133,18 @@ public class MoviesDetails extends AppCompatActivity {
         //storing data from array in arraylist
         ArrayList<String> movieArray = new ArrayList<>(Arrays.asList(array));
         return movieArray;
+    }*/
+    private ArrayList<String> jsonCastParser(String jsonCast)throws JSONException{
+        ArrayList<String> recyclerArray = new ArrayList<>();
+        JSONObject castObject = new JSONObject(jsonCast);
+        JSONArray castList = castObject.getJSONArray("cast");
+        for (int i = 0; i < castList.length(); i++){
+            JSONObject cast = castList.getJSONObject(i);
+            String name = cast.get("name").toString();
+            String character = cast.get("character").toString();
+            recyclerArray.add(name + "\n" + character);
+        }
+        return recyclerArray;
     }
 }
 
