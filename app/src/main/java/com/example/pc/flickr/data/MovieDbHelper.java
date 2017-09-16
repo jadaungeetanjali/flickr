@@ -26,7 +26,10 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 MovieDbApiContract.ApiData.COLUMN_TYPE_SUB +  " TEXT NOT NULL, " +
                 MovieDbApiContract.ApiData.COLUMN_VOTE_AVERAGE + " TEXT NOT NULL, " +
                 MovieDbApiContract.ApiData.COLUMN_WISH_LIST +  " BOOLEAN NOT NULL, " +
-                MovieDbApiContract.ApiData.COLUMN_IMG_URL +  " TEXT NOT NULL "
+                MovieDbApiContract.ApiData.COLUMN_IMG_URL +  " TEXT NOT NULL, " +
+                MovieDbApiContract.ApiData.COLUMN_TYPE_ID + "INTEGER NOT NULL"+
+                " UNIQUE ("+ MovieDbApiContract.ApiData.COLUMN_ID +","+ MovieDbApiContract.ApiData.COLUMN_TYPE_SUB +
+                ") ON CONFLICT IGNORE"
                 +")";
         db.execSQL(SQL_MOVIEDB);
     }

@@ -1,12 +1,14 @@
 package com.example.pc.flickr;
 
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,6 +16,7 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,22 +113,22 @@ public class HorizontalListFragment extends Fragment {
             String str = arrayList.get(position);
             holder.parentCardViewHeading.setText(str);
 
-            //FetchTask fetchTask = new FetchTask();
-            //ArrayList<String> childArrayList = new ArrayList<>();
-            //ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-            //NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-            /*if ((networkInfo != null) && networkInfo.isConnected()){
+            FetchTask fetchTask = new FetchTask();
+            ArrayList<String> childArrayList = new ArrayList<>();
+            ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+            if ((networkInfo != null) && networkInfo.isConnected()){
                 fetchTask.execute(urls[position]);
 
                 try {
                     String jsonData = fetchTask.get();
-                    if(type == "movies") {
+                    if(type.equals("movies")) {
                         childArrayList = jsonMovieParser(jsonData, str);
                     }
-                    else if(type == "tv"){
+                    else if(type.equals("tv")){
                         childArrayList = jsonTvParser(jsonData, str);
                     }
-                    else if (type == "celebs"){
+                    else if (type.equals("celebs")){
                         childArrayList = jsonCelebsParser(jsonData, str);
                     }
                 } catch (JSONException e) {
@@ -138,7 +141,7 @@ public class HorizontalListFragment extends Fragment {
             }
             else {
                 Toast.makeText(getContext(), "Please connect to internet", Toast.LENGTH_LONG).show();
-            }*/
+            }
             holder.childRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             Cursor cursor = getData(type,str);
@@ -182,7 +185,7 @@ public class HorizontalListFragment extends Fragment {
         public void dataProvider(){
             list = new ArrayList<>();
             while (cursor.moveToNext()){
-                DataModel dataModel = new DataModel(cursor.getString(2),cursor.getString(3),cursor.getString(6),cursor.getString(8));
+                DataModel dataModel = new DataModel(cursor.getString(2),cursor.getString(3),cursor.getString(0),cursor.getString(8));
                 list.add(dataModel);
             }
         }
@@ -212,10 +215,10 @@ public class HorizontalListFragment extends Fragment {
         }
     }
     private class DataModel{
-        public String name;
-        public String popularity;
-        public String vote_avg;
-        public String img_url;
+        private String name;
+        private String popularity;
+        private String vote_avg;
+        private String img_url;
         public DataModel(String name,String popularity,String vote_avg,String img_url){
             this.img_url = img_url;
             this.name = name;
@@ -255,7 +258,7 @@ public class HorizontalListFragment extends Fragment {
 
 
 
-/*
+
     private ArrayList<String> jsonMovieParser(String jsonMovie, String type)throws JSONException {
 
         MovieDbHelper movieDbHelper = new MovieDbHelper(getContext());
@@ -303,6 +306,7 @@ public class HorizontalListFragment extends Fragment {
             String popularity = Math.round(Double.parseDouble(populartvShows.get("popularity").toString())) + "";
             String vote_average = populartvShows.get("vote_average").toString();
             String imgUrl = populartvShows.get("poster_path").toString();
+            String args[]={i+""};
             values.put(MovieDbApiContract.ApiData.COLUMN_ID, id);
             values.put(MovieDbApiContract.ApiData.COLUMN_NAME, title);
             values.put(MovieDbApiContract.ApiData.COLUMN_POPULARITY, popularity);
@@ -311,7 +315,7 @@ public class HorizontalListFragment extends Fragment {
             values.put(MovieDbApiContract.ApiData.COLUMN_TYPE_SUB, type);
             values.put(MovieDbApiContract.ApiData.COLUMN_IMG_URL, imgUrl);
             values.put(MovieDbApiContract.ApiData.COLUMN_WISH_LIST, false);
-            long rowId = db.insert(MovieDbApiContract.ApiData.TABLE_NAME, null, values);
+            long rowId = db.update(MovieDbApiContract.ApiData.TABLE_NAME,values,"type_id=?",args);
             tvShowsArray.add(title);
         }
         return tvShowsArray;
@@ -319,8 +323,8 @@ public class HorizontalListFragment extends Fragment {
 
 
     private ArrayList<String> jsonCelebsParser(String jsonCelebrities,String type)throws JSONException {
-        MovieDbHelper movieDbHelper = new MovieDbHelper(getContext());
-        SQLiteDatabase db = movieDbHelper.getWritableDatabase();
+        //MovieDbHelper movieDbHelper = new MovieDbHelper(getContext());
+        //SQLiteDatabase db = movieDbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
 
         ArrayList<String> celebritiesArray = new ArrayList<>();
@@ -342,9 +346,14 @@ public class HorizontalListFragment extends Fragment {
             values.put(MovieDbApiContract.ApiData.COLUMN_TYPE_SUB, type);
             values.put(MovieDbApiContract.ApiData.COLUMN_IMG_URL, imgUrl);
             values.put(MovieDbApiContract.ApiData.COLUMN_WISH_LIST, false);
-            long rowId = db.insert(MovieDbApiContract.ApiData.TABLE_NAME, null, values);
+            Uri uri = getContext().getContentResolver().insert(MovieDbApiContract.ApiData.CONTENT_URI, values);
+
+            if (uri != null){
+                Toast.makeText(getContext(), uri.toString(), Toast.LENGTH_SHORT).show();
+            }
+
             celebritiesArray.add(title);
         }
         return celebritiesArray;
-    }*/
+    }
 }

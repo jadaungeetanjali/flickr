@@ -9,7 +9,8 @@
         android:id="@+id/main_child_imageView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="11">
+        android:layout_weight="11"
+        android:elevation="1dp">
 
     </ImageView>
     <LinearLayout
