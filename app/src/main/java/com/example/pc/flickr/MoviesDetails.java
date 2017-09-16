@@ -64,24 +64,6 @@ public class MoviesDetails extends AppCompatActivity {
         FetchTask callMovieData = new FetchTask();
         callMovieData.execute(urls[0], urls[1], urls[2]);
 
-        //populating data in particular text views
-        /*title.setText(arrayList.get(0));
-        overview.setText(arrayList.get(1));
-        vote_average.setText(arrayList.get(2));
-        tagline.setText(arrayList.get(3));
-        release_date.setText(arrayList.get(4));
-        language.setText(arrayList.get(5));*/
-        /*callMovieData.execute(url1);
-        try {
-            String data = callMovieData.get().toString();
-            recyclerArrayList = jsonCastParser(data);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }*/
         //to populate the data in recyclerView
         mAdapter = new MovieAdapter(recyclerArrayList);
         // to set the horizontal linear layout for recycler view
@@ -131,21 +113,6 @@ public class MoviesDetails extends AppCompatActivity {
         }
     }
 
-
-    /*
-    private ArrayList<String> jsonCastParser(String jsonCast) throws JSONException {
-        ArrayList<String> recyclerArray = new ArrayList<>();
-        JSONObject castObject = new JSONObject(jsonCast);
-        JSONArray castList = castObject.getJSONArray("cast");
-        for (int i = 0; i < castList.length(); i++) {
-            JSONObject cast = castList.getJSONObject(i);
-            String name = cast.get("name").toString();
-            String character = cast.get("character").toString();
-            String image = cast.get("profile_path").toString();
-            recyclerArray.add(name + "\n" + character + "\n" + image);
-        }
-        return recyclerArray;
-    }*/
 
 
     //new class is created to initialise all the variables
@@ -224,6 +191,21 @@ public class MoviesDetails extends AppCompatActivity {
             }
             return datamodel;
         }*/
+
+        /*
+    private ArrayList<String> jsonCastParser(String jsonCast) throws JSONException {
+        ArrayList<String> recyclerArray = new ArrayList<>();
+        JSONObject castObject = new JSONObject(jsonCast);
+        JSONArray castList = castObject.getJSONArray("cast");
+        for (int i = 0; i < castList.length(); i++) {
+            JSONObject cast = castList.getJSONObject(i);
+            String name = cast.get("name").toString();
+            String character = cast.get("character").toString();
+            String image = cast.get("profile_path").toString();
+            recyclerArray.add(name + "\n" + character + "\n" + image);
+        }
+        return recyclerArray;
+    }*/
 
 
         //doInBackground method to set up url connection and return jsondata
