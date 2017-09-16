@@ -33,23 +33,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button tvShowsButton = (Button) findViewById(R.id.tv_shows);
-        tvShowsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //using intents to move from MainActivity to TvShowsDetails on button click
-                Intent intent = new Intent(MainActivity.this, TvShowsDetails.class);
-                startActivity(intent);
-            }
-        });
-        Button celebritiesButton = (Button) findViewById(R.id.celebrities);
-        celebritiesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //using intents to move from MainActivity to Celebrities on button click
-                Intent intent = new Intent(MainActivity.this, Celebrities.class);
-                startActivity(intent);
-            }
-        });
     }
 }
