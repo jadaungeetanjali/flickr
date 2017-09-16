@@ -10,7 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,12 +34,9 @@ public class MoviesDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_movie_layout);
 
-
         recyclerView = (RecyclerView) findViewById(R.id.detail_recycler_view);
 
-
         ArrayList<String> recyclerArrayList = new ArrayList<String>();
-
         /*TextView title, overview, vote_average, tagline, release_date, language;
         title = (TextView) findViewById(R.id.main_title);
         overview = (TextView) findViewById(R.id.overview);
@@ -92,14 +92,19 @@ public class MoviesDetails extends AppCompatActivity {
     private class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.movieViewHolder> {
         private ArrayList<String> recyclerArrayList;
         class movieViewHolder extends RecyclerView.ViewHolder {
-            TextView listItemTextView;
+            //ImageView castImageView;
+            TextView castNameTextView;
+            //TextView castCharacterTextView;
 
             public movieViewHolder(View itemView) {
                 super(itemView);
-                listItemTextView = (TextView) itemView.findViewById(R.id.castTextView);
+                castNameTextView = (TextView) itemView.findViewById(R.id.castName);
+                //castImageView = (ImageView) itemView.findViewById(R.id.castImageView);
+                //castCharacterTextView = (TextView) itemView.findViewById(R.id.castCharacter);
             }
         }
         public MovieAdapter(ArrayList<String> arrayList) {
+
             this.recyclerArrayList = arrayList;
         }
         @Override
@@ -111,7 +116,7 @@ public class MoviesDetails extends AppCompatActivity {
         @Override
         public void onBindViewHolder(movieViewHolder holder, int position) {
           String str = recyclerArrayList.get(position);
-            holder.listItemTextView.setText(str);
+            holder.castNameTextView.setText(str);
         }
 
         @Override
@@ -142,9 +147,52 @@ public class MoviesDetails extends AppCompatActivity {
             JSONObject cast = castList.getJSONObject(i);
             String name = cast.get("name").toString();
             String character = cast.get("character").toString();
-            recyclerArray.add(name + "\n" + character);
+            String image = cast.get("profile_path").toString();
+            recyclerArray.add(name + "\n" + character + "\n" + image);
         }
         return recyclerArray;
+    }
+    //new class is created to initialise all the variables
+    private class DataModel{
+        public String title;
+        public String overview;
+        public String vote_avg;
+        public String tagline;
+        public String release_date;
+        public String language;
+        public String img_url;
+        //constructor to initialise all the variables
+        public DataModel(String title,String overview, String vote_avg,
+                         String tagline, String release_date, String language,String img_url){
+            this.title = title;
+            this.overview = overview;
+            this.vote_avg = vote_avg;
+            this.tagline = tagline;
+            this.release_date = release_date;
+            this.language = language;
+            this.img_url = img_url;
+        }
+        public String getTitle(){
+            return title;
+        }
+        public String getOverview(){
+            return overview;
+        }
+        public String getVote_avg(){
+            return vote_avg;
+        }
+        public String getTagline(){
+            return tagline;
+        }
+        public String getRelease_date(){
+            return release_date;
+        }
+        public String getLanguage(){
+            return language;
+        }
+        public String getImg_url(){
+            return  img_url;
+        }
     }
 }
 
