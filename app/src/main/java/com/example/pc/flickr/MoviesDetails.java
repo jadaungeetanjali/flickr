@@ -36,8 +36,9 @@ import java.util.concurrent.ExecutionException;
 
 // MoviesDetails activity to display the detail of particualr movie
 public class MoviesDetails extends AppCompatActivity {
-    RecyclerView recyclerViewCast;
+    RecyclerView recyclerViewCast, recyclerViewReviews;
     private MovieAdapter mAdapter;
+    private ReviewAdapter reviewAdapter;
     TextView title, overview, vote_average, tagline, release_date, language;
     ImageView poster;
     @Override
@@ -45,10 +46,16 @@ public class MoviesDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_movie_layout);
 
-        recyclerViewCast = (RecyclerView) findViewById(R.id.detail_recycler_view);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        recyclerViewCast.setLayoutManager(layoutManager);
+        recyclerViewCast = (RecyclerView) findViewById(R.id.cast_recycler_view);
+        LinearLayoutManager layoutManagerCast = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewCast.setLayoutManager(layoutManagerCast);
         recyclerViewCast.setItemAnimator(new DefaultItemAnimator());
+
+        recyclerViewReviews = (RecyclerView) findViewById(R.id.reviews);
+        LinearLayoutManager layoutManagerReviews = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewReviews.setLayoutManager(layoutManagerReviews);
+        recyclerViewReviews.setItemAnimator(new DefaultItemAnimator());
+
         //String urlHeading[] = this.getIntent().getExtras().getStringArray("urlHeading");
         //ArrayList<String> urlHeadingList = new ArrayList<>(Arrays.asList(urlHeading));
         String urls[] = this.getIntent().getExtras().getStringArray("urls");
@@ -65,8 +72,6 @@ public class MoviesDetails extends AppCompatActivity {
         callMovieData.execute(urls[0], urls[1], urls[2]);
 
         // to set the horizontal linear layout for recycler view
-
-
     }
 
     private class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.movieViewHolder> {
@@ -109,6 +114,42 @@ public class MoviesDetails extends AppCompatActivity {
         }
     }
 
+    private class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.reviewViewHolder> {
+        private ArrayList<String> reviewArrayList;
+
+        class reviewViewHolder extends RecyclerView.ViewHolder {
+            TextView authorTextView, contentTextView;
+
+            public reviewViewHolder(View itemView) {
+                super(itemView);
+                authorTextView = (TextView) itemView.findViewById(R.id.author);
+                contentTextView = (TextView) itemView.findViewById(R.id.content);
+            }
+        }
+
+        public ReviewAdapter(ArrayList<String> arrayList) {
+            this.reviewArrayList = arrayList;
+        }
+
+        @Override
+        public reviewViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.reviews_textview, parent, false);
+            return new reviewViewHolder(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(reviewViewHolder holder, int position) {
+            //String str = castArrayList.get(position);
+            holder.authorTextView.setText(reviewArrayList.get(0));
+            holder.contentTextView.setText(reviewArrayList.get(1));
+        }
+
+        @Override
+        public int getItemCount() {
+            return reviewArrayList.size();
+        }
+    }
+
     //new class is created to initialise all the variables
     private class DataModel{
         public String title;
@@ -130,6 +171,7 @@ public class MoviesDetails extends AppCompatActivity {
             this.img_url = img_url;
         }
         public String getTitle(){
+
             return title;
         }
         public String getOverview(){
@@ -172,19 +214,8 @@ public class MoviesDetails extends AppCompatActivity {
 
             return dataModel;
         }
-        /*
-       private ArrayList<String> jsonReviews(String jsonReviews) throws JSONException {
-             ArrayList<String> reviewsArray = new ArrayList<>();
-            JSONObject reviewsObject = new JSONObject(jsonReviews);
-            JSONArray reviewsList = reviewsObject.getJSONArray("results");
-            for (int i = 0; i < reviewsList.length(); i++) {
-                JSONObject review = reviewsList.getJSONObject(i);
-                String author = review.get("author").toString();
-                String content = review.get("content").toString();
-                reviewsArray.add(author + "" + content);
-            }
-            return reviewsArray;
-        }*/
+
+
 
 
     private ArrayList<String> jsonCastParser(String jsonCast) throws JSONException {
@@ -201,6 +232,18 @@ public class MoviesDetails extends AppCompatActivity {
         return recyclerArray;
     }
 
+            private ArrayList<String> jsonReviewsParser(String jsonReviews) throws JSONException {
+                ArrayList<String> reviewsArray = new ArrayList<>();
+                JSONObject reviewsObject = new JSONObject(jsonReviews);
+                JSONArray reviewsList = reviewsObject.getJSONArray("results");
+                for (int i = 0; i < reviewsList.length(); i++) {
+                    JSONObject review = reviewsList.getJSONObject(i);
+                    String author = review.get("author").toString();
+                    String content = review.get("content").toString();
+                    reviewsArray.add(author + "" + content);
+                }
+                return reviewsArray;
+            }
 
         //doInBackground method to set up url connection and return jsondata
         @Override
@@ -258,7 +301,8 @@ public class MoviesDetails extends AppCompatActivity {
             //for (String name:jsonArray){
                // Log.v("output",name);
             //}
-            ArrayList<String> recyclerArray = new ArrayList<>();
+            ArrayList<String> castArray = new ArrayList<>();
+            ArrayList<String> reviewArray = new ArrayList<>();
             try {
                 DataModel dataModel = jsonMovieParser(jsonArray.get(0));
                 //Log.v("title",dataModel.getTitle());
@@ -273,13 +317,19 @@ public class MoviesDetails extends AppCompatActivity {
                 e.printStackTrace();
             }
             try {
-                recyclerArray = jsonCastParser(jsonArray.get(1));
-                mAdapter = new MovieAdapter(recyclerArray);
+                castArray = jsonCastParser(jsonArray.get(1));
+                mAdapter = new MovieAdapter(castArray);
                 recyclerViewCast.setAdapter(mAdapter);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
+            try {
+                reviewArray = jsonReviewsParser(jsonArray.get(2));
+                reviewAdapter = new ReviewAdapter(reviewArray);
+                recyclerViewReviews.setAdapter(reviewAdapter);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
