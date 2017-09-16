@@ -83,12 +83,13 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
                 <TextView
+                    android:id="@+id/overview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="A group of bullied kids band together when a shapeshift in demon, taking the appearance of clown, begins hunting children"
                     android:textSize="16sp"
                     android:layout_weight="1"
-                    android:id="@+id/overview"/>
+                    android:paddingLeft="5dp"/>
                 <Button
                     android:id="@+id/wishlist"
                     android:layout_width="match_parent"
@@ -171,9 +172,9 @@
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
+            android:id="@+id/detail_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/detail_recycler_view"
             >
         </android.support.v7.widget.RecyclerView>
 
@@ -191,7 +192,7 @@
                     android:text="Storyline"
                     android:textStyle="bold"
                     android:textSize="22sp"
-                    android:paddingLeft="16dp"/>
+                    android:paddingLeft="12dp"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -204,7 +205,7 @@
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:layout_marginLeft="10dp"
-                    android:padding="10dp"/>
+                    android:padding="5dp"/>
                 <TextView
                     android:id="@+id/tagline"
                     android:layout_width="match_parent"
@@ -212,7 +213,7 @@
                     android:text="You'll float too"
                     android:textSize="16sp"
                     android:layout_marginLeft="10dp"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     />
             </LinearLayout>
             <LinearLayout
@@ -230,7 +231,7 @@
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:layout_marginLeft="10dp"
-                        android:padding="10dp"/>
+                        android:padding="5dp"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -289,7 +290,7 @@
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:layout_marginLeft="10dp"
-                    android:padding="10dp"/>
+                    android:padding="5dp"/>
                 <TextView
                     android:id="@+id/release_date"
                     android:layout_width="wrap_content"
@@ -297,7 +298,7 @@
                     android:text="September 24,2017"
                     android:textSize="16sp"
                     android:layout_marginLeft="10dp"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     />
             </LinearLayout>
             <LinearLayout
@@ -311,7 +312,7 @@
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:layout_marginLeft="10dp"
-                    android:padding="10dp"/>
+                    android:padding="5dp"/>
                 <TextView
                     android:id="@+id/production_companies"
                     android:layout_width="wrap_content"
@@ -319,7 +320,7 @@
                     android:text="United State"
                     android:textSize="16sp"
                     android:layout_marginLeft="10dp"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     />
             </LinearLayout>
             <LinearLayout
@@ -333,7 +334,7 @@
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:layout_marginLeft="10dp"
-                    android:padding="10dp"/>
+                    android:padding="5dp"/>
                 <TextView
                     android:id="@+id/language"
                     android:layout_width="wrap_content"
@@ -341,8 +342,7 @@
                     android:text="English"
                     android:textSize="16sp"
                     android:layout_marginLeft="10dp"
-                    android:padding="10dp"
-                    android:paddingTop="0dp"
+                    android:padding="5dp"
                     />
             </LinearLayout>
             <LinearLayout
@@ -356,7 +356,7 @@
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:layout_marginLeft="10dp"
-                    android:padding="10dp"/>
+                    android:padding="5dp"/>
                 <TextView
                     android:id="@+id/known_as"
                     android:layout_width="wrap_content"
@@ -364,9 +364,16 @@
                     android:text="English"
                     android:textSize="16sp"
                     android:layout_marginLeft="10dp"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     />
             </LinearLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/similarMovies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+            </android.support.v7.widget.RecyclerView>
+
         </LinearLayout>
     </LinearLayout>
 
