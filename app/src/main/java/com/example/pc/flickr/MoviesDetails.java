@@ -46,8 +46,9 @@ public class MoviesDetails extends AppCompatActivity {
         setContentView(R.layout.detail_movie_layout);
 
         recyclerViewCast = (RecyclerView) findViewById(R.id.detail_recycler_view);
-        ArrayList<String> recyclerArrayList = new ArrayList<String>();
-
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewCast.setLayoutManager(layoutManager);
+        recyclerViewCast.setItemAnimator(new DefaultItemAnimator());
         //String urlHeading[] = this.getIntent().getExtras().getStringArray("urlHeading");
         //ArrayList<String> urlHeadingList = new ArrayList<>(Arrays.asList(urlHeading));
         String urls[] = this.getIntent().getExtras().getStringArray("urls");
@@ -59,40 +60,33 @@ public class MoviesDetails extends AppCompatActivity {
         release_date = (TextView) findViewById(R.id.release_date);
         language = (TextView) findViewById(R.id.language);
         poster = (ImageView) findViewById(R.id.poster);
-        List<String> arrayList = new ArrayList<String>();
 
         FetchTask callMovieData = new FetchTask();
         callMovieData.execute(urls[0], urls[1], urls[2]);
 
-        //to populate the data in recyclerView
-        mAdapter = new MovieAdapter(recyclerArrayList);
         // to set the horizontal linear layout for recycler view
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        recyclerViewCast.setLayoutManager(layoutManager);
-        recyclerViewCast.setItemAnimator(new DefaultItemAnimator());
-        recyclerViewCast.setAdapter(mAdapter);
+
 
     }
 
     private class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.movieViewHolder> {
-        private ArrayList<String> recyclerArrayList;
+        private ArrayList<String> castArrayList;
 
         class movieViewHolder extends RecyclerView.ViewHolder {
-            //ImageView castImageView;
+            ImageView castImageView;
             TextView castNameTextView;
-            //TextView castCharacterTextView;
+            TextView castCharacterTextView;
 
             public movieViewHolder(View itemView) {
                 super(itemView);
                 castNameTextView = (TextView) itemView.findViewById(R.id.castName);
-                //castImageView = (ImageView) itemView.findViewById(R.id.castImageView);
-                //castCharacterTextView = (TextView) itemView.findViewById(R.id.castCharacter);
+                castImageView = (ImageView) itemView.findViewById(R.id.castImageView);
+                castCharacterTextView = (TextView) itemView.findViewById(R.id.castCharacter);
             }
         }
 
         public MovieAdapter(ArrayList<String> arrayList) {
-
-            this.recyclerArrayList = arrayList;
+            this.castArrayList = arrayList;
         }
 
         @Override
@@ -103,17 +97,17 @@ public class MoviesDetails extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(movieViewHolder holder, int position) {
-            String str = recyclerArrayList.get(position);
-            holder.castNameTextView.setText(str);
+            //String str = castArrayList.get(position);
+            holder.castNameTextView.setText(castArrayList.get(0));
+            holder.castCharacterTextView.setText(castArrayList.get(1));
+            Picasso.with(getBaseContext()).load("https://image.tmdb.org/t/p/w500"+castArrayList.get(2)).centerCrop().into(holder.castImageView);
         }
 
         @Override
         public int getItemCount() {
-            return recyclerArrayList.size();
+            return castArrayList.size();
         }
     }
-
-
 
     //new class is created to initialise all the variables
     private class DataModel{
@@ -158,6 +152,8 @@ public class MoviesDetails extends AppCompatActivity {
             return  img_url;
         }
     }
+
+
     public class FetchTask extends AsyncTask<String, Void, ArrayList<String>> {
 
         private DataModel jsonMovieParser(String jsonMovie)throws JSONException {
@@ -171,28 +167,26 @@ public class MoviesDetails extends AppCompatActivity {
             String release_date = movieObject.get("release_date").toString();
             String language = movieObject.get("original_language").toString();
             String poster = movieObject.get("poster").toString();
-            //String[] array = {title, overview, vote_average, tagline, release_date, language};
-            //storing data from array in arraylist
 
             DataModel dataModel=new DataModel(title, overview, vote_average, tagline, release_date, language, poster);
-            //ArrayList<String> movieArray = new ArrayList<>(Arrays.asList(array));
+
             return dataModel;
         }
         /*
-       private DataModel jsonReviews(String jsonReviews) throws JSONException {
-
+       private ArrayList<String> jsonReviews(String jsonReviews) throws JSONException {
+             ArrayList<String> reviewsArray = new ArrayList<>();
             JSONObject reviewsObject = new JSONObject(jsonReviews);
             JSONArray reviewsList = reviewsObject.getJSONArray("results");
             for (int i = 0; i < reviewsList.length(); i++) {
                 JSONObject review = reviewsList.getJSONObject(i);
                 String author = review.get("author").toString();
                 String content = review.get("content").toString();
-                DataModel dataModel=new DataModel(title, overview, vote_average, tagline, release_date, language,"img");
+                reviewsArray.add(author + "" + content);
             }
-            return datamodel;
+            return reviewsArray;
         }*/
 
-        /*
+
     private ArrayList<String> jsonCastParser(String jsonCast) throws JSONException {
         ArrayList<String> recyclerArray = new ArrayList<>();
         JSONObject castObject = new JSONObject(jsonCast);
@@ -202,10 +196,10 @@ public class MoviesDetails extends AppCompatActivity {
             String name = cast.get("name").toString();
             String character = cast.get("character").toString();
             String image = cast.get("profile_path").toString();
-            recyclerArray.add(name + "\n" + character + "\n" + image);
+            recyclerArray.add(name + "" + character + "" + image);
         }
         return recyclerArray;
-    }*/
+    }
 
 
         //doInBackground method to set up url connection and return jsondata
@@ -264,6 +258,7 @@ public class MoviesDetails extends AppCompatActivity {
             //for (String name:jsonArray){
                // Log.v("output",name);
             //}
+            ArrayList<String> recyclerArray = new ArrayList<>();
             try {
                 DataModel dataModel = jsonMovieParser(jsonArray.get(0));
                 //Log.v("title",dataModel.getTitle());
@@ -273,7 +268,14 @@ public class MoviesDetails extends AppCompatActivity {
                 tagline.setText(dataModel.getTagline());
                 release_date.setText(dataModel.getRelease_date());
                 language.setText(dataModel.getLanguage());
-
+                Picasso.with(getBaseContext()).load("https://image.tmdb.org/t/p/w500"+dataModel.getImg_url()).centerCrop().into(poster);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                recyclerArray = jsonCastParser(jsonArray.get(1));
+                mAdapter = new MovieAdapter(recyclerArray);
+                recyclerViewCast.setAdapter(mAdapter);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
