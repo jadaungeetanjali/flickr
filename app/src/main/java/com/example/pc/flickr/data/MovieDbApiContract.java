@@ -24,7 +24,6 @@ public class MovieDbApiContract {
         public static final String COLUMN_POPULARITY = "popularity";
         public static final String COLUMN_VOTE_AVERAGE = "vote_average";
         public static final String COLUMN_TYPE = "type";
-        public static final String COLUMN_TYPE_ID = "type_id";
         public static final String COLUMN_TYPE_SUB = "type_sub";
         public static final String COLUMN_WISH_LIST = "wish_list";
         public static final String COLUMN_IMG_URL = "img_url";

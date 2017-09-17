@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.pc.flickr">
-    <uses-permission android:name="android.permission.INTERNET">
-    </uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -18,13 +19,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
-        <provider
-            android:authorities="com.example.pc.flickr"
-            android:name="com.example.pc.flickr.data.DataContentProvider"
-            android:exported="false">
 
-        </provider>
+        <provider
+            android:name=".data.DataContentProvider"
+            android:authorities="com.example.pc.flickr"
+            android:exported="false"></provider>
+
+        <service
+            android:name=".FetchApiService"
+            android:exported="false"></service>
     </application>
 
 </manifest>

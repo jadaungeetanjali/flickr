@@ -56,7 +56,6 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 public class HorizontalListFragment extends Fragment {
     public PrimaryMainAdapter mAdapter;
     String type;
-    private String urls[];
     RecyclerView recyclerView;
 
     public HorizontalListFragment() {
@@ -73,7 +72,6 @@ public class HorizontalListFragment extends Fragment {
         ArrayList<String> arrayList = new ArrayList<String>();
         String urlHeading[] = this.getArguments().getStringArray("urlHeading");
         ArrayList<String> urlHeadingList = new ArrayList<>(Arrays.asList(urlHeading));
-        urls = this.getArguments().getStringArray("urls");
         type = this.getArguments().getString("type");
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -112,36 +110,6 @@ public class HorizontalListFragment extends Fragment {
         public void onBindViewHolder(MyViewHolder holder, int position) {
             String str = arrayList.get(position);
             holder.parentCardViewHeading.setText(str);
-
-            FetchTask fetchTask = new FetchTask();
-            ArrayList<String> childArrayList = new ArrayList<>();
-            ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-            if ((networkInfo != null) && networkInfo.isConnected()){
-                fetchTask.execute(urls[position]);
-
-                try {
-                    String jsonData = fetchTask.get();
-                    if(type.equals("movies")) {
-                        childArrayList = jsonMovieParser(jsonData, str);
-                    }
-                    else if(type.equals("tv")){
-                        childArrayList = jsonTvParser(jsonData, str);
-                    }
-                    else if (type.equals("celebs")){
-                        childArrayList = jsonCelebsParser(jsonData, str);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                }
-            }
-            else {
-                Toast.makeText(getContext(), "Please connect to internet", Toast.LENGTH_LONG).show();
-            }
             holder.childRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             Cursor cursor = getData(type,str);
@@ -254,106 +222,5 @@ public class HorizontalListFragment extends Fragment {
                 null,
                 MovieDbApiContract.ApiData._ID
                 );
-    }
-
-
-
-
-    private ArrayList<String> jsonMovieParser(String jsonMovie, String type)throws JSONException {
-
-        MovieDbHelper movieDbHelper = new MovieDbHelper(getContext());
-        SQLiteDatabase db = movieDbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-
-        ArrayList<String> movieArray = new ArrayList<>();
-        JSONObject movieObject = new JSONObject(jsonMovie);
-        JSONArray list = movieObject.getJSONArray("results");
-        for (int i = 0; i < list.length();i++){
-            JSONObject popularMovie = list.getJSONObject(i);
-            String title = popularMovie.get("title").toString();
-            String id = popularMovie.get("id").toString();
-            String popularity = Math.round(Double.parseDouble(popularMovie.get("popularity").toString())) + "";
-            String vote_average = popularMovie.get("vote_average").toString();
-            String imgUrl = popularMovie.get("poster_path").toString();
-            values.put(MovieDbApiContract.ApiData.COLUMN_ID, id);
-            values.put(MovieDbApiContract.ApiData.COLUMN_NAME, title);
-            values.put(MovieDbApiContract.ApiData.COLUMN_POPULARITY, popularity);
-            values.put(MovieDbApiContract.ApiData.COLUMN_VOTE_AVERAGE, vote_average);
-            values.put(MovieDbApiContract.ApiData.COLUMN_TYPE, "movies");
-            values.put(MovieDbApiContract.ApiData.COLUMN_TYPE_SUB, type);
-            values.put(MovieDbApiContract.ApiData.COLUMN_IMG_URL, imgUrl);
-            values.put(MovieDbApiContract.ApiData.COLUMN_WISH_LIST, false);
-            long rowId = db.insert(MovieDbApiContract.ApiData.TABLE_NAME, null, values);
-            movieArray.add(title);
-        }
-        return movieArray;
-    }
-
-    private ArrayList<String> jsonTvParser(String jsontvShows, String type)throws JSONException {
-        MovieDbHelper movieDbHelper = new MovieDbHelper(getContext());
-        SQLiteDatabase db = movieDbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-
-
-        ArrayList<String> tvShowsArray = new ArrayList<>();
-        JSONObject tvShowsObject = new JSONObject(jsontvShows);
-        JSONArray list = tvShowsObject.getJSONArray("results");
-
-        for (int i = 0; i < list.length();i++){
-            JSONObject populartvShows = list.getJSONObject(i);
-            String id = populartvShows.get("id").toString();
-            String title = populartvShows.get("name").toString();
-            String popularity = Math.round(Double.parseDouble(populartvShows.get("popularity").toString())) + "";
-            String vote_average = populartvShows.get("vote_average").toString();
-            String imgUrl = populartvShows.get("poster_path").toString();
-            String args[]={i+""};
-            values.put(MovieDbApiContract.ApiData.COLUMN_ID, id);
-            values.put(MovieDbApiContract.ApiData.COLUMN_NAME, title);
-            values.put(MovieDbApiContract.ApiData.COLUMN_POPULARITY, popularity);
-            values.put(MovieDbApiContract.ApiData.COLUMN_VOTE_AVERAGE, vote_average);
-            values.put(MovieDbApiContract.ApiData.COLUMN_TYPE, "tv");
-            values.put(MovieDbApiContract.ApiData.COLUMN_TYPE_SUB, type);
-            values.put(MovieDbApiContract.ApiData.COLUMN_IMG_URL, imgUrl);
-            values.put(MovieDbApiContract.ApiData.COLUMN_WISH_LIST, false);
-            long rowId = db.update(MovieDbApiContract.ApiData.TABLE_NAME,values,"type_id=?",args);
-            tvShowsArray.add(title);
-        }
-        return tvShowsArray;
-    }
-
-
-    private ArrayList<String> jsonCelebsParser(String jsonCelebrities,String type)throws JSONException {
-        //MovieDbHelper movieDbHelper = new MovieDbHelper(getContext());
-        //SQLiteDatabase db = movieDbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-
-        ArrayList<String> celebritiesArray = new ArrayList<>();
-        JSONObject celebritiesObject = new JSONObject(jsonCelebrities);
-        JSONArray list = celebritiesObject.getJSONArray("results");
-        for (int i = 0; i < list.length();i++){
-            JSONObject popularCelebrities = list.getJSONObject(i);
-            String id = popularCelebrities.get("id").toString();
-            String title = popularCelebrities.get("name").toString();
-            JSONObject known_for = popularCelebrities.getJSONArray("known_for").getJSONObject(0);
-            String popularity = Math.round(Double.parseDouble(popularCelebrities.get("popularity").toString())) + "";
-            String vote_average = known_for.get("vote_average").toString();
-            String imgUrl = popularCelebrities.get("profile_path").toString();
-            values.put(MovieDbApiContract.ApiData.COLUMN_ID, id);
-            values.put(MovieDbApiContract.ApiData.COLUMN_NAME, title);
-            values.put(MovieDbApiContract.ApiData.COLUMN_POPULARITY, popularity);
-            values.put(MovieDbApiContract.ApiData.COLUMN_VOTE_AVERAGE, vote_average);
-            values.put(MovieDbApiContract.ApiData.COLUMN_TYPE, "celebs");
-            values.put(MovieDbApiContract.ApiData.COLUMN_TYPE_SUB, type);
-            values.put(MovieDbApiContract.ApiData.COLUMN_IMG_URL, imgUrl);
-            values.put(MovieDbApiContract.ApiData.COLUMN_WISH_LIST, false);
-            Uri uri = getContext().getContentResolver().insert(MovieDbApiContract.ApiData.CONTENT_URI, values);
-
-            if (uri != null){
-                Toast.makeText(getContext(), uri.toString(), Toast.LENGTH_SHORT).show();
-            }
-
-            celebritiesArray.add(title);
-        }
-        return celebritiesArray;
     }
 }
