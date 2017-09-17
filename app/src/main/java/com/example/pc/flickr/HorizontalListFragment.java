@@ -1,9 +1,12 @@
 package com.example.pc.flickr;
 
 
+import android.app.LoaderManager;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.CursorLoader;
+import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
@@ -107,15 +110,35 @@ public class HorizontalListFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(MyViewHolder holder, int position) {
+        public void onBindViewHolder(final MyViewHolder holder, int position) {
             String str = arrayList.get(position);
             holder.parentCardViewHeading.setText(str);
             holder.childRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
             recyclerView.setItemAnimator(new DefaultItemAnimator());
-            Cursor cursor = getData(type,str);
-            childAdapter = new HorizontalListFragment.ChildMainAdapter(cursor, cursor.getCount());
-            holder.childRecyclerView.setAdapter(childAdapter);
+            //Cursor cursor = getData(type,str);
+            //childAdapter = new HorizontalListFragment.ChildMainAdapter(cursor, cursor.getCount());
+            //holder.childRecyclerView.setAdapter(childAdapter);
+            class GetFilterData extends AsyncTask<String,Void,Cursor>{
 
+                @Override
+                protected Cursor doInBackground(String... params) {
+                    MovieDbHelper movieDbHelper = new MovieDbHelper(getContext());
+                    SQLiteDatabase db = movieDbHelper.getReadableDatabase();
+                    String WHERE = "type=? AND type_sub=?";
+                    String args[] = {type,params[0]};
+                    return getContext().getContentResolver().query(MovieDbApiContract.ApiData.CONTENT_URI,
+                            null,
+                            WHERE,
+                            args,
+                            null);
+                }
+                protected void onPostExecute(Cursor cursor) {
+                    childAdapter = new HorizontalListFragment.ChildMainAdapter(cursor, cursor.getCount());
+                    holder.childRecyclerView.setAdapter(childAdapter);
+                }
+            }
+            GetFilterData filterData = new GetFilterData();
+            filterData.execute(str);
         }
 
         @Override
@@ -153,7 +176,7 @@ public class HorizontalListFragment extends Fragment {
         public void dataProvider(){
             list = new ArrayList<>();
             while (cursor.moveToNext()){
-                DataModel dataModel = new DataModel(cursor.getString(2),cursor.getString(3),cursor.getString(0),cursor.getString(8));
+                DataModel dataModel = new DataModel(cursor.getString(2),cursor.getString(3),cursor.getString(6),cursor.getString(8));
                 list.add(dataModel);
             }
         }

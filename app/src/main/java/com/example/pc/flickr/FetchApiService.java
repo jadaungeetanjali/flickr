@@ -119,7 +119,7 @@ public class FetchApiService extends IntentService {
     }
 
     private ArrayList<ListDataModel> jsonMovieParser(String jsonMovie, String type, String subType, ArrayList<ListDataModel> listDataModel)throws JSONException {
-        ArrayList<String> movieArray = new ArrayList<>();
+
         JSONObject movieObject = new JSONObject(jsonMovie);
         JSONArray list = movieObject.getJSONArray("results");
         for (int i = 0; i < list.length();i++){
@@ -135,7 +135,7 @@ public class FetchApiService extends IntentService {
         return listDataModel;
     }
     private ArrayList<ListDataModel> jsonTvParser(String jsontvShows, String type, String subType, ArrayList<ListDataModel> listDataModel)throws JSONException {
-        ArrayList<String> tvShowsArray = new ArrayList<>();
+
         JSONObject tvShowsObject = new JSONObject(jsontvShows);
         JSONArray list = tvShowsObject.getJSONArray("results");
         for (int i = 0; i < list.length();i++){
@@ -152,7 +152,7 @@ public class FetchApiService extends IntentService {
     }
 
     private ArrayList<ListDataModel> jsonCelebsParser(String jsonCelebrities, String type, String subType, ArrayList<ListDataModel> listDataModel)throws JSONException {
-        ArrayList<String> celebritiesArray = new ArrayList<>();
+
         JSONObject celebritiesObject = new JSONObject(jsonCelebrities);
         JSONArray list = celebritiesObject.getJSONArray("results");
         for (int i = 0; i < list.length();i++){
