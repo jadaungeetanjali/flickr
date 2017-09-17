@@ -37,10 +37,10 @@ import java.util.concurrent.ExecutionException;
 // MoviesDetails activity to display the detail of particualr movie
 public class MoviesDetails extends AppCompatActivity {
     RecyclerView recyclerViewCast, recyclerViewReviews;
-    private MovieAdapter mAdapter;
+    private CastAdapter castAdapter;
     private ReviewAdapter reviewAdapter;
-    TextView title, overview, vote_average, tagline, release_date, language;
-    ImageView poster;
+    public TextView title, overview, vote_average, tagline, release_date, language;
+    public ImageView poster;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +52,7 @@ public class MoviesDetails extends AppCompatActivity {
         recyclerViewCast.setItemAnimator(new DefaultItemAnimator());
 
         recyclerViewReviews = (RecyclerView) findViewById(R.id.reviews);
-        LinearLayoutManager layoutManagerReviews = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager layoutManagerReviews = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerViewReviews.setLayoutManager(layoutManagerReviews);
         recyclerViewReviews.setItemAnimator(new DefaultItemAnimator());
 
@@ -74,15 +74,15 @@ public class MoviesDetails extends AppCompatActivity {
         // to set the horizontal linear layout for recycler view
     }
 
-    private class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.movieViewHolder> {
-        private ArrayList<String> castArrayList;
+    private class CastAdapter extends RecyclerView.Adapter<CastAdapter.castViewHolder> {
+        private ArrayList<CastModel> castArrayList;
 
-        class movieViewHolder extends RecyclerView.ViewHolder {
+        class castViewHolder extends RecyclerView.ViewHolder {
             ImageView castImageView;
             TextView castNameTextView;
             TextView castCharacterTextView;
 
-            public movieViewHolder(View itemView) {
+            public castViewHolder(View itemView) {
                 super(itemView);
                 castNameTextView = (TextView) itemView.findViewById(R.id.castName);
                 castImageView = (ImageView) itemView.findViewById(R.id.castImageView);
@@ -90,22 +90,22 @@ public class MoviesDetails extends AppCompatActivity {
             }
         }
 
-        public MovieAdapter(ArrayList<String> arrayList) {
+        public CastAdapter(ArrayList<CastModel> arrayList) {
             this.castArrayList = arrayList;
         }
 
         @Override
-        public movieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public castViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.movies_textview, parent, false);
-            return new movieViewHolder(itemView);
+            return new castViewHolder(itemView);
         }
 
         @Override
-        public void onBindViewHolder(movieViewHolder holder, int position) {
-            //String str = castArrayList.get(position);
-            holder.castNameTextView.setText(castArrayList.get(0));
-            holder.castCharacterTextView.setText(castArrayList.get(1));
-            Picasso.with(getBaseContext()).load("https://image.tmdb.org/t/p/w500"+castArrayList.get(2)).centerCrop().into(holder.castImageView);
+        public void onBindViewHolder(castViewHolder holder, int position) {
+            CastModel castModel = castArrayList.get(position);
+            holder.castNameTextView.setText(castModel.getName());
+            holder.castCharacterTextView.setText(castModel.getCharacter());
+            Picasso.with(getBaseContext()).load("https://image.tmdb.org/t/p/w500"+castModel.getImage()).into(holder.castImageView);
         }
 
         @Override
@@ -115,7 +115,7 @@ public class MoviesDetails extends AppCompatActivity {
     }
 
     private class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.reviewViewHolder> {
-        private ArrayList<String> reviewArrayList;
+        private ArrayList<ReviewModel> reviewArrayList;
 
         class reviewViewHolder extends RecyclerView.ViewHolder {
             TextView authorTextView, contentTextView;
@@ -127,7 +127,7 @@ public class MoviesDetails extends AppCompatActivity {
             }
         }
 
-        public ReviewAdapter(ArrayList<String> arrayList) {
+        public ReviewAdapter(ArrayList<ReviewModel> arrayList) {
             this.reviewArrayList = arrayList;
         }
 
@@ -139,9 +139,9 @@ public class MoviesDetails extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(reviewViewHolder holder, int position) {
-            //String str = castArrayList.get(position);
-            holder.authorTextView.setText(reviewArrayList.get(0));
-            holder.contentTextView.setText(reviewArrayList.get(1));
+            ReviewModel reviewModel = reviewArrayList.get(position);
+            holder.authorTextView.setText(reviewModel.getAuthor());
+            holder.contentTextView.setText(reviewModel.getContent());
         }
 
         @Override
@@ -149,6 +149,7 @@ public class MoviesDetails extends AppCompatActivity {
             return reviewArrayList.size();
         }
     }
+
 
     //new class is created to initialise all the variables
     private class DataModel{
@@ -195,6 +196,45 @@ public class MoviesDetails extends AppCompatActivity {
         }
     }
 
+    private class CastModel{
+        public String name;
+        public String character;
+        public String image;
+
+        public CastModel(String name,String character,String image){
+            this.name = name;
+            this.character = character;
+            this.image = image;
+        }
+
+        public String getCharacter() {
+            return character;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getImage() {
+            return image;
+        }
+    }
+    private class ReviewModel{
+        public String author;
+        public String content;
+        public ReviewModel(String author, String content){
+            this.author = author;
+            this.content = content;
+        }
+
+        public String getAuthor() {
+            return author;
+        }
+
+        public String getContent() {
+            return content;
+        }
+    }
 
     public class FetchTask extends AsyncTask<String, Void, ArrayList<String>> {
 
@@ -208,7 +248,7 @@ public class MoviesDetails extends AppCompatActivity {
             String tagline = movieObject.get("tagline").toString();
             String release_date = movieObject.get("release_date").toString();
             String language = movieObject.get("original_language").toString();
-            String poster = movieObject.get("poster").toString();
+            String poster = movieObject.get("poster_path").toString();
 
             DataModel dataModel=new DataModel(title, overview, vote_average, tagline, release_date, language, poster);
 
@@ -217,9 +257,8 @@ public class MoviesDetails extends AppCompatActivity {
 
 
 
-
-    private ArrayList<String> jsonCastParser(String jsonCast) throws JSONException {
-        ArrayList<String> recyclerArray = new ArrayList<>();
+    private ArrayList<CastModel> jsonCastParser(String jsonCast) throws JSONException {
+        ArrayList<CastModel> recyclerArray = new ArrayList<>();
         JSONObject castObject = new JSONObject(jsonCast);
         JSONArray castList = castObject.getJSONArray("cast");
         for (int i = 0; i < castList.length(); i++) {
@@ -227,20 +266,22 @@ public class MoviesDetails extends AppCompatActivity {
             String name = cast.get("name").toString();
             String character = cast.get("character").toString();
             String image = cast.get("profile_path").toString();
-            recyclerArray.add(name + "" + character + "" + image);
+            CastModel castModel = new CastModel(name,character,image);
+            recyclerArray.add(castModel);
         }
         return recyclerArray;
     }
 
-            private ArrayList<String> jsonReviewsParser(String jsonReviews) throws JSONException {
-                ArrayList<String> reviewsArray = new ArrayList<>();
+            private ArrayList<ReviewModel> jsonReviewsParser(String jsonReviews) throws JSONException {
+                ArrayList<ReviewModel> reviewsArray = new ArrayList<>();
                 JSONObject reviewsObject = new JSONObject(jsonReviews);
                 JSONArray reviewsList = reviewsObject.getJSONArray("results");
                 for (int i = 0; i < reviewsList.length(); i++) {
                     JSONObject review = reviewsList.getJSONObject(i);
                     String author = review.get("author").toString();
                     String content = review.get("content").toString();
-                    reviewsArray.add(author + "" + content);
+                    ReviewModel reviewModel = new ReviewModel(author, content);
+                    reviewsArray.add(reviewModel);
                 }
                 return reviewsArray;
             }
@@ -299,32 +340,35 @@ public class MoviesDetails extends AppCompatActivity {
         protected void onPostExecute(ArrayList<String> jsonArray) {
             super.onPostExecute(jsonArray);
             //for (String name:jsonArray){
-               // Log.v("output",name);
+                //Log.v("output",name);
             //}
-            ArrayList<String> castArray = new ArrayList<>();
-            ArrayList<String> reviewArray = new ArrayList<>();
+
+            ArrayList<CastModel> castArray = new ArrayList<>();
+            ArrayList<ReviewModel> reviewArray = new ArrayList<>();
             try {
                 DataModel dataModel = jsonMovieParser(jsonArray.get(0));
-                //Log.v("title",dataModel.getTitle());
+                Log.v("title",dataModel.getTitle());
                 title.setText(dataModel.getTitle());
                 overview.setText(dataModel.getOverview());
                 vote_average.setText(dataModel.getVote_avg());
                 tagline.setText(dataModel.getTagline());
                 release_date.setText(dataModel.getRelease_date());
                 language.setText(dataModel.getLanguage());
-                Picasso.with(getBaseContext()).load("https://image.tmdb.org/t/p/w500"+dataModel.getImg_url()).centerCrop().into(poster);
+                Picasso.with(getBaseContext()).load("https://image.tmdb.org/t/p/w500"+dataModel.getImg_url()).into(poster);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
             try {
                 castArray = jsonCastParser(jsonArray.get(1));
-                mAdapter = new MovieAdapter(castArray);
-                recyclerViewCast.setAdapter(mAdapter);
+                castAdapter = new CastAdapter(castArray);
+                recyclerViewCast.setAdapter(castAdapter);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             try {
                 reviewArray = jsonReviewsParser(jsonArray.get(2));
+                Log.v("review",jsonArray.get(2));
                 reviewAdapter = new ReviewAdapter(reviewArray);
                 recyclerViewReviews.setAdapter(reviewAdapter);
             } catch (JSONException e) {

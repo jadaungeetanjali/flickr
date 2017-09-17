@@ -14,9 +14,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         final Bundle moviesBundle = new Bundle();
         String[] moviesUrls = {
-                "https://api.themoviedb.org/3/movie/400?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US",  //detail_movie url
-                "https://api.themoviedb.org/3/movie/400/credits?api_key=fe56cdee4dfea0c18403e0965acfa23b",        //cast url
-                "https://api.themoviedb.org/3/movie/400/reviews?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US&page=1", //reviews
+                "https://api.themoviedb.org/3/movie/100?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US",  //detail_movie url
+                "https://api.themoviedb.org/3/movie/100/credits?api_key=fe56cdee4dfea0c18403e0965acfa23b",        //cast url
+                "https://api.themoviedb.org/3/movie/100/reviews?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US&page=1", //reviews
         };
         //String[] movieHeading = {"detailMovie", "cast", "reviews"};
         moviesBundle.putStringArray("urls", moviesUrls);
@@ -32,6 +32,5 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
 }
