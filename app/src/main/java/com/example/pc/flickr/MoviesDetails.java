@@ -34,11 +34,12 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 
-// MoviesDetails activity to display the detail of particualr movie
+// MoviesDetails activity to display the detail of particular movie
 public class MoviesDetails extends AppCompatActivity {
-    RecyclerView recyclerViewCast, recyclerViewReviews;
+    RecyclerView recyclerViewCast, recyclerViewReviews, recyclerViewSimilar;
     private CastAdapter castAdapter;
     private ReviewAdapter reviewAdapter;
+    private SimilarMoviesAdapter similarMoviesAdapter;
     public TextView title, overview, vote_average, tagline, release_date, language;
     public ImageView poster;
     @Override
@@ -46,20 +47,24 @@ public class MoviesDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_movie_layout);
 
-        recyclerViewCast = (RecyclerView) findViewById(R.id.cast_recycler_view);
+        recyclerViewCast = (RecyclerView) findViewById(R.id.castRecyclerView);
+        // to set the horizontal linear layout for recycler view
         LinearLayoutManager layoutManagerCast = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerViewCast.setLayoutManager(layoutManagerCast);
         recyclerViewCast.setItemAnimator(new DefaultItemAnimator());
 
-        recyclerViewReviews = (RecyclerView) findViewById(R.id.reviews);
+        recyclerViewReviews = (RecyclerView) findViewById(R.id.reviewsRecyclerView);
         LinearLayoutManager layoutManagerReviews = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerViewReviews.setLayoutManager(layoutManagerReviews);
         recyclerViewReviews.setItemAnimator(new DefaultItemAnimator());
 
-        //String urlHeading[] = this.getIntent().getExtras().getStringArray("urlHeading");
-        //ArrayList<String> urlHeadingList = new ArrayList<>(Arrays.asList(urlHeading));
-        String urls[] = this.getIntent().getExtras().getStringArray("urls");
+        recyclerViewSimilar = (RecyclerView) findViewById(R.id.similarMoviesRecyclerView);
+        LinearLayoutManager layoutManagerSimilar = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewSimilar.setLayoutManager(layoutManagerSimilar);
+        recyclerViewSimilar.setItemAnimator(new DefaultItemAnimator());
 
+        String urls[] = this.getIntent().getExtras().getStringArray("urls");
+        // initialising the textViews to be populated with data
         title = (TextView) findViewById(R.id.main_title);
         overview = (TextView) findViewById(R.id.overview);
         vote_average = (TextView) findViewById(R.id.vote_average);
@@ -69,11 +74,10 @@ public class MoviesDetails extends AppCompatActivity {
         poster = (ImageView) findViewById(R.id.poster);
 
         FetchTask callMovieData = new FetchTask();
-        callMovieData.execute(urls[0], urls[1], urls[2]);
+        callMovieData.execute(urls[0], urls[1], urls[2], urls[3]);
 
-        // to set the horizontal linear layout for recycler view
     }
-
+    // CastAdapter class to populate data in castRecyclerView
     private class CastAdapter extends RecyclerView.Adapter<CastAdapter.castViewHolder> {
         private ArrayList<CastModel> castArrayList;
 
@@ -113,7 +117,7 @@ public class MoviesDetails extends AppCompatActivity {
             return castArrayList.size();
         }
     }
-
+    // ReviewAdapter class to populate data in reviewsRecyclerView
     private class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.reviewViewHolder> {
         private ArrayList<ReviewModel> reviewArrayList;
 
@@ -149,9 +153,49 @@ public class MoviesDetails extends AppCompatActivity {
             return reviewArrayList.size();
         }
     }
+    // SimilarMovieAdapter class to populate data in similarMovieRecyclerView
+    private class SimilarMoviesAdapter extends RecyclerView.Adapter<SimilarMoviesAdapter.similarMoviesViewHolder> {
+        private ArrayList<SimilarMoviesModel> similarMoviesArrayList;
+
+        class similarMoviesViewHolder extends RecyclerView.ViewHolder {
+            ImageView similarMovieImageView;
+            TextView similarMovieNameTextView ;
+            TextView similarMovieVoteAverageTextView;
+
+            public similarMoviesViewHolder(View itemView) {
+                super(itemView);
+                similarMovieNameTextView = (TextView) itemView.findViewById(R.id.castName); //change id to similarMovieName
+                similarMovieImageView = (ImageView) itemView.findViewById(R.id.castImageView); //change id to similarMovieImage
+                similarMovieVoteAverageTextView = (TextView) itemView.findViewById(R.id.castCharacter); //change id to similarMovieVote
+            }
+        }
+
+        public SimilarMoviesAdapter(ArrayList<SimilarMoviesModel> arrayList) {
+            this.similarMoviesArrayList = arrayList;
+        }
+
+        @Override
+        public similarMoviesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.movies_textview, parent, false); //change layout id
+            return new similarMoviesViewHolder(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(similarMoviesViewHolder holder, int position) {
+            SimilarMoviesModel similarMoviesModel = similarMoviesArrayList.get(position);
+            holder.similarMovieNameTextView.setText(similarMoviesModel.getSimilarMovieName());
+            holder.similarMovieVoteAverageTextView.setText(similarMoviesModel.getSimilarMovieVoteAverage());
+            Picasso.with(getBaseContext()).load("https://image.tmdb.org/t/p/w500"+similarMoviesModel.getSimilarMovieimage()).into(holder.similarMovieImageView);
+        }
+
+        @Override
+        public int getItemCount() {
+            return similarMoviesArrayList.size();
+        }
+    }
 
 
-    //new class is created to initialise all the variables
+    //DataModel class is created to initialise all the variables using constructor
     private class DataModel{
         public String title;
         public String overview;
@@ -160,7 +204,7 @@ public class MoviesDetails extends AppCompatActivity {
         public String release_date;
         public String language;
         public String img_url;
-        //constructor to initialise all the variables
+        //constructor to initialise all the variables of textViews and imageView in detail_movie_layout
         public DataModel(String title,String overview, String vote_avg,
                          String tagline, String release_date, String language,String img_url){
             this.title = title;
@@ -195,7 +239,7 @@ public class MoviesDetails extends AppCompatActivity {
             return  img_url;
         }
     }
-
+    // CastModel class to initialise all the variables of castRecyclerView
     private class CastModel{
         public String name;
         public String character;
@@ -219,6 +263,7 @@ public class MoviesDetails extends AppCompatActivity {
             return image;
         }
     }
+    // ReviewModel class to initialise all the variables of reviewsRecyclerView
     private class ReviewModel{
         public String author;
         public String content;
@@ -235,11 +280,35 @@ public class MoviesDetails extends AppCompatActivity {
             return content;
         }
     }
+    // SimilarMoviesModel class to initialise all the variables of similarMoviesRecyclerView
+    private class SimilarMoviesModel{
+        public String similarMovieName;
+        public String similarMovieVoteAverage;
+        public String similarMovieimage;
+
+        public SimilarMoviesModel(String name,String voteAverage,String image){
+            this.similarMovieName = name;
+            this.similarMovieVoteAverage = voteAverage;
+            this.similarMovieimage = image;
+        }
+
+        public String getSimilarMovieVoteAverage() {
+            return similarMovieVoteAverage;
+        }
+
+        public String getSimilarMovieName() {
+            return similarMovieName;
+        }
+
+        public String getSimilarMovieimage() {
+            return similarMovieimage;
+        }
+    }
+
 
     public class FetchTask extends AsyncTask<String, Void, ArrayList<String>> {
-
+        // jsonMovieParser to parse the jsonData of MovieDetails
         private DataModel jsonMovieParser(String jsonMovie)throws JSONException {
-
             // fetching data in json
             JSONObject movieObject = new JSONObject(jsonMovie);
             String title = movieObject.get("title").toString();
@@ -249,16 +318,14 @@ public class MoviesDetails extends AppCompatActivity {
             String release_date = movieObject.get("release_date").toString();
             String language = movieObject.get("original_language").toString();
             String poster = movieObject.get("poster_path").toString();
-
+            //creating object of dataModel class to initialise constructor with movieDetails
             DataModel dataModel=new DataModel(title, overview, vote_average, tagline, release_date, language, poster);
 
             return dataModel;
         }
-
-
-
+     // jsonCastParser to parse the jsonData for cast
     private ArrayList<CastModel> jsonCastParser(String jsonCast) throws JSONException {
-        ArrayList<CastModel> recyclerArray = new ArrayList<>();
+        ArrayList<CastModel> castArray = new ArrayList<>();
         JSONObject castObject = new JSONObject(jsonCast);
         JSONArray castList = castObject.getJSONArray("cast");
         for (int i = 0; i < castList.length(); i++) {
@@ -266,27 +333,46 @@ public class MoviesDetails extends AppCompatActivity {
             String name = cast.get("name").toString();
             String character = cast.get("character").toString();
             String image = cast.get("profile_path").toString();
+
             CastModel castModel = new CastModel(name,character,image);
-            recyclerArray.add(castModel);
+            castArray.add(castModel);
         }
-        return recyclerArray;
+        return castArray;
+    }
+    // jsonReviewsParser to parse the jsonData for reviews
+    private ArrayList<ReviewModel> jsonReviewsParser(String jsonReviews) throws JSONException {
+        ArrayList<ReviewModel> reviewsArray = new ArrayList<>();
+        JSONObject reviewsObject = new JSONObject(jsonReviews);
+        JSONArray reviewsList = reviewsObject.getJSONArray("results");
+        for (int i = 0; i < reviewsList.length(); i++) {
+            JSONObject review = reviewsList.getJSONObject(i);
+            String author = review.get("author").toString();
+            String content = review.get("content").toString();
+
+            ReviewModel reviewModel = new ReviewModel(author, content);
+            reviewsArray.add(reviewModel);
+        }
+        return reviewsArray;
+    }
+    // jsonSimilarMoviesParser to parse the jsonData for SimilarMovies
+    private ArrayList<SimilarMoviesModel> jsonSimilarMoviesParser(String jsonSimilarMovies) throws JSONException {
+        ArrayList<SimilarMoviesModel> similarMoviesArray = new ArrayList<>();
+        JSONObject similarMoviesObject = new JSONObject(jsonSimilarMovies);
+        JSONArray similarMoviesList = similarMoviesObject.getJSONArray("results");
+        for (int i = 0; i < similarMoviesList.length(); i++) {
+            JSONObject similarMovies = similarMoviesList.getJSONObject(i);
+            String similarMovieName = similarMovies.get("title").toString();
+            String similarMovieVoteAverage = similarMovies.get("vote_average").toString();
+            String similarMoviePoster = similarMovies.get("poster_path").toString();
+
+            SimilarMoviesModel similarMoviesModel = new SimilarMoviesModel(similarMovieName,similarMovieVoteAverage,similarMoviePoster);
+            similarMoviesArray.add(similarMoviesModel);
+            }
+            return similarMoviesArray;
     }
 
-            private ArrayList<ReviewModel> jsonReviewsParser(String jsonReviews) throws JSONException {
-                ArrayList<ReviewModel> reviewsArray = new ArrayList<>();
-                JSONObject reviewsObject = new JSONObject(jsonReviews);
-                JSONArray reviewsList = reviewsObject.getJSONArray("results");
-                for (int i = 0; i < reviewsList.length(); i++) {
-                    JSONObject review = reviewsList.getJSONObject(i);
-                    String author = review.get("author").toString();
-                    String content = review.get("content").toString();
-                    ReviewModel reviewModel = new ReviewModel(author, content);
-                    reviewsArray.add(reviewModel);
-                }
-                return reviewsArray;
-            }
 
-        //doInBackground method to set up url connection and return jsondata
+        //doInBackground method to set up url connection and return jsonData
         @Override
         protected ArrayList<String> doInBackground(String... params) {
             HttpURLConnection urlConnection = null;
@@ -295,8 +381,7 @@ public class MoviesDetails extends AppCompatActivity {
             ArrayList<String> jsonArray = new ArrayList<>();
             for (String param : params){
                 try {
-                    //setting the urlconnection
-
+                    //setting the urlConnection
                     URL url = new URL(param);
                     urlConnection = (HttpURLConnection) url.openConnection();
                     urlConnection.setRequestMethod("GET");
@@ -337,6 +422,7 @@ public class MoviesDetails extends AppCompatActivity {
             }
             return jsonArray;
         }
+        // onPostExecute data to populate data after fetching data
         protected void onPostExecute(ArrayList<String> jsonArray) {
             super.onPostExecute(jsonArray);
             //for (String name:jsonArray){
@@ -345,6 +431,7 @@ public class MoviesDetails extends AppCompatActivity {
 
             ArrayList<CastModel> castArray = new ArrayList<>();
             ArrayList<ReviewModel> reviewArray = new ArrayList<>();
+            ArrayList<SimilarMoviesModel> similarMoviesArray = new ArrayList<>();
             try {
                 DataModel dataModel = jsonMovieParser(jsonArray.get(0));
                 Log.v("title",dataModel.getTitle());
@@ -368,9 +455,16 @@ public class MoviesDetails extends AppCompatActivity {
             }
             try {
                 reviewArray = jsonReviewsParser(jsonArray.get(2));
-                Log.v("review",jsonArray.get(2));
+                //Log.v("review",jsonArray.get(2));
                 reviewAdapter = new ReviewAdapter(reviewArray);
                 recyclerViewReviews.setAdapter(reviewAdapter);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                similarMoviesArray = jsonSimilarMoviesParser(jsonArray.get(3));
+                similarMoviesAdapter = new SimilarMoviesAdapter(similarMoviesArray);
+                recyclerViewSimilar.setAdapter(similarMoviesAdapter);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

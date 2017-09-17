@@ -17,10 +17,10 @@ public class MainActivity extends AppCompatActivity {
                 "https://api.themoviedb.org/3/movie/100?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US",  //detail_movie url
                 "https://api.themoviedb.org/3/movie/100/credits?api_key=fe56cdee4dfea0c18403e0965acfa23b",        //cast url
                 "https://api.themoviedb.org/3/movie/100/reviews?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US&page=1", //reviews
+                "https://api.themoviedb.org/3/movie/100/similar?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US&page=1" //similar movies
         };
-        //String[] movieHeading = {"detailMovie", "cast", "reviews"};
+
         moviesBundle.putStringArray("urls", moviesUrls);
-        //moviesBundle.putStringArray("urlHeading", movieHeading);
         // using setOnclickListener on button click
         Button movieButton = (Button) findViewById(R.id.movie);
         movieButton.setOnClickListener(new View.OnClickListener() {

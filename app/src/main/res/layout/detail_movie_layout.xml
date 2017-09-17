@@ -23,48 +23,11 @@
                     android:text="It"
                     android:textStyle="bold"
                     android:textSize="22sp"
-                    android:paddingLeft="16dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="5dp"
                     />
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_weight="0">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="16dp"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="2017"
-                    android:textSize="16sp"
-                    android:id="@+id/year"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="A"
-                    android:textSize="16sp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="2h 15min"
-                    android:textSize="16sp"
-                    android:layout_marginRight="16dp"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Drama, Horror"
-                    android:textSize="16sp"
-                    android:id="@+id/genres"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
             </LinearLayout>
-        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="220dp"
@@ -170,14 +133,16 @@
                     android:paddingBottom="10dp"/>
             </LinearLayout>
         </LinearLayout>
-
+         <LinearLayout
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content">
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/cast_recycler_view"
+            android:id="@+id/castRecyclerView"
             android:layout_width="wrap_content"
             android:layout_height="200dp"
             >
         </android.support.v7.widget.RecyclerView>
-
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -216,47 +181,6 @@
                     android:padding="5dp"
                     />
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:id="@+id/textView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Genres"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:layout_marginLeft="10dp"
-                        android:padding="5dp"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingBottom="16dp"
-                    android:paddingTop="16dp">
-                    <Button
-                        android:id="@+id/genres1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Drama"
-                        android:background="@color/colorAccent"
-                        android:layout_marginRight="16dp"
-                        android:layout_marginLeft="16dp"
-                        />
-                    <Button
-                        android:id="@+id/genres2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Horror"
-                        android:background="@color/colorAccent"
-                        />
-                </LinearLayout>
-            </LinearLayout>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -272,13 +196,14 @@
                     android:text="Details"
                     android:textSize="22sp"
                     android:textStyle="bold"
-                    android:padding="10dp"/>
+                    android:layout_margin="5dp"/>
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="10dp">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -289,16 +214,13 @@
                     android:text="Release Date"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:layout_marginLeft="10dp"
-                    android:padding="5dp"/>
+                    />
                 <TextView
                     android:id="@+id/release_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="September 24,2017"
                     android:textSize="16sp"
-                    android:layout_marginLeft="10dp"
-                    android:padding="5dp"
                     />
             </LinearLayout>
             <LinearLayout
@@ -311,16 +233,13 @@
                     android:text="Country of origin"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:layout_marginLeft="10dp"
-                    android:padding="5dp"/>
+                    />
                 <TextView
                     android:id="@+id/production_companies"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="United State"
                     android:textSize="16sp"
-                    android:layout_marginLeft="10dp"
-                    android:padding="5dp"
                     />
             </LinearLayout>
             <LinearLayout
@@ -333,16 +252,13 @@
                     android:text="Language spoken"
                     android:textStyle="bold"
                     android:textSize="18sp"
-                    android:layout_marginLeft="10dp"
-                    android:padding="5dp"/>
+                    />
                 <TextView
                     android:id="@+id/language"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="English"
                     android:textSize="16sp"
-                    android:layout_marginLeft="10dp"
-                    android:padding="5dp"
                     />
             </LinearLayout>
             <LinearLayout
@@ -355,35 +271,53 @@
                     android:text="Also known as"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:layout_marginLeft="10dp"
-                    android:padding="5dp"/>
+                    />
                 <TextView
                     android:id="@+id/known_as"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="English"
                     android:textSize="16sp"
-                    android:layout_marginLeft="10dp"
-                    android:padding="5dp"
                     />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_margin="2dp">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Reviews"
-                    android:textSize="16dp"
+                    android:textSize="22sp"
                     android:textStyle="bold"
-                    android:padding="5dp"/>
+                    android:padding="5dp"
+                    android:layout_marginTop="5dp"
+                    />
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/reviews"
+                android:id="@+id/reviewsRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 >
             </android.support.v7.widget.RecyclerView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Simialr Movies"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:padding="5dp"/>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/similarMoviesRecyclerView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="200dp"
+                    >
+                </android.support.v7.widget.RecyclerView>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
