@@ -19,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         Intent intent = new Intent(this,FetchApiService.class);
         startService(intent);
-        final FrameLayout fragmentContainer = (FrameLayout) findViewById(R.id.main_fragment_container);
 
         Bundle moviesBundle = new Bundle();
         String[] movieHeading = {"Now Playing", "Popular", "Top Rated", "Upcoming"};

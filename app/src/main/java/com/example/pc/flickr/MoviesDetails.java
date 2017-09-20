@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,7 +47,9 @@ public class MoviesDetails extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_movie_layout);
-
+        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         recyclerViewCast = (RecyclerView) findViewById(R.id.castRecyclerView);
         // to set the horizontal linear layout for recycler view
         LinearLayoutManager layoutManagerCast = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -63,7 +66,23 @@ public class MoviesDetails extends AppCompatActivity {
         recyclerViewSimilar.setLayoutManager(layoutManagerSimilar);
         recyclerViewSimilar.setItemAnimator(new DefaultItemAnimator());
 
-        String urls[] = this.getIntent().getExtras().getStringArray("urls");
+        Bundle bundle  = this.getIntent().getExtras();
+        String type = bundle.getString("type");
+        String id = bundle.getString("id");
+        ArrayList<String> urlList = new ArrayList<>();
+        switch (type){
+            case "movies":
+                urlList.add("https://api.themoviedb.org/3/movie/"+ id +"?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
+                urlList.add("https://api.themoviedb.org/3/movie/"+ id +"/credits?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
+                urlList.add("https://api.themoviedb.org/3/movie/"+ id +"/reviews?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
+                urlList.add("https://api.themoviedb.org/3/movie/"+ id +"/similar?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
+                break;
+            default:
+                urlList.add("https://api.themoviedb.org/3/movie/"+ id +"?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
+                urlList.add("https://api.themoviedb.org/3/movie/"+ id +"/credits?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
+                urlList.add("https://api.themoviedb.org/3/movie/"+ id +"/reviews?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
+                urlList.add("https://api.themoviedb.org/3/movie/"+ id +"/similar?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
+        }
         // initialising the textViews to be populated with data
         title = (TextView) findViewById(R.id.main_title);
         overview = (TextView) findViewById(R.id.overview);
@@ -74,7 +93,7 @@ public class MoviesDetails extends AppCompatActivity {
         poster = (ImageView) findViewById(R.id.poster);
 
         FetchTask callMovieData = new FetchTask();
-        callMovieData.execute(urls[0], urls[1], urls[2], urls[3]);
+        callMovieData.execute(urlList.get(0),urlList.get(1),urlList.get(2),urlList.get(3));
 
     }
     // CastAdapter class to populate data in castRecyclerView
@@ -100,7 +119,7 @@ public class MoviesDetails extends AppCompatActivity {
 
         @Override
         public castViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.movies_textview, parent, false);
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_textview, parent, false);
             return new castViewHolder(itemView);
         }
 
@@ -164,9 +183,9 @@ public class MoviesDetails extends AppCompatActivity {
 
             public similarMoviesViewHolder(View itemView) {
                 super(itemView);
-                similarMovieNameTextView = (TextView) itemView.findViewById(R.id.castName); //change id to similarMovieName
-                similarMovieImageView = (ImageView) itemView.findViewById(R.id.castImageView); //change id to similarMovieImage
-                similarMovieVoteAverageTextView = (TextView) itemView.findViewById(R.id.castCharacter); //change id to similarMovieVote
+                similarMovieNameTextView = (TextView) itemView.findViewById(R.id.main_child_title_textView); //change id to similarMovieName
+                similarMovieImageView = (ImageView) itemView.findViewById(R.id.main_child_imageView); //change id to similarMovieImage
+                similarMovieVoteAverageTextView = (TextView) itemView.findViewById(R.id.main_child_vote_textView); //change id to similarMovieVote
             }
         }
 
@@ -176,7 +195,7 @@ public class MoviesDetails extends AppCompatActivity {
 
         @Override
         public similarMoviesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.movies_textview, parent, false); //change layout id
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_vertical_card, parent, false); //change layout id
             return new similarMoviesViewHolder(itemView);
         }
 

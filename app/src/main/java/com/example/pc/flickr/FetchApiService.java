@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.pc.flickr.data.MovieDbApiContract;
 import com.example.pc.flickr.data.MovieDbHelper;
@@ -65,7 +66,7 @@ public class FetchApiService extends IntentService {
 
         }
         DatabaseInsert(listDataModel);
-
+        //Toast.makeText(this, "New Data Synced", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -230,5 +231,6 @@ public class FetchApiService extends IntentService {
             values.put(MovieDbApiContract.ApiData.COLUMN_WISH_LIST, false);
             Uri uri = getContentResolver().insert(MovieDbApiContract.ApiData.CONTENT_URI, values);
         }
+        db.close();
     }
 }
