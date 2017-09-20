@@ -4,6 +4,8 @@ import android.app.IntentService;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -47,27 +49,28 @@ public class FetchApiService extends IntentService {
         };
         String type[] = {"movies", "movies", "movies", "movies", "tv", "tv", "tv", "tv", "celebs"};
         String subType[] = {"Now Playing", "Popular", "Top Rated", "Upcoming", "Airing Today", "Popular", "Top Rated", "On The Air", "Popular"};
-        ArrayList<String> jsonArray = fetchTask(urls);
-        ArrayList<ListDataModel> listDataModel = new ArrayList<>();
-        for (int i= 0; i < urls.length ; i++){
-            try {
-                if (type[i].equals("movies")){
-                    listDataModel = jsonMovieParser(jsonArray.get(i),type[i],subType[i],listDataModel);
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if ((networkInfo != null) && networkInfo.isConnected()) {
+            ArrayList<String> jsonArray = fetchTask(urls);
+            ArrayList<ListDataModel> listDataModel = new ArrayList<>();
+            for (int i = 0; i < urls.length; i++) {
+                try {
+                    if (type[i].equals("movies")) {
+                        listDataModel = jsonMovieParser(jsonArray.get(i), type[i], subType[i], listDataModel);
+                    } else if (type[i].equals("tv")) {
+                        listDataModel = jsonTvParser(jsonArray.get(i), type[i], subType[i], listDataModel);
+                    } else {
+                        listDataModel = jsonCelebsParser(jsonArray.get(i), type[i], subType[i], listDataModel);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                else if (type[i].equals("tv")){
-                    listDataModel = jsonTvParser(jsonArray.get(i),type[i],subType[i],listDataModel);
-                }
-                else{
-                    listDataModel = jsonCelebsParser(jsonArray.get(i),type[i],subType[i],listDataModel);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
+
             }
-
+            DatabaseInsert(listDataModel);
+            //Toast.makeText(this, "New Data Synced", Toast.LENGTH_SHORT).show();
         }
-        DatabaseInsert(listDataModel);
-        //Toast.makeText(this, "New Data Synced", Toast.LENGTH_SHORT).show();
-
     }
 
     private ArrayList<String> fetchTask(String urls[]){
