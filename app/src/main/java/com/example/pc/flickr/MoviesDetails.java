@@ -121,9 +121,11 @@ public class MoviesDetails extends AppCompatActivity {
             ImageView castImageView;
             TextView castNameTextView;
             TextView castCharacterTextView;
+            ProgressBar castProgressBar;
 
             public castViewHolder(View itemView) {
                 super(itemView);
+                castProgressBar = (ProgressBar) itemView.findViewById(R.id.cast_image_progressBar);
                 castNameTextView = (TextView) itemView.findViewById(R.id.castName);
                 castImageView = (ImageView) itemView.findViewById(R.id.castImageView);
                 castCharacterTextView = (TextView) itemView.findViewById(R.id.castCharacter);
@@ -141,11 +143,24 @@ public class MoviesDetails extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(castViewHolder holder, int position) {
+        public void onBindViewHolder(final castViewHolder holder, int position) {
             CastModel castModel = castArrayList.get(position);
             holder.castNameTextView.setText(castModel.getName());
             holder.castCharacterTextView.setText(castModel.getCharacter());
-            Picasso.with(getBaseContext()).load("https://image.tmdb.org/t/p/w500"+castModel.getImage()).into(holder.castImageView);
+            Picasso.with(getBaseContext()).load("https://image.tmdb.org/t/p/w500"+castModel.getImage()).
+                    into(holder.castImageView,new com.squareup.picasso.Callback() {
+
+                        @Override
+                        public void onSuccess() {
+                            holder.castProgressBar.setVisibility(View.GONE);
+                            holder.castImageView.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onError() {
+
+                        }
+                    });
         }
 
         @Override
@@ -197,9 +212,11 @@ public class MoviesDetails extends AppCompatActivity {
             ImageView similarMovieImageView;
             TextView similarMovieNameTextView ;
             TextView similarMovieVoteAverageTextView;
+            ProgressBar similarMovieProgressBar;
 
             public similarMoviesViewHolder(View itemView) {
                 super(itemView);
+                similarMovieProgressBar = (ProgressBar) itemView.findViewById(R.id.main_image_progressBar);
                 similarMovieNameTextView = (TextView) itemView.findViewById(R.id.main_child_title_textView); //change id to similarMovieName
                 similarMovieImageView = (ImageView) itemView.findViewById(R.id.main_child_imageView); //change id to similarMovieImage
                 similarMovieVoteAverageTextView = (TextView) itemView.findViewById(R.id.main_child_vote_textView); //change id to similarMovieVote
@@ -217,11 +234,24 @@ public class MoviesDetails extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(similarMoviesViewHolder holder, int position) {
+        public void onBindViewHolder(final similarMoviesViewHolder holder, int position) {
             SimilarMoviesModel similarMoviesModel = similarMoviesArrayList.get(position);
             holder.similarMovieNameTextView.setText(similarMoviesModel.getSimilarMovieName());
             holder.similarMovieVoteAverageTextView.setText(similarMoviesModel.getSimilarMovieVoteAverage());
-            Picasso.with(getBaseContext()).load("https://image.tmdb.org/t/p/w500"+similarMoviesModel.getSimilarMovieimage()).into(holder.similarMovieImageView);
+            Picasso.with(getBaseContext()).load("https://image.tmdb.org/t/p/w500"+similarMoviesModel.getSimilarMovieimage())
+                    .into(holder.similarMovieImageView,new com.squareup.picasso.Callback() {
+
+                        @Override
+                        public void onSuccess() {
+                            holder.similarMovieProgressBar.setVisibility(View.GONE);
+                            holder.similarMovieImageView.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onError() {
+
+                        }
+                    });
         }
 
         @Override

@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -157,12 +158,14 @@ public class HorizontalListFragment extends Fragment {
             TextView childViewVote;
             TextView childViewPopularity;
             ImageView childImageView;
+            ProgressBar progressBar;
             public MyViewHolder(View itemview){
                 super(itemview);
                 childViewTitle = (TextView) itemview.findViewById(R.id.main_child_title_textView);
                 childViewVote = (TextView) itemview.findViewById(R.id.main_child_vote_textView);
                 childViewPopularity = (TextView) itemview.findViewById(R.id.main_child_popularity_textView);
                 childImageView = (ImageView) itemview.findViewById(R.id.main_child_imageView);
+                progressBar = (ProgressBar) itemview.findViewById(R.id.main_image_progressBar);
                 itemview.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -204,16 +207,29 @@ public class HorizontalListFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(MyViewHolder holder, int position) {
+        public void onBindViewHolder(final MyViewHolder holder, int position) {
             DataModel dataModel = list.get(position);
             holder.childViewTitle.setText(dataModel.getName());
             holder.childViewVote.setText(dataModel.getVote_avg());
             holder.childViewPopularity.setText(dataModel.getPopularity());
+            //final ProgressBar progressBar = holder.progressBar;
             final int radius = 10;
             final int margin = 5;
             final Transformation transformation = new RoundedCornersTransformation(radius, margin);
             Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w500"+dataModel.getImg_url()).transform(transformation)
-                    .into(holder.childImageView);
+                    .into(holder.childImageView,new com.squareup.picasso.Callback() {
+
+                        @Override
+                        public void onSuccess() {
+                            holder.progressBar.setVisibility(View.GONE);
+                            holder.childImageView.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onError() {
+
+                        }
+                    });
 
         }
 
