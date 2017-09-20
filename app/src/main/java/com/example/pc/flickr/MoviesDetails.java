@@ -16,6 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,11 +47,33 @@ public class MoviesDetails extends AppCompatActivity {
     private CastAdapter castAdapter;
     private ReviewAdapter reviewAdapter;
     private SimilarMoviesAdapter similarMoviesAdapter;
-    public TextView title, overview, vote_average, tagline, release_date, language;
+    public TextView title, overview, vote_average, tagline, release_date, language, internet_connectivity;
+    public ProgressBar progressBar;
     public ImageView poster;
+    public LinearLayout mainContainer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.detail_movie_layout);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        recyclerViewCast = (RecyclerView) findViewById(R.id.castRecyclerView);
+        // to set the horizontal linear layout for recycler view
+        LinearLayoutManager layoutManagerCast = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewCast.setLayoutManager(layoutManagerCast);
+        recyclerViewCast.setItemAnimator(new DefaultItemAnimator());
+
+        recyclerViewReviews = (RecyclerView) findViewById(R.id.reviewsRecyclerView);
+        LinearLayoutManager layoutManagerReviews = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        recyclerViewReviews.setLayoutManager(layoutManagerReviews);
+        recyclerViewReviews.setItemAnimator(new DefaultItemAnimator());
+
+        recyclerViewSimilar = (RecyclerView) findViewById(R.id.similarMoviesRecyclerView);
+        LinearLayoutManager layoutManagerSimilar = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewSimilar.setLayoutManager(layoutManagerSimilar);
+        recyclerViewSimilar.setItemAnimator(new DefaultItemAnimator());
+
         Bundle bundle  = this.getIntent().getExtras();
         String type = bundle.getString("type");
         String id = bundle.getString("id");
@@ -67,45 +92,24 @@ public class MoviesDetails extends AppCompatActivity {
                 urlList.add("https://api.themoviedb.org/3/movie/"+ id +"/similar?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
         }
         // initialising the textViews to be populated with data
+        title = (TextView) findViewById(R.id.main_title);
+        overview = (TextView) findViewById(R.id.overview);
+        vote_average = (TextView) findViewById(R.id.vote_average);
+        tagline = (TextView) findViewById(R.id.tagline);
+        release_date = (TextView) findViewById(R.id.release_date);
+        language = (TextView) findViewById(R.id.language);
+        poster = (ImageView) findViewById(R.id.poster);
+        internet_connectivity = (TextView) findViewById(R.id.internet_connectivity);
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         if ((networkInfo != null) && networkInfo.isConnected()) {
-            setContentView(R.layout.detail_movie_layout);
-            Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
-            setSupportActionBar(toolbar);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            recyclerViewCast = (RecyclerView) findViewById(R.id.castRecyclerView);
-            // to set the horizontal linear layout for recycler view
-            LinearLayoutManager layoutManagerCast = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-            recyclerViewCast.setLayoutManager(layoutManagerCast);
-            recyclerViewCast.setItemAnimator(new DefaultItemAnimator());
-
-            recyclerViewReviews = (RecyclerView) findViewById(R.id.reviewsRecyclerView);
-            LinearLayoutManager layoutManagerReviews = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-            recyclerViewReviews.setLayoutManager(layoutManagerReviews);
-            recyclerViewReviews.setItemAnimator(new DefaultItemAnimator());
-
-            recyclerViewSimilar = (RecyclerView) findViewById(R.id.similarMoviesRecyclerView);
-            LinearLayoutManager layoutManagerSimilar = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-            recyclerViewSimilar.setLayoutManager(layoutManagerSimilar);
-            recyclerViewSimilar.setItemAnimator(new DefaultItemAnimator());
-
-
-            title = (TextView) findViewById(R.id.main_title);
-            overview = (TextView) findViewById(R.id.overview);
-            vote_average = (TextView) findViewById(R.id.vote_average);
-            tagline = (TextView) findViewById(R.id.tagline);
-            release_date = (TextView) findViewById(R.id.release_date);
-            language = (TextView) findViewById(R.id.language);
-            poster = (ImageView) findViewById(R.id.poster);
+            internet_connectivity.setVisibility(View.GONE);
+            ScrollView scrollView = (ScrollView) findViewById(R.id.detail_movie_scrollView);
+            scrollView.setVisibility(View.VISIBLE);
             FetchTask callMovieData = new FetchTask();
             callMovieData.execute(urlList.get(0), urlList.get(1), urlList.get(2), urlList.get(3));
         }
         else{
-            setContentView(R.layout.internet_connectivity);
-            Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
-            setSupportActionBar(toolbar);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             Toast.makeText(this, "Please Connect to internet...", Toast.LENGTH_SHORT).show();
         }
     }
@@ -474,29 +478,23 @@ public class MoviesDetails extends AppCompatActivity {
                 release_date.setText(dataModel.getRelease_date());
                 language.setText(dataModel.getLanguage());
                 Picasso.with(getBaseContext()).load("https://image.tmdb.org/t/p/w500"+dataModel.getImg_url()).into(poster);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
 
-            try {
                 castArray = jsonCastParser(jsonArray.get(1));
                 castAdapter = new CastAdapter(castArray);
                 recyclerViewCast.setAdapter(castAdapter);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            try {
+
                 reviewArray = jsonReviewsParser(jsonArray.get(2));
                 //Log.v("review",jsonArray.get(2));
                 reviewAdapter = new ReviewAdapter(reviewArray);
                 recyclerViewReviews.setAdapter(reviewAdapter);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            try {
+
                 similarMoviesArray = jsonSimilarMoviesParser(jsonArray.get(3));
                 similarMoviesAdapter = new SimilarMoviesAdapter(similarMoviesArray);
                 recyclerViewSimilar.setAdapter(similarMoviesAdapter);
+                progressBar = (ProgressBar) findViewById(R.id.detail_progressBar);
+                mainContainer = (LinearLayout) findViewById(R.id.detail_mainContainer);
+                progressBar.setVisibility(View.GONE);
+                mainContainer.setVisibility(View.VISIBLE);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
