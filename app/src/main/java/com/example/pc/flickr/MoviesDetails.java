@@ -1,6 +1,5 @@
 package com.example.pc.flickr;
 
-import android.graphics.Movie;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -14,7 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,6 +21,13 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.pc.flickr.models.CastModel;
+import com.example.pc.flickr.models.DetailItemModel;
+import com.example.pc.flickr.models.ReviewModel;
+import com.example.pc.flickr.models.SimilarItemModel;
+import com.example.pc.flickr.models.WishListModel;
+import com.example.pc.flickr.services.FetchApiService;
+import com.example.pc.flickr.services.FirebaseCurd;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -37,9 +42,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 
 // MoviesDetails activity to display the detail of particular movie
@@ -48,11 +50,12 @@ public class MoviesDetails extends AppCompatActivity {
     private CastAdapter castAdapter;
     private ReviewAdapter reviewAdapter;
     private SimilarMoviesAdapter similarMoviesAdapter;
-    public TextView title, overview, vote_average, tagline, release_date, language, internet_connectivity;
-    public ProgressBar progressBar;
-    public ImageView poster;
-    public LinearLayout mainContainer;
-    public Button button;
+    private TextView title, overview, vote_average, tagline, release_date, language, internet_connectivity;
+    private ProgressBar progressBar;
+    private ImageView poster;
+    private LinearLayout mainContainer;
+    private Button button;
+    private String type, id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,8 +80,8 @@ public class MoviesDetails extends AppCompatActivity {
         recyclerViewSimilar.setItemAnimator(new DefaultItemAnimator());
 
         Bundle bundle  = this.getIntent().getExtras();
-        String type = bundle.getString("type");
-        String id = bundle.getString("id");
+        type = bundle.getString("type");
+        id = bundle.getString("id");
         ArrayList<String> urlList = new ArrayList<>();
         switch (type){
             case "movies":
@@ -215,7 +218,7 @@ public class MoviesDetails extends AppCompatActivity {
     }
     // SimilarMovieAdapter class to populate data in similarMovieRecyclerView
     private class SimilarMoviesAdapter extends RecyclerView.Adapter<SimilarMoviesAdapter.similarMoviesViewHolder> {
-        private ArrayList<SimilarMoviesModel> similarMoviesArrayList;
+        private ArrayList<SimilarItemModel> similarMoviesArrayList;
 
         class similarMoviesViewHolder extends RecyclerView.ViewHolder {
             ImageView similarMovieImageView;
@@ -232,7 +235,7 @@ public class MoviesDetails extends AppCompatActivity {
             }
         }
 
-        public SimilarMoviesAdapter(ArrayList<SimilarMoviesModel> arrayList) {
+        public SimilarMoviesAdapter(ArrayList<SimilarItemModel> arrayList) {
             this.similarMoviesArrayList = arrayList;
         }
 
@@ -244,10 +247,10 @@ public class MoviesDetails extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final similarMoviesViewHolder holder, int position) {
-            SimilarMoviesModel similarMoviesModel = similarMoviesArrayList.get(position);
-            holder.similarMovieNameTextView.setText(similarMoviesModel.getSimilarMovieName());
-            holder.similarMovieVoteAverageTextView.setText(similarMoviesModel.getSimilarMovieVoteAverage());
-            Picasso.with(getBaseContext()).load("https://image.tmdb.org/t/p/w500"+similarMoviesModel.getSimilarMovieimage())
+            SimilarItemModel SimilarItemModel = similarMoviesArrayList.get(position);
+            holder.similarMovieNameTextView.setText(SimilarItemModel.getSimilarItemName());
+            holder.similarMovieVoteAverageTextView.setText(SimilarItemModel.getSimilarItemVoteAverage());
+            Picasso.with(getBaseContext()).load("https://image.tmdb.org/t/p/w500"+SimilarItemModel.getSimilarItemimage())
                     .into(holder.similarMovieImageView,new com.squareup.picasso.Callback() {
 
                         @Override
@@ -270,120 +273,17 @@ public class MoviesDetails extends AppCompatActivity {
     }
 
 
-    //DataModel class is created to initialise all the variables using constructor
-    private class DataModel{
-        public String title;
-        public String overview;
-        public String vote_avg;
-        public String tagline;
-        public String release_date;
-        public String language;
-        public String img_url;
-        //constructor to initialise all the variables of textViews and imageView in detail_movie_layout
-        public DataModel(String title,String overview, String vote_avg,
-                         String tagline, String release_date, String language,String img_url){
-            this.title = title;
-            this.overview = overview;
-            this.vote_avg = vote_avg;
-            this.tagline = tagline;
-            this.release_date = release_date;
-            this.language = language;
-            this.img_url = img_url;
-        }
-        public String getTitle(){
+    //DetailItemModel class is created to initialise all the variables using constructor
 
-            return title;
-        }
-        public String getOverview(){
-
-            return overview;
-        }
-        public String getVote_avg(){
-            return vote_avg;
-        }
-        public String getTagline(){
-            return tagline;
-        }
-        public String getRelease_date(){
-            return release_date;
-        }
-        public String getLanguage(){
-            return language;
-        }
-        public String getImg_url(){
-            return  img_url;
-        }
-    }
     // CastModel class to initialise all the variables of castRecyclerView
-    private class CastModel{
-        public String name;
-        public String character;
-        public String image;
 
-        public CastModel(String name,String character,String image){
-            this.name = name;
-            this.character = character;
-            this.image = image;
-        }
-
-        public String getCharacter() {
-            return character;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getImage() {
-            return image;
-        }
-    }
     // ReviewModel class to initialise all the variables of reviewsRecyclerView
-    private class ReviewModel{
-        public String author;
-        public String content;
-        public ReviewModel(String author, String content){
-            this.author = author;
-            this.content = content;
-        }
 
-        public String getAuthor() {
-            return author;
-        }
-
-        public String getContent() {
-            return content;
-        }
-    }
-    // SimilarMoviesModel class to initialise all the variables of similarMoviesRecyclerView
-    private class SimilarMoviesModel{
-        public String similarMovieName;
-        public String similarMovieVoteAverage;
-        public String similarMovieimage;
-
-        public SimilarMoviesModel(String name,String voteAverage,String image){
-            this.similarMovieName = name;
-            this.similarMovieVoteAverage = voteAverage;
-            this.similarMovieimage = image;
-        }
-
-        public String getSimilarMovieVoteAverage() {
-            return similarMovieVoteAverage;
-        }
-
-        public String getSimilarMovieName() {
-            return similarMovieName;
-        }
-
-        public String getSimilarMovieimage() {
-            return similarMovieimage;
-        }
-    }
-
+    // SimilarItemModel class to initialise all the variables of similarMoviesRecyclerView
 
     public class FetchTask extends AsyncTask<String, Void, ArrayList<String>> {
         // jsonMovieParser to parse the jsonData of MovieDetails
-        private DataModel jsonMovieParser(String jsonMovie)throws JSONException {
+        private DetailItemModel jsonMovieParser(String jsonMovie)throws JSONException {
             // fetching data in json
             JSONObject movieObject = new JSONObject(jsonMovie);
             String title = movieObject.get("title").toString();
@@ -393,10 +293,10 @@ public class MoviesDetails extends AppCompatActivity {
             String release_date = movieObject.get("release_date").toString();
             String language = movieObject.get("original_language").toString();
             String poster = movieObject.get("poster_path").toString();
-            //creating object of dataModel class to initialise constructor with movieDetails
-            DataModel dataModel=new DataModel(title, overview, vote_average, tagline, release_date, language, poster);
+            //creating object of DetailItemModel class to initialise constructor with movieDetails
+            DetailItemModel DetailItemModel=new DetailItemModel(title, overview, vote_average, tagline, release_date, language, poster);
 
-            return dataModel;
+            return DetailItemModel;
         }
      // jsonCastParser to parse the jsonData for cast
     private ArrayList<CastModel> jsonCastParser(String jsonCast) throws JSONException {
@@ -405,11 +305,12 @@ public class MoviesDetails extends AppCompatActivity {
         JSONArray castList = castObject.getJSONArray("cast");
         for (int i = 0; i < castList.length(); i++) {
             JSONObject cast = castList.getJSONObject(i);
+            String itemId = cast.get("id").toString();
             String name = cast.get("name").toString();
             String character = cast.get("character").toString();
             String image = cast.get("profile_path").toString();
 
-            CastModel castModel = new CastModel(name,character,image);
+            CastModel castModel = new CastModel(id,name,character,image);
             castArray.add(castModel);
         }
         return castArray;
@@ -430,18 +331,18 @@ public class MoviesDetails extends AppCompatActivity {
         return reviewsArray;
     }
     // jsonSimilarMoviesParser to parse the jsonData for SimilarMovies
-    private ArrayList<SimilarMoviesModel> jsonSimilarMoviesParser(String jsonSimilarMovies) throws JSONException {
-        ArrayList<SimilarMoviesModel> similarMoviesArray = new ArrayList<>();
+    private ArrayList<SimilarItemModel> jsonSimilarMoviesParser(String jsonSimilarMovies) throws JSONException {
+        ArrayList<SimilarItemModel> similarMoviesArray = new ArrayList<>();
         JSONObject similarMoviesObject = new JSONObject(jsonSimilarMovies);
         JSONArray similarMoviesList = similarMoviesObject.getJSONArray("results");
         for (int i = 0; i < similarMoviesList.length(); i++) {
             JSONObject similarMovies = similarMoviesList.getJSONObject(i);
-            String similarMovieName = similarMovies.get("title").toString();
-            String similarMovieVoteAverage = similarMovies.get("vote_average").toString();
-            String similarMoviePoster = similarMovies.get("poster_path").toString();
-
-            SimilarMoviesModel similarMoviesModel = new SimilarMoviesModel(similarMovieName,similarMovieVoteAverage,similarMoviePoster);
-            similarMoviesArray.add(similarMoviesModel);
+            String similarItemName = similarMovies.get("title").toString();
+            String similarItemVoteAverage = similarMovies.get("vote_average").toString();
+            String similarItemPoster = similarMovies.get("poster_path").toString();
+            String similarItemId = similarMovies.get("id").toString();
+            SimilarItemModel SimilarItemModel = new SimilarItemModel(similarItemId, similarItemName, similarItemVoteAverage, similarItemPoster);
+            similarMoviesArray.add(SimilarItemModel);
             }
             return similarMoviesArray;
     }
@@ -506,17 +407,17 @@ public class MoviesDetails extends AppCompatActivity {
 
             ArrayList<CastModel> castArray = new ArrayList<>();
             ArrayList<ReviewModel> reviewArray = new ArrayList<>();
-            ArrayList<SimilarMoviesModel> similarMoviesArray = new ArrayList<>();
+            ArrayList<SimilarItemModel> similarMoviesArray = new ArrayList<>();
             try {
-                final DataModel dataModel = jsonMovieParser(jsonArray.get(0));
-                Log.v("title",dataModel.getTitle());
-                title.setText(dataModel.getTitle());
-                overview.setText(dataModel.getOverview());
-                vote_average.setText(dataModel.getVote_avg());
-                tagline.setText(dataModel.getTagline());
-                release_date.setText(dataModel.getRelease_date());
-                language.setText(dataModel.getLanguage());
-                Picasso.with(getBaseContext()).load("https://image.tmdb.org/t/p/w500"+dataModel.getImg_url()).into(poster);
+                final DetailItemModel DetailItemModel = jsonMovieParser(jsonArray.get(0));
+                Log.v("title",DetailItemModel.getTitle());
+                title.setText(DetailItemModel.getTitle());
+                overview.setText(DetailItemModel.getOverview());
+                vote_average.setText(DetailItemModel.getVote_avg());
+                tagline.setText(DetailItemModel.getTagline());
+                release_date.setText(DetailItemModel.getRelease_date());
+                language.setText(DetailItemModel.getLanguage());
+                Picasso.with(getBaseContext()).load("https://image.tmdb.org/t/p/w500"+DetailItemModel.getImg_url()).into(poster);
 
                 castArray = jsonCastParser(jsonArray.get(1));
                 castAdapter = new CastAdapter(castArray);
@@ -537,7 +438,11 @@ public class MoviesDetails extends AppCompatActivity {
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.v("movie",dataModel.getTitle());
+                        Log.v("movie",DetailItemModel.getTitle());
+                        WishListModel wishListModel = new WishListModel(
+                                "tyagideepu133",id,type,DetailItemModel.getTitle(),DetailItemModel.getImg_url(),DetailItemModel.getVote_avg());
+                        FirebaseCurd firebaseCurd = new FirebaseCurd();
+                        firebaseCurd.addWhistListModel(wishListModel);
                     }
                 });
             } catch (JSONException e) {

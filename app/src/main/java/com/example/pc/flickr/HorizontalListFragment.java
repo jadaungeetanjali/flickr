@@ -34,6 +34,7 @@ import android.widget.Toast;
 import com.example.pc.flickr.R;
 import com.example.pc.flickr.data.MovieDbApiContract;
 import com.example.pc.flickr.data.MovieDbHelper;
+import com.example.pc.flickr.models.ListDataModel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
@@ -59,7 +60,7 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
  * A simple {@link Fragment} subclass.
  */
 public class HorizontalListFragment extends Fragment {
-    public PrimaryMainAdapter mAdapter;
+    public MainParentAdapter mAdapter;
     String type;
     RecyclerView recyclerView;
 
@@ -81,13 +82,14 @@ public class HorizontalListFragment extends Fragment {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        mAdapter = new HorizontalListFragment.PrimaryMainAdapter(urlHeadingList);
+        mAdapter = new HorizontalListFragment.MainParentAdapter(urlHeadingList);
         recyclerView.setAdapter(mAdapter);
         return rootView;
     }
 
-    private class PrimaryMainAdapter extends RecyclerView.Adapter<PrimaryMainAdapter.MyViewHolder> {
-        private ChildMainAdapter childAdapter;
+    //----------------------------------------------------------------------------------------------------------//
+    private class MainParentAdapter extends RecyclerView.Adapter<MainParentAdapter.MyViewHolder> {
+        private MainChildAdapter childAdapter;
         private ArrayList<String> arrayList;
 
         class MyViewHolder extends RecyclerView.ViewHolder{
@@ -100,7 +102,7 @@ public class HorizontalListFragment extends Fragment {
             }
         }
 
-        public PrimaryMainAdapter(ArrayList<String> arrayList){
+        public MainParentAdapter(ArrayList<String> arrayList){
             this.arrayList = arrayList;
         }
 
@@ -132,7 +134,7 @@ public class HorizontalListFragment extends Fragment {
                             null);
                 }
                 protected void onPostExecute(Cursor cursor) {
-                    childAdapter = new HorizontalListFragment.ChildMainAdapter(cursor, cursor.getCount());
+                    childAdapter = new HorizontalListFragment.MainChildAdapter(cursor, cursor.getCount());
                     holder.childRecyclerView.setAdapter(childAdapter);
                 }
             }
@@ -145,12 +147,18 @@ public class HorizontalListFragment extends Fragment {
             return arrayList.size();
         }
     }
-    private class ChildMainAdapter extends RecyclerView.Adapter<ChildMainAdapter.MyViewHolder> {
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
+
+
+
+
+
+    //----------------------------------------------------------------------------------------------------//
+    private class MainChildAdapter extends RecyclerView.Adapter<MainChildAdapter.MyViewHolder> {
 
         private Cursor cursor;
         private int mCount;
-        private List<DataModel> list;
-        private List<ListDataModel> dataList;
+        private ArrayList<ListDataModel> dataList;
 
 
         class MyViewHolder extends RecyclerView.ViewHolder{
@@ -181,21 +189,18 @@ public class HorizontalListFragment extends Fragment {
             }
         }
 
-        public ChildMainAdapter(Cursor cursor, int mCount){
+        public MainChildAdapter(Cursor cursor, int mCount){
             this.mCount = mCount;
             this.cursor = cursor;
             dataProvider();
         }
 
         public void dataProvider(){
-            list = new ArrayList<>();
             dataList = new ArrayList<>();
             while (cursor.moveToNext()){
-                DataModel dataModel = new DataModel(cursor.getString(2),cursor.getString(3),cursor.getString(6),cursor.getString(8));
                 ListDataModel listDataModel = new ListDataModel(cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(6),
                         cursor.getString(8),cursor.getString(4),cursor.getString(5));
                 dataList.add(listDataModel);
-                list.add(dataModel);
             }
             cursor.close();
         }
@@ -208,7 +213,7 @@ public class HorizontalListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(final MyViewHolder holder, int position) {
-            DataModel dataModel = list.get(position);
+            ListDataModel dataModel = dataList.get(position);
             holder.childViewTitle.setText(dataModel.getName());
             holder.childViewVote.setText(dataModel.getVote_avg());
             holder.childViewPopularity.setText(dataModel.getPopularity());
@@ -238,78 +243,9 @@ public class HorizontalListFragment extends Fragment {
             return mCount;
         }
     }
-    private class DataModel{
-        private String name;
-        private String popularity;
-        private String vote_avg;
-        private String img_url;
-        public DataModel(String name,String popularity,String vote_avg,String img_url){
-            this.img_url = img_url;
-            this.name = name;
-            this.vote_avg = vote_avg;
-            this.popularity = popularity;
-        }
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
 
-        public String getName(){
-            return name;
-        }
-        public String getPopularity(){
-            return popularity;
-        }
 
-        public String getImg_url() {
-            return img_url;
-        }
-
-        public String getVote_avg() {
-            return vote_avg;
-        }
-    }
-    private class ListDataModel{
-        private String name;
-        private String popularity;
-        private String vote_avg;
-        private String img_url;
-        private String id;
-        private String type;
-        private String subType;
-        public ListDataModel(String id,String name,String popularity,String vote_avg,String img_url,String type,String subType){
-            this.img_url = img_url;
-            this.name = name;
-            this.vote_avg = vote_avg;
-            this.popularity = popularity;
-            this.id = id;
-            this.type = type;
-            this.subType = subType;
-        }
-
-        public String getName(){
-            return name;
-        }
-        public String getPopularity(){
-            return popularity;
-        }
-
-        public String getImg_url() {
-            return img_url;
-        }
-
-        public String getVote_avg() {
-            return vote_avg;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public String getSubType() {
-            return subType;
-        }
-
-        public String getType() {
-            return type;
-        }
-    }
     private Cursor getData(String type, String sub_type){
         MovieDbHelper movieDbHelper = new MovieDbHelper(getContext());
         SQLiteDatabase db = movieDbHelper.getReadableDatabase();

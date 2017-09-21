@@ -1,4 +1,4 @@
-package com.example.pc.flickr;
+package com.example.pc.flickr.services;
 
 import android.app.IntentService;
 import android.content.ContentValues;
@@ -7,12 +7,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.pc.flickr.data.MovieDbApiContract;
 import com.example.pc.flickr.data.MovieDbHelper;
+import com.example.pc.flickr.models.ListDataModel;
+import com.example.pc.flickr.models.WishListModel;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +28,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static android.content.ContentValues.TAG;
 
@@ -172,58 +175,14 @@ public class FetchApiService extends IntentService {
         }
         return listDataModel;
     }
-    private class ListDataModel{
-        private String name;
-        private String popularity;
-        private String vote_avg;
-        private String img_url;
-        private String id;
-        private String type;
-        private String subType;
-        public ListDataModel(String id,String name,String popularity,String vote_avg,String img_url,String type,String subType){
-            this.img_url = img_url;
-            this.name = name;
-            this.vote_avg = vote_avg;
-            this.popularity = popularity;
-            this.id = id;
-            this.type = type;
-            this.subType = subType;
-        }
 
-        public String getName(){
-            return name;
-        }
-        public String getPopularity(){
-            return popularity;
-        }
 
-        public String getImg_url() {
-            return img_url;
-        }
-
-        public String getVote_avg() {
-            return vote_avg;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public String getSubType() {
-            return subType;
-        }
-
-        public String getType() {
-            return type;
-        }
-    }
-
-    private void DatabaseInsert(ArrayList<ListDataModel> listDataModel){
+    private void DatabaseInsert(ArrayList<ListDataModel> listDataModel) {
         MovieDbHelper movieDbHelper = new MovieDbHelper(this);
         SQLiteDatabase db = movieDbHelper.getWritableDatabase();
-        db.delete(MovieDbApiContract.ApiData.TABLE_NAME,null,null);
+        db.delete(MovieDbApiContract.ApiData.TABLE_NAME, null, null);
         ContentValues values = new ContentValues();
-        for (ListDataModel dataModel:listDataModel){
+        for (ListDataModel dataModel : listDataModel) {
             values.put(MovieDbApiContract.ApiData.COLUMN_ID, dataModel.getId());
             values.put(MovieDbApiContract.ApiData.COLUMN_NAME, dataModel.getName());
             values.put(MovieDbApiContract.ApiData.COLUMN_POPULARITY, dataModel.getPopularity());
