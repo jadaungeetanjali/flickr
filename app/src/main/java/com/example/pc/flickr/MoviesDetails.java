@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -51,6 +52,7 @@ public class MoviesDetails extends AppCompatActivity {
     public ProgressBar progressBar;
     public ImageView poster;
     public LinearLayout mainContainer;
+    public Button button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +87,12 @@ public class MoviesDetails extends AppCompatActivity {
                 urlList.add("https://api.themoviedb.org/3/movie/"+ id +"/reviews?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
                 urlList.add("https://api.themoviedb.org/3/movie/"+ id +"/similar?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
                 break;
+            case "tv":
+                urlList.add("https://api.themoviedb.org/3/tv/"+ id +"?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
+                urlList.add("https://api.themoviedb.org/3/tv/"+ id +"/credits?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
+                urlList.add("https://api.themoviedb.org/3/movie/"+ id +"/reviews?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
+                urlList.add("https://api.themoviedb.org/3/tv/"+ id +"/similar?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
+                break;
             default:
                 urlList.add("https://api.themoviedb.org/3/movie/"+ id +"?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
                 urlList.add("https://api.themoviedb.org/3/movie/"+ id +"/credits?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
@@ -100,6 +108,7 @@ public class MoviesDetails extends AppCompatActivity {
         language = (TextView) findViewById(R.id.language);
         poster = (ImageView) findViewById(R.id.poster);
         internet_connectivity = (TextView) findViewById(R.id.internet_connectivity);
+        button = (Button) findViewById(R.id.detail_wishlist);
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         if ((networkInfo != null) && networkInfo.isConnected()) {
@@ -499,7 +508,7 @@ public class MoviesDetails extends AppCompatActivity {
             ArrayList<ReviewModel> reviewArray = new ArrayList<>();
             ArrayList<SimilarMoviesModel> similarMoviesArray = new ArrayList<>();
             try {
-                DataModel dataModel = jsonMovieParser(jsonArray.get(0));
+                final DataModel dataModel = jsonMovieParser(jsonArray.get(0));
                 Log.v("title",dataModel.getTitle());
                 title.setText(dataModel.getTitle());
                 overview.setText(dataModel.getOverview());
@@ -525,6 +534,12 @@ public class MoviesDetails extends AppCompatActivity {
                 mainContainer = (LinearLayout) findViewById(R.id.detail_mainContainer);
                 progressBar.setVisibility(View.GONE);
                 mainContainer.setVisibility(View.VISIBLE);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.v("movie",dataModel.getTitle());
+                    }
+                });
             } catch (JSONException e) {
                 e.printStackTrace();
             }

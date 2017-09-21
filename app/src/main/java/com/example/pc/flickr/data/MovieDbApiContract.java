@@ -12,6 +12,7 @@ public class MovieDbApiContract {
     public static final String AUTHORITY = "com.example.pc.flickr";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
     public static final String PATH_API_DATA = "api_data";
+    public static final String PATH_LIKE_DATA = "like_data";
 
     public static final class ApiData implements BaseColumns{
 
@@ -28,4 +29,19 @@ public class MovieDbApiContract {
         public static final String COLUMN_WISH_LIST = "wish_list";
         public static final String COLUMN_IMG_URL = "img_url";
     }
+
+    public static final class LikeData implements BaseColumns{
+
+        public static final Uri CONTENT_URI_LIKE = BASE_CONTENT_URI.buildUpon()
+                .appendPath(PATH_LIKE_DATA).build();
+
+        public static final String TABLE_NAME = "like_data";
+        public static final String COLUMN_ID = "data_id";
+        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_VOTE_AVERAGE = "vote_average";
+        public static final String COLUMN_TYPE = "type";
+        public static final String COLUMN_ITEM_TYPE = "item_type";
+        public static final String COLUMN_IMG_URL = "img_url";
+    }
+
 }
