@@ -230,5 +230,6 @@ public class FetchApiService extends IntentService {
             values.put(MovieDbApiContract.ApiData.COLUMN_WISH_LIST, false);
             Uri uri = getContentResolver().insert(MovieDbApiContract.ApiData.CONTENT_URI, values);
         }
+        db.close();
     }
 }

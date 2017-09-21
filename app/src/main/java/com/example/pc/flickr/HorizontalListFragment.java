@@ -6,6 +6,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -115,9 +116,6 @@ public class HorizontalListFragment extends Fragment {
             holder.parentCardViewHeading.setText(str);
             holder.childRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
             recyclerView.setItemAnimator(new DefaultItemAnimator());
-            //Cursor cursor = getData(type,str);
-            //childAdapter = new HorizontalListFragment.ChildMainAdapter(cursor, cursor.getCount());
-            //holder.childRecyclerView.setAdapter(childAdapter);
             class GetFilterData extends AsyncTask<String,Void,Cursor>{
 
                 @Override
@@ -151,7 +149,7 @@ public class HorizontalListFragment extends Fragment {
         private Cursor cursor;
         private int mCount;
         private List<DataModel> list;
-
+        private List<ListDataModel> dataList;
 
         class MyViewHolder extends RecyclerView.ViewHolder{
             TextView childViewTitle;
@@ -164,6 +162,18 @@ public class HorizontalListFragment extends Fragment {
                 childViewVote = (TextView) itemview.findViewById(R.id.main_child_vote_textView);
                 childViewPopularity = (TextView) itemview.findViewById(R.id.main_child_popularity_textView);
                 childImageView = (ImageView) itemview.findViewById(R.id.main_child_imageView);
+                itemview.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getContext(),MoviesDetails.class);
+                        Bundle mBundle = new Bundle();
+                        ListDataModel dataModel = dataList.get(getAdapterPosition());
+                        mBundle.putString("type",dataModel.getType());
+                        mBundle.putString("id",dataModel.getId());
+                        intent.putExtras(mBundle);
+                        startActivity(intent);
+                                          }
+                });
             }
         }
 
@@ -175,10 +185,14 @@ public class HorizontalListFragment extends Fragment {
 
         public void dataProvider(){
             list = new ArrayList<>();
+            dataList = new ArrayList<>();
             while (cursor.moveToNext()){
                 DataModel dataModel = new DataModel(cursor.getString(2),cursor.getString(3),cursor.getString(6),cursor.getString(8));
+                ListDataModel listDataModel = new ListDataModel(cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(6),cursor.getString(8),cursor.getString(4),cursor.getString(5));
+                dataList.add(listDataModel);
                 list.add(dataModel);
             }
+            cursor.close();
         }
         @Override
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -231,6 +245,50 @@ public class HorizontalListFragment extends Fragment {
         public String getVote_avg() {
             return vote_avg;
         }
+    }
+
+    private class ListDataModel{
+        private String name;
+        private String popularity;
+        private String vote_avg;
+        private String img_url;
+        private String id;
+        private String type;
+        private String subType;
+        public ListDataModel(String id,String name,String popularity,String vote_avg,String img_url,String type,String subType){
+            this.img_url = img_url;
+            this.name = name;
+            this.vote_avg = vote_avg;
+            this.popularity = popularity;
+            this.id = id;
+            this.type = type;
+            this.subType = subType;
+        }
+
+        public String getName(){
+            return name;
+        }
+        public String getPopularity(){
+            return popularity;
+        }
+
+        public String getImg_url() {
+            return img_url;
+        }
+
+        public String getVote_avg() {
+            return vote_avg;
+        }
+
+        public String getId() {
+            return id;
+ }
+        public String getSubType() {
+            return subType;
+        }
+        public String getType() {
+            return type;
+ }
     }
     private Cursor getData(String type, String sub_type){
         MovieDbHelper movieDbHelper = new MovieDbHelper(getContext());

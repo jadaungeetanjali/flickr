@@ -19,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         Intent intent = new Intent(this,FetchApiService.class);
         startService(intent);
-        final FrameLayout fragmentContainer = (FrameLayout) findViewById(R.id.main_fragment_container);
 
         Bundle moviesBundle = new Bundle();
         String[] movieHeading = {"Now Playing", "Popular", "Top Rated", "Upcoming"};
@@ -27,8 +26,6 @@ public class MainActivity extends AppCompatActivity {
         moviesBundle.putStringArray("urlHeading", movieHeading);
         final HorizontalListFragment moviesFragment =new HorizontalListFragment();
         moviesFragment.setArguments(moviesBundle);
-
-
 
         Bundle tvBundle = new Bundle();
         String[] tvHeading = {"Airing Today", "Popular", "Top Rated", "On The Air"};

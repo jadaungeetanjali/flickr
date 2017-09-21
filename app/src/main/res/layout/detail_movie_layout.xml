@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="wrap_content"
-    android:layout_width="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+<android.support.v7.widget.Toolbar
+    android:id="@+id/detail_toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="@color/colorDanger"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+    android:elevation="6dp"/>
+    <ScrollView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -39,6 +51,7 @@
                 android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:src="@drawable/movie_poster"
+                android:layout_marginLeft="2dp"
                 />
             <LinearLayout
                 android:layout_width="0dp"
@@ -52,15 +65,17 @@
                     android:text="A group of bullied kids band together when a shapeshift in demon, taking the appearance of clown, begins hunting children"
                     android:textSize="16sp"
                     android:layout_weight="1"
-                    android:paddingLeft="5dp"/>
+                    android:paddingLeft="5dp"
+                    android:layout_marginLeft="5dp"/>
                 <Button
                     android:id="@+id/wishlist"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="ADD TO WISHLISHT"
-                    android:background="@color/colorAccent"
+                    android:background="@color/colorDanger"
+                    android:padding="5dp"
+                    android:layout_marginLeft="15dp"
                     android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
                     />
             </LinearLayout>
         </LinearLayout>
@@ -146,7 +161,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginLeft="5dp">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -156,8 +172,7 @@
                     android:layout_height="wrap_content"
                     android:text="Storyline"
                     android:textStyle="bold"
-                    android:textSize="22sp"
-                    android:paddingLeft="12dp"/>
+                    android:textSize="22sp" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -169,16 +184,15 @@
                     android:text="Tagline"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:layout_marginLeft="10dp"
-                    android:padding="5dp"/>
+                    android:paddingTop="5dp"
+                    />
                 <TextView
                     android:id="@+id/tagline"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="You'll float too"
                     android:textSize="16sp"
-                    android:layout_marginLeft="10dp"
-                    android:padding="5dp"
+                    android:paddingBottom="5dp"
                     />
             </LinearLayout>
         </LinearLayout>
@@ -189,21 +203,24 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:layout_marginLeft="5dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="Details"
                     android:textSize="22sp"
                     android:textStyle="bold"
-                    android:layout_margin="5dp"/>
+                    android:paddingBottom="2dp"
+                    />
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="10dp">
+            android:layout_marginLeft="5dp"
+            >
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -221,6 +238,7 @@
                     android:layout_height="wrap_content"
                     android:text="September 24,2017"
                     android:textSize="16sp"
+                    android:paddingBottom="2dp"
                     />
             </LinearLayout>
             <LinearLayout
@@ -240,6 +258,7 @@
                     android:layout_height="wrap_content"
                     android:text="United State"
                     android:textSize="16sp"
+                    android:paddingBottom="2dp"
                     />
             </LinearLayout>
             <LinearLayout
@@ -259,6 +278,7 @@
                     android:layout_height="wrap_content"
                     android:text="English"
                     android:textSize="16sp"
+                    android:paddingBottom="2dp"
                     />
             </LinearLayout>
             <LinearLayout
@@ -278,26 +298,24 @@
                     android:layout_height="wrap_content"
                     android:text="English"
                     android:textSize="16sp"
+                    android:paddingBottom="2dp"
                     />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_margin="2dp">
+                android:orientation="vertical">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Reviews"
                     android:textSize="22sp"
                     android:textStyle="bold"
-                    android:padding="5dp"
-                    android:layout_marginTop="5dp"
                     />
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/reviewsRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="150dp"
                 >
             </android.support.v7.widget.RecyclerView>
             </LinearLayout>
@@ -315,12 +333,12 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/similarMoviesRecyclerView"
                     android:layout_width="wrap_content"
-                    android:layout_height="200dp"
+                    android:layout_height="220dp"
                     >
                 </android.support.v7.widget.RecyclerView>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-
 </ScrollView>
 
+</LinearLayout>
