@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,18 +31,22 @@ import java.util.ArrayList;
 public class MovieList extends AppCompatActivity {
     RecyclerView recyclerViewMovieList;
     private MovieListAdapter movieListAdapter;
+    public String type,subType;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_list);
-
-        recyclerViewMovieList = (RecyclerView) findViewById(R.id.reviewsRecyclerView);
-        LinearLayoutManager layoutManagerReviews = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        recyclerViewMovieList.setLayoutManager(layoutManagerReviews);
-        recyclerViewMovieList.setItemAnimator(new DefaultItemAnimator());
-        String url = "https://api.themoviedb.org/3/movie/popular?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US&page=1";
-        FetchTask callMovieData = new FetchTask();
-        callMovieData.execute(url);
+        Bundle bundle  = this.getIntent().getExtras();
+        type = bundle.getString("type");
+        subType = bundle.getString("subType");
+        Log.i("data",type + " / " + subType);
+        //recyclerViewMovieList = (RecyclerView) findViewById(R.id.reviewsRecyclerView);
+        //LinearLayoutManager layoutManagerReviews = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        //recyclerViewMovieList.setLayoutManager(layoutManagerReviews);
+        //recyclerViewMovieList.setItemAnimator(new DefaultItemAnimator());
+        //String url = "https://api.themoviedb.org/3/movie/popular?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US&page=1";
+        //FetchTask callMovieData = new FetchTask();
+        //callMovieData.execute(url);
     }
     private class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.movieListViewHolder> {
         private ArrayList<MovieListModel> movieListArrayList;

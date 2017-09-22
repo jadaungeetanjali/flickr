@@ -9,11 +9,11 @@
     android:layout_marginBottom="15dp"
     android:layout_margin="6dp">
     <LinearLayout
+        android:id="@+id/main_horizontal_card_Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="10dp"
-        android:onClick=""
         android:background="#fff"
         android:layout_gravity="center_vertical">
         <TextView

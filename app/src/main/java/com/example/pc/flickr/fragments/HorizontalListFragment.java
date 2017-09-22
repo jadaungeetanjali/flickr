@@ -14,9 +14,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.pc.flickr.MovieList;
 import com.example.pc.flickr.MoviesDetails;
 import com.example.pc.flickr.R;
 import com.example.pc.flickr.data.MovieDbApiContract;
@@ -67,12 +69,14 @@ public class HorizontalListFragment extends Fragment {
         private ArrayList<String> arrayList;
 
         class MyViewHolder extends RecyclerView.ViewHolder{
+            LinearLayout parentButton;
             TextView parentCardViewHeading;
             RecyclerView childRecyclerView;
             public MyViewHolder(View itemview){
                 super(itemview);
                 parentCardViewHeading = (TextView) itemview.findViewById(R.id.main_horizontal_card_heading);
                 childRecyclerView = (RecyclerView) itemview.findViewById(R.id.main_child_recyclerView);
+                parentButton = (LinearLayout) itemview.findViewById(R.id.main_horizontal_card_Button);
             }
         }
 
@@ -88,8 +92,8 @@ public class HorizontalListFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(final MyViewHolder holder, int position) {
-            String str = arrayList.get(position);
+        public void onBindViewHolder(final MyViewHolder holder, final int position) {
+            final String str = arrayList.get(position);
             holder.parentCardViewHeading.setText(str);
             holder.childRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
             recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -114,12 +118,41 @@ public class HorizontalListFragment extends Fragment {
             }
             GetFilterData filterData = new GetFilterData();
             filterData.execute(str);
+            holder.parentButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String sType;
+                    String[] subType={"now_playing","popular","top_rated","upcoming",
+                           "popular","airing_today","top_rated","on_the_air",
+                           "popular"};
+                    int sPosition =0;
+                    if (type.equals("movies")) {
+                        sType = "movie";
+                        sPosition = 0;
+                    }
+                    else if (type.equals("tv")){
+                        sType = "tv";
+                        sPosition = 1;
+                    }
+                    else {
+                        sType = "person";
+                        sPosition = 2;
+                    }
+                    Intent intent = new Intent(getContext(),MovieList.class);
+                    Bundle mBundle = new Bundle();
+                    mBundle.putString("type",sType);
+                    mBundle.putString("subType",subType[(sPosition*4)+position]);
+                    intent.putExtras(mBundle);
+                    startActivity(intent);
+                }
+            });
         }
 
         @Override
         public int getItemCount() {
             return arrayList.size();
         }
+
     }
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
 
