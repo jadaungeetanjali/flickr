@@ -18,13 +18,16 @@ public class FirebaseCurd {
     private DatabaseReference mWishListReference;
     private DatabaseReference mFavoriteReference;
     private DatabaseReference mUserReference;
+    private DatabaseReference mWatchListReference;
 
     public FirebaseCurd(){
         //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        mWishListReference = mDatabaseReference.child("WishList");
-        mFavoriteReference = mDatabaseReference.child("Favorite");
-        mUserReference = mDatabaseReference.child("Users");
+        mUserReference = mDatabaseReference.child("Users").child("tyagideepu133");
+        mWishListReference = mUserReference.child("WishList");
+        mWatchListReference = mUserReference.child("WatchList");
+        mFavoriteReference = mUserReference.child("Favorite");
+
     }
 
     //Post method of firebase are here
@@ -40,15 +43,26 @@ public class FirebaseCurd {
         mWishListReference.child(wishListModel.getItemId()).updateChildren(result);
     }
 
+    public void addWatchListModel(WishListModel watchListModel){
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("uid",watchListModel.getUserId());
+        result.put("id", watchListModel.getItemId());
+        result.put("type", watchListModel.getItemType());
+        result.put("name", watchListModel.getItemName());
+        result.put("imgUrl", watchListModel.getImgUrl());
+        result.put("rating", watchListModel.getItemRating());
+        Log.v("result",result.toString());
+        mWatchListReference.child(watchListModel.getItemId()).updateChildren(result);
+    }
+
     public void addFavoriteModel(FavoriteModel favoriteModel){
         HashMap<String, Object> result = new HashMap<>();
         result.put("uid",favoriteModel.getUserId());
-        result.put("itemId", favoriteModel.getItemId());
-        result.put("itemName", favoriteModel.getItemName());
-        result.put("itemImgUrl", favoriteModel.getImgUrl());
+        result.put("id", favoriteModel.getItemId());
+        result.put("name", favoriteModel.getItemName());
+        result.put("imgUrl", favoriteModel.getImgUrl());
         Log.v("result",result.toString());
         mFavoriteReference.child(favoriteModel.getItemId()).updateChildren(result);
     }
-
 
 }
