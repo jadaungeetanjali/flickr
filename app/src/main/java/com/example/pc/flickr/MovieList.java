@@ -127,8 +127,8 @@ public class MovieList extends AppCompatActivity {
                 String movieListReleaseDate = movies.get("release_date").toString();
                 String movieListImage = movies.get("poster_path").toString();
                 String movieListRating = movies.get("vote_average").toString();
-                MovieListModel reviewModel = new MovieListModel(movieListName, movieListReleaseDate, movieListImage, movieListRating  );
-                movieListArray.add(reviewModel);
+                MovieListModel movieListModel = new MovieListModel(movieListName, movieListReleaseDate, movieListImage, movieListRating  );
+                movieListArray.add(movieListModel);
             }
             return movieListArray;
         }

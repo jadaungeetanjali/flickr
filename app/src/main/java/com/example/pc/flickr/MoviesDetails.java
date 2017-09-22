@@ -16,6 +16,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.pc.flickr.MovieData.CastModel;
+import com.example.pc.flickr.MovieData.DataModel;
+import com.example.pc.flickr.MovieData.ReviewModel;
+import com.example.pc.flickr.MovieData.SimilarMoviesModel;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -215,123 +219,14 @@ public class MoviesDetails extends AppCompatActivity {
 
 
     //DataModel class is created to initialise all the variables using constructor
-    private class DataModel {
-        public String title;
-        public String overview;
-        public String vote_avg;
-        public String tagline;
-        public String release_date;
-        public String language;
-        public String img_url;
 
-        public DataModel(String title, String overview, String vote_avg,
-                         String tagline, String release_date, String language, String img_url) {
-            this.title = title;
-            this.overview = overview;
-            this.vote_avg = vote_avg;
-            this.tagline = tagline;
-            this.release_date = release_date;
-            this.language = language;
-            this.img_url = img_url;
-        }
-
-        public String getTitle() {
-
-            return title;
-        }
-
-        public String getOverview() {
-
-            return overview;
-        }
-
-        public String getVote_avg() {
-            return vote_avg;
-        }
-
-        public String getTagline() {
-            return tagline;
-        }
-
-        public String getRelease_date() {
-            return release_date;
-        }
-
-        public String getLanguage() {
-            return language;
-        }
-
-        public String getImg_url() {
-            return img_url;
-        }
-    }
         //constructor to initialise all the variables of textViews and imageView in detail_movie_layout
 
     // CastModel class to initialise all the variables of castRecyclerView
-    private class CastModel{
-        public String name;
-        public String character;
-        public String image;
-
-        public CastModel(String name,String character,String image){
-            this.name = name;
-            this.character = character;
-            this.image = image;
-        }
-
-        public String getCharacter() {
-            return character;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getImage() {
-            return image;
-        }
-    }
     // ReviewModel class to initialise all the variables of reviewsRecyclerView
-    private class ReviewModel{
-        public String author;
-        public String content;
-        public ReviewModel(String author, String content){
-            this.author = author;
-            this.content = content;
-        }
 
-        public String getAuthor() {
-            return author;
-        }
-
-        public String getContent() {
-            return content;
-        }
-    }
     // SimilarMoviesModel class to initialise all the variables of similarMoviesRecyclerView
-    private class SimilarMoviesModel{
-        public String similarMovieName;
-        public String similarMovieVoteAverage;
-        public String similarMovieimage;
 
-        public SimilarMoviesModel(String name,String voteAverage,String image){
-            this.similarMovieName = name;
-            this.similarMovieVoteAverage = voteAverage;
-            this.similarMovieimage = image;
-        }
-
-        public String getSimilarMovieVoteAverage() {
-            return similarMovieVoteAverage;
-        }
-
-        public String getSimilarMovieName() {
-            return similarMovieName;
-        }
-
-        public String getSimilarMovieimage() {
-            return similarMovieimage;
-        }
-    }
 
 
     public class FetchTask extends AsyncTask<String, Void, ArrayList<String>> {
