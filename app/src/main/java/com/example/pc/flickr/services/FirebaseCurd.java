@@ -2,6 +2,7 @@ package com.example.pc.flickr.services;
 
 import android.util.Log;
 
+import com.example.pc.flickr.models.FavoriteModel;
 import com.example.pc.flickr.models.WishListModel;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -38,4 +39,16 @@ public class FirebaseCurd {
         Log.v("result",result.toString());
         mWishListReference.child(wishListModel.getItemId()).updateChildren(result);
     }
+
+    public void addFavoriteModel(FavoriteModel favoriteModel){
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("uid",favoriteModel.getUserId());
+        result.put("itemId", favoriteModel.getItemId());
+        result.put("itemName", favoriteModel.getItemName());
+        result.put("itemImgUrl", favoriteModel.getImgUrl());
+        Log.v("result",result.toString());
+        mFavoriteReference.child(favoriteModel.getItemId()).updateChildren(result);
+    }
+
+
 }

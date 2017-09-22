@@ -28,7 +28,6 @@ public class DetailJsonParser {
         String poster = movieObject.get("poster_path").toString();
         //creating object of DetailItemModel class to initialise constructor with movieDetails
         DetailItemModel DetailItemModel=new DetailItemModel(title, overview, vote_average, tagline, release_date, language, poster);
-
         return DetailItemModel;
     }
 
@@ -79,5 +78,4 @@ public class DetailJsonParser {
         }
         return similarMoviesArray;
     }
-
 }
