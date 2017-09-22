@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.example.pc.flickr.data.MovieDbApiContract;
 import com.example.pc.flickr.data.MovieDbHelper;
+import com.example.pc.flickr.json_parsers.MainJsonParser;
 import com.example.pc.flickr.models.ListDataModel;
 import com.example.pc.flickr.models.WishListModel;
 import com.google.firebase.database.DatabaseReference;
@@ -57,14 +58,15 @@ public class FetchApiService extends IntentService {
         if ((networkInfo != null) && networkInfo.isConnected()) {
             ArrayList<String> jsonArray = fetchTask(urls);
             ArrayList<ListDataModel> listDataModel = new ArrayList<>();
+            MainJsonParser mainJsonParser = new MainJsonParser();
             for (int i = 0; i < urls.length; i++) {
                 try {
                     if (type[i].equals("movies")) {
-                        listDataModel = jsonMovieParser(jsonArray.get(i), type[i], subType[i], listDataModel);
+                        listDataModel = mainJsonParser.jsonMovieParser(jsonArray.get(i), type[i], subType[i], listDataModel);
                     } else if (type[i].equals("tv")) {
-                        listDataModel = jsonTvParser(jsonArray.get(i), type[i], subType[i], listDataModel);
+                        listDataModel = mainJsonParser.jsonTvParser(jsonArray.get(i), type[i], subType[i], listDataModel);
                     } else {
-                        listDataModel = jsonCelebsParser(jsonArray.get(i), type[i], subType[i], listDataModel);
+                        listDataModel = mainJsonParser.jsonCelebsParser(jsonArray.get(i), type[i], subType[i], listDataModel);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -125,56 +127,7 @@ public class FetchApiService extends IntentService {
         return jsonArray;
     }
 
-    private ArrayList<ListDataModel> jsonMovieParser(String jsonMovie, String type, String subType, ArrayList<ListDataModel> listDataModel)throws JSONException {
 
-        JSONObject movieObject = new JSONObject(jsonMovie);
-        JSONArray list = movieObject.getJSONArray("results");
-        for (int i = 0; i < list.length();i++){
-            JSONObject popularMovie = list.getJSONObject(i);
-            String title = popularMovie.get("title").toString();
-            String id = popularMovie.get("id").toString();
-            String popularity = Math.round(Double.parseDouble(popularMovie.get("popularity").toString())) + "";
-            String vote_average = popularMovie.get("vote_average").toString();
-            String imgUrl = popularMovie.get("poster_path").toString();
-            ListDataModel dataModel = new ListDataModel(id,title,popularity,vote_average,imgUrl,type,subType);
-            listDataModel.add(dataModel);
-        }
-        return listDataModel;
-    }
-    private ArrayList<ListDataModel> jsonTvParser(String jsontvShows, String type, String subType, ArrayList<ListDataModel> listDataModel)throws JSONException {
-
-        JSONObject tvShowsObject = new JSONObject(jsontvShows);
-        JSONArray list = tvShowsObject.getJSONArray("results");
-        for (int i = 0; i < list.length();i++){
-            JSONObject populartvShows = list.getJSONObject(i);
-            String id = populartvShows.get("id").toString();
-            String title = populartvShows.get("name").toString();
-            String popularity = Math.round(Double.parseDouble(populartvShows.get("popularity").toString())) + "";
-            String vote_average = populartvShows.get("vote_average").toString();
-            String imgUrl = populartvShows.get("poster_path").toString();
-            ListDataModel dataModel = new ListDataModel(id,title,popularity,vote_average,imgUrl,type,subType);
-            listDataModel.add(dataModel);
-        }
-        return listDataModel;
-    }
-
-    private ArrayList<ListDataModel> jsonCelebsParser(String jsonCelebrities, String type, String subType, ArrayList<ListDataModel> listDataModel)throws JSONException {
-
-        JSONObject celebritiesObject = new JSONObject(jsonCelebrities);
-        JSONArray list = celebritiesObject.getJSONArray("results");
-        for (int i = 0; i < list.length();i++){
-            JSONObject popularCelebrities = list.getJSONObject(i);
-            String id = popularCelebrities.get("id").toString();
-            String title = popularCelebrities.get("name").toString();
-            JSONObject known_for = popularCelebrities.getJSONArray("known_for").getJSONObject(0);
-            String popularity = Math.round(Double.parseDouble(popularCelebrities.get("popularity").toString())) + "";
-            String vote_average = known_for.get("vote_average").toString();
-            String imgUrl = popularCelebrities.get("profile_path").toString();
-            ListDataModel dataModel = new ListDataModel(id,title,popularity,vote_average,imgUrl,type,subType);
-            listDataModel.add(dataModel);
-        }
-        return listDataModel;
-    }
 
 
     private void DatabaseInsert(ArrayList<ListDataModel> listDataModel) {
