@@ -1,7 +1,6 @@
 package com.example.pc.flickr;
 
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.graphics.Movie;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,24 +12,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.pc.flickr.json_parsers.DetailJsonParser;
-import com.example.pc.flickr.models.CastModel;
-import com.example.pc.flickr.models.DetailItemModel;
-import com.example.pc.flickr.models.ReviewModel;
-import com.example.pc.flickr.models.SimilarItemModel;
-import com.example.pc.flickr.models.WishListModel;
-import com.example.pc.flickr.services.FirebaseCurd;
+import com.example.pc.flickr.MovieData.CastModel;
+import com.example.pc.flickr.MovieData.DataModel;
+import com.example.pc.flickr.MovieData.ReviewModel;
+import com.example.pc.flickr.MovieData.SimilarMoviesModel;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -40,6 +34,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 
 // MoviesDetails activity to display the detail of particular movie
@@ -48,12 +45,8 @@ public class MoviesDetails extends AppCompatActivity {
     private CastAdapter castAdapter;
     private ReviewAdapter reviewAdapter;
     private SimilarMoviesAdapter similarMoviesAdapter;
-    private TextView title, overview, vote_average, tagline, release_date, language, internet_connectivity;
-    private ProgressBar progressBar;
-    private ImageView poster;
-    private LinearLayout mainContainer;
-    private Button button;
-    private String type, id;
+    public TextView title, overview, vote_average, tagline, release_date, language;
+    public ImageView poster;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,8 +71,8 @@ public class MoviesDetails extends AppCompatActivity {
         recyclerViewSimilar.setItemAnimator(new DefaultItemAnimator());
 
         Bundle bundle  = this.getIntent().getExtras();
-        type = bundle.getString("type");
-        id = bundle.getString("id");
+        String type = bundle.getString("type");
+        String id = bundle.getString("id");
         ArrayList<String> urlList = new ArrayList<>();
         switch (type){
             case "movies":
@@ -87,12 +80,6 @@ public class MoviesDetails extends AppCompatActivity {
                 urlList.add("https://api.themoviedb.org/3/movie/"+ id +"/credits?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
                 urlList.add("https://api.themoviedb.org/3/movie/"+ id +"/reviews?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
                 urlList.add("https://api.themoviedb.org/3/movie/"+ id +"/similar?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
-                break;
-            case "tv":
-                urlList.add("https://api.themoviedb.org/3/tv/"+ id +"?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
-                urlList.add("https://api.themoviedb.org/3/tv/"+ id +"/credits?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
-                urlList.add("https://api.themoviedb.org/3/movie/"+ id +"/reviews?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
-                urlList.add("https://api.themoviedb.org/3/tv/"+ id +"/similar?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
                 break;
             default:
                 urlList.add("https://api.themoviedb.org/3/movie/"+ id +"?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
@@ -108,20 +95,10 @@ public class MoviesDetails extends AppCompatActivity {
         release_date = (TextView) findViewById(R.id.release_date);
         language = (TextView) findViewById(R.id.language);
         poster = (ImageView) findViewById(R.id.poster);
-        internet_connectivity = (TextView) findViewById(R.id.internet_connectivity);
-        button = (Button) findViewById(R.id.detail_wishlist);
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        if ((networkInfo != null) && networkInfo.isConnected()) {
-            internet_connectivity.setVisibility(View.GONE);
-            ScrollView scrollView = (ScrollView) findViewById(R.id.detail_movie_scrollView);
-            scrollView.setVisibility(View.VISIBLE);
-            FetchTask callMovieData = new FetchTask();
-            callMovieData.execute(urlList.get(0), urlList.get(1), urlList.get(2), urlList.get(3));
-        }
-        else{
-            Toast.makeText(this, "Please Connect to internet...", Toast.LENGTH_SHORT).show();
-        }
+
+        FetchTask callMovieData = new FetchTask();
+        callMovieData.execute(urlList.get(0),urlList.get(1),urlList.get(2),urlList.get(3));
+
     }
     // CastAdapter class to populate data in castRecyclerView
     private class CastAdapter extends RecyclerView.Adapter<CastAdapter.castViewHolder> {
@@ -131,11 +108,9 @@ public class MoviesDetails extends AppCompatActivity {
             ImageView castImageView;
             TextView castNameTextView;
             TextView castCharacterTextView;
-            ProgressBar castProgressBar;
 
             public castViewHolder(View itemView) {
                 super(itemView);
-                castProgressBar = (ProgressBar) itemView.findViewById(R.id.cast_image_progressBar);
                 castNameTextView = (TextView) itemView.findViewById(R.id.castName);
                 castImageView = (ImageView) itemView.findViewById(R.id.castImageView);
                 castCharacterTextView = (TextView) itemView.findViewById(R.id.castCharacter);
@@ -153,24 +128,11 @@ public class MoviesDetails extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(final castViewHolder holder, int position) {
+        public void onBindViewHolder(castViewHolder holder, int position) {
             CastModel castModel = castArrayList.get(position);
             holder.castNameTextView.setText(castModel.getName());
             holder.castCharacterTextView.setText(castModel.getCharacter());
-            Picasso.with(getBaseContext()).load("https://image.tmdb.org/t/p/w500"+castModel.getImage()).
-                    into(holder.castImageView,new com.squareup.picasso.Callback() {
-
-                        @Override
-                        public void onSuccess() {
-                            holder.castProgressBar.setVisibility(View.GONE);
-                            holder.castImageView.setVisibility(View.VISIBLE);
-                        }
-
-                        @Override
-                        public void onError() {
-
-                        }
-                    });
+            Picasso.with(getBaseContext()).load("https://image.tmdb.org/t/p/w500"+castModel.getImage()).into(holder.castImageView);
         }
 
         @Override
@@ -216,24 +178,22 @@ public class MoviesDetails extends AppCompatActivity {
     }
     // SimilarMovieAdapter class to populate data in similarMovieRecyclerView
     private class SimilarMoviesAdapter extends RecyclerView.Adapter<SimilarMoviesAdapter.similarMoviesViewHolder> {
-        private ArrayList<SimilarItemModel> similarMoviesArrayList;
+        private ArrayList<SimilarMoviesModel> similarMoviesArrayList;
 
         class similarMoviesViewHolder extends RecyclerView.ViewHolder {
             ImageView similarMovieImageView;
             TextView similarMovieNameTextView ;
             TextView similarMovieVoteAverageTextView;
-            ProgressBar similarMovieProgressBar;
 
             public similarMoviesViewHolder(View itemView) {
                 super(itemView);
-                similarMovieProgressBar = (ProgressBar) itemView.findViewById(R.id.main_image_progressBar);
-                similarMovieNameTextView = (TextView) itemView.findViewById(R.id.main_child_title_textView); //change id to similarMovieName
-                similarMovieImageView = (ImageView) itemView.findViewById(R.id.main_child_imageView); //change id to similarMovieImage
-                similarMovieVoteAverageTextView = (TextView) itemView.findViewById(R.id.main_child_vote_textView); //change id to similarMovieVote
+                similarMovieNameTextView = (TextView) itemView.findViewById(R.id.main_child_title_textView);
+                similarMovieImageView = (ImageView) itemView.findViewById(R.id.main_child_imageView);
+                similarMovieVoteAverageTextView = (TextView) itemView.findViewById(R.id.main_child_vote_textView);
             }
         }
 
-        public SimilarMoviesAdapter(ArrayList<SimilarItemModel> arrayList) {
+        public SimilarMoviesAdapter(ArrayList<SimilarMoviesModel> arrayList) {
             this.similarMoviesArrayList = arrayList;
         }
 
@@ -244,24 +204,11 @@ public class MoviesDetails extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(final similarMoviesViewHolder holder, int position) {
-            SimilarItemModel SimilarItemModel = similarMoviesArrayList.get(position);
-            holder.similarMovieNameTextView.setText(SimilarItemModel.getSimilarItemName());
-            holder.similarMovieVoteAverageTextView.setText(SimilarItemModel.getSimilarItemVoteAverage());
-            Picasso.with(getBaseContext()).load("https://image.tmdb.org/t/p/w500"+SimilarItemModel.getSimilarItemimage())
-                    .into(holder.similarMovieImageView,new com.squareup.picasso.Callback() {
-
-                        @Override
-                        public void onSuccess() {
-                            holder.similarMovieProgressBar.setVisibility(View.GONE);
-                            holder.similarMovieImageView.setVisibility(View.VISIBLE);
-                        }
-
-                        @Override
-                        public void onError() {
-
-                        }
-                    });
+        public void onBindViewHolder(similarMoviesViewHolder holder, int position) {
+            SimilarMoviesModel similarMoviesModel = similarMoviesArrayList.get(position);
+            holder.similarMovieNameTextView.setText(similarMoviesModel.getSimilarMovieName());
+            holder.similarMovieVoteAverageTextView.setText(similarMoviesModel.getSimilarMovieVoteAverage());
+            Picasso.with(getBaseContext()).load("https://image.tmdb.org/t/p/w500"+similarMoviesModel.getSimilarMovieimage()).into(holder.similarMovieImageView);
         }
 
         @Override
@@ -271,24 +218,81 @@ public class MoviesDetails extends AppCompatActivity {
     }
 
 
-    //DetailItemModel class is created to initialise all the variables using constructor
+    //DataModel class is created to initialise all the variables using constructor
+
+        //constructor to initialise all the variables of textViews and imageView in detail_movie_layout
 
     // CastModel class to initialise all the variables of castRecyclerView
-
     // ReviewModel class to initialise all the variables of reviewsRecyclerView
 
-    // SimilarItemModel class to initialise all the variables of similarMoviesRecyclerView
+    // SimilarMoviesModel class to initialise all the variables of similarMoviesRecyclerView
+
+
 
     public class FetchTask extends AsyncTask<String, Void, ArrayList<String>> {
         // jsonMovieParser to parse the jsonData of MovieDetails
+        private DataModel jsonMovieParser(String jsonMovie)throws JSONException {
+            // fetching data in json
+            JSONObject movieObject = new JSONObject(jsonMovie);
+            String title = movieObject.get("title").toString();
+            String overview = movieObject.get("overview").toString();
+            String vote_average = movieObject.get("vote_average").toString();
+            String tagline = movieObject.get("tagline").toString();
+            String release_date = movieObject.get("release_date").toString();
+            String language = movieObject.get("original_language").toString();
+            String poster = movieObject.get("poster_path").toString();
+            //creating object of dataModel class to initialise constructor with movieDetails
+            DataModel dataModel=new DataModel(title, overview, vote_average, tagline, release_date, language, poster);
 
+            return dataModel;
+        }
      // jsonCastParser to parse the jsonData for cast
+    private ArrayList<CastModel> jsonCastParser(String jsonCast) throws JSONException {
+        ArrayList<CastModel> castArray = new ArrayList<>();
+        JSONObject castObject = new JSONObject(jsonCast);
+        JSONArray castList = castObject.getJSONArray("cast");
+        for (int i = 0; i < castList.length(); i++) {
+            JSONObject cast = castList.getJSONObject(i);
+            String name = cast.get("name").toString();
+            String character = cast.get("character").toString();
+            String image = cast.get("profile_path").toString();
 
+            CastModel castModel = new CastModel(name,character,image);
+            castArray.add(castModel);
+        }
+        return castArray;
+    }
     // jsonReviewsParser to parse the jsonData for reviews
+    private ArrayList<ReviewModel> jsonReviewsParser(String jsonReviews) throws JSONException {
+        ArrayList<ReviewModel> reviewsArray = new ArrayList<>();
+        JSONObject reviewsObject = new JSONObject(jsonReviews);
+        JSONArray reviewsList = reviewsObject.getJSONArray("results");
+        for (int i = 0; i < reviewsList.length(); i++) {
+            JSONObject review = reviewsList.getJSONObject(i);
+            String author = review.get("author").toString();
+            String content = review.get("content").toString();
 
+            ReviewModel reviewModel = new ReviewModel(author, content);
+            reviewsArray.add(reviewModel);
+        }
+        return reviewsArray;
+    }
     // jsonSimilarMoviesParser to parse the jsonData for SimilarMovies
+    private ArrayList<SimilarMoviesModel> jsonSimilarMoviesParser(String jsonSimilarMovies) throws JSONException {
+        ArrayList<SimilarMoviesModel> similarMoviesArray = new ArrayList<>();
+        JSONObject similarMoviesObject = new JSONObject(jsonSimilarMovies);
+        JSONArray similarMoviesList = similarMoviesObject.getJSONArray("results");
+        for (int i = 0; i < similarMoviesList.length(); i++) {
+            JSONObject similarMovies = similarMoviesList.getJSONObject(i);
+            String similarMovieName = similarMovies.get("title").toString();
+            String similarMovieVoteAverage = similarMovies.get("vote_average").toString();
+            String similarMoviePoster = similarMovies.get("poster_path").toString();
 
-
+            SimilarMoviesModel similarMoviesModel = new SimilarMoviesModel(similarMovieName,similarMovieVoteAverage,similarMoviePoster);
+            similarMoviesArray.add(similarMoviesModel);
+            }
+            return similarMoviesArray;
+    }
 
         //doInBackground method to set up url connection and return jsonData
         @Override
@@ -349,47 +353,40 @@ public class MoviesDetails extends AppCompatActivity {
 
             ArrayList<CastModel> castArray = new ArrayList<>();
             ArrayList<ReviewModel> reviewArray = new ArrayList<>();
-            ArrayList<SimilarItemModel> similarMoviesArray = new ArrayList<>();
+            ArrayList<SimilarMoviesModel> similarMoviesArray = new ArrayList<>();
             try {
-                DetailJsonParser detailJsonParser = new DetailJsonParser();
-                final DetailItemModel DetailItemModel = detailJsonParser.jsonMovieDetailParser(jsonArray.get(0));
-                Log.v("title",DetailItemModel.getTitle());
-                title.setText(DetailItemModel.getTitle());
-                overview.setText(DetailItemModel.getOverview());
-                vote_average.setText(DetailItemModel.getVote_avg());
-                tagline.setText(DetailItemModel.getTagline());
-                release_date.setText(DetailItemModel.getRelease_date());
-                language.setText(DetailItemModel.getLanguage());
-                Picasso.with(getBaseContext()).load("https://image.tmdb.org/t/p/w500"+DetailItemModel.getImg_url()).into(poster);
+                DataModel dataModel = jsonMovieParser(jsonArray.get(0));
+                Log.v("title",dataModel.getTitle());
+                title.setText(dataModel.getTitle());
+                overview.setText(dataModel.getOverview());
+                vote_average.setText(dataModel.getVote_avg());
+                tagline.setText(dataModel.getTagline());
+                release_date.setText(dataModel.getRelease_date());
+                language.setText(dataModel.getLanguage());
+                Picasso.with(getBaseContext()).load("https://image.tmdb.org/t/p/w500"+dataModel.getImg_url()).into(poster);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
-                castArray = detailJsonParser.jsonMovieCastParser(jsonArray.get(1));
+            try {
+                castArray = jsonCastParser(jsonArray.get(1));
                 castAdapter = new CastAdapter(castArray);
                 recyclerViewCast.setAdapter(castAdapter);
-
-                reviewArray = detailJsonParser.jsonMovieReviewsParser(jsonArray.get(2));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                reviewArray = jsonReviewsParser(jsonArray.get(2));
                 //Log.v("review",jsonArray.get(2));
                 reviewAdapter = new ReviewAdapter(reviewArray);
                 recyclerViewReviews.setAdapter(reviewAdapter);
-
-                similarMoviesArray = detailJsonParser.jsonSimilarMoviesParser(jsonArray.get(3));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                similarMoviesArray = jsonSimilarMoviesParser(jsonArray.get(3));
                 similarMoviesAdapter = new SimilarMoviesAdapter(similarMoviesArray);
                 recyclerViewSimilar.setAdapter(similarMoviesAdapter);
-
-
-                progressBar = (ProgressBar) findViewById(R.id.detail_progressBar);
-                mainContainer = (LinearLayout) findViewById(R.id.detail_mainContainer);
-                progressBar.setVisibility(View.GONE);
-                mainContainer.setVisibility(View.VISIBLE);
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Log.v("movie",DetailItemModel.getTitle());
-                        WishListModel wishListModel = new WishListModel(
-                                "tyagideepu133",id,type,DetailItemModel.getTitle(),DetailItemModel.getImg_url(),DetailItemModel.getVote_avg());
-                        FirebaseCurd firebaseCurd = new FirebaseCurd();
-                        firebaseCurd.addWhistListModel(wishListModel);
-                    }
-                });
             } catch (JSONException e) {
                 e.printStackTrace();
             }

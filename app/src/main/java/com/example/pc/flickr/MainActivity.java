@@ -29,8 +29,6 @@ public class MainActivity extends AppCompatActivity {
         final HorizontalListFragment moviesFragment =new HorizontalListFragment();
         moviesFragment.setArguments(moviesBundle);
 
-
-
         Bundle tvBundle = new Bundle();
         String[] tvHeading = {"Airing Today", "Popular", "Top Rated", "On The Air"};
         tvBundle.putString("type","tv");
