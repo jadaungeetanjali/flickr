@@ -282,11 +282,11 @@ public class MoviesDetails extends AppCompatActivity {
     public class FetchTask extends AsyncTask<String, Void, ArrayList<String>> {
         // jsonMovieParser to parse the jsonData of MovieDetails
 
-     // jsonCastParser to parse the jsonData for cast
+        // jsonCastParser to parse the jsonData for cast
 
-    // jsonReviewsParser to parse the jsonData for reviews
+        // jsonReviewsParser to parse the jsonData for reviews
 
-    // jsonSimilarMoviesParser to parse the jsonData for SimilarMovies
+        // jsonSimilarMoviesParser to parse the jsonData for SimilarMovies
 
 
 
@@ -344,7 +344,7 @@ public class MoviesDetails extends AppCompatActivity {
         protected void onPostExecute(ArrayList<String> jsonArray) {
             super.onPostExecute(jsonArray);
             //for (String name:jsonArray){
-                //Log.v("output",name);
+            //Log.v("output",name);
             //}
 
             ArrayList<CastModel> castArray = new ArrayList<>();
