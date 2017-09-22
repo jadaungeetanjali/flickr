@@ -241,7 +241,7 @@ public class MoviesDetails extends AppCompatActivity {
             String release_date = movieObject.get("release_date").toString();
             String language = movieObject.get("original_language").toString();
             String poster = movieObject.get("poster_path").toString();
-            //creating object of dataModel class to initialise constructor with movieDetails
+            //creating object of dataModel class to initialise constructor with movieDetailsj
             DataModel dataModel=new DataModel(title, overview, vote_average, tagline, release_date, language, poster);
 
             return dataModel;
