@@ -1,5 +1,7 @@
 package com.example.pc.flickr;
 
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -44,10 +47,18 @@ public class MovieList extends AppCompatActivity {
         type = bundle.getString("type");
         subType = bundle.getString("subType");
         Log.i("data",type + " / " + subType);
-        ArrayList<String> urlList = new ArrayList<>();
-        urlList.add("https://api.themoviedb.org/3/" + type + "/" + subType + "?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US&page=1");
-        FetchTask callMovieData = new FetchTask();
-        callMovieData.execute(urlList.get(0));
+
+        String url="https://api.themoviedb.org/3/" + type + "/" + subType + "?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US&page=";
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if ((networkInfo != null) && networkInfo.isConnected()) {
+            FetchTask callMovieData = new FetchTask();
+            callMovieData.execute(url);
+        }
+        else{
+            Toast.makeText(this, "Please Connect to internet...", Toast.LENGTH_SHORT).show();
+        }
     }
     private class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.movieListViewHolder> {
         private ArrayList<MovieListModel> movieListArrayList;
@@ -131,8 +142,8 @@ public class MovieList extends AppCompatActivity {
 
     public class FetchTask extends AsyncTask<String, Void, ArrayList<String>> {
 
-        private ArrayList<MovieListModel> jsonMovieParser(String jsonMovieList) throws JSONException {
-            ArrayList<MovieListModel> movieListArray = new ArrayList<>();
+        private ArrayList<MovieListModel> jsonMovieParser(String jsonMovieList, ArrayList<MovieListModel> movieListsArray) throws JSONException {
+            //ArrayList<MovieListModel> movieListArray = new ArrayList<>();
             JSONObject movieListObject = new JSONObject(jsonMovieList);
             JSONArray moviesList = movieListObject.getJSONArray("results");
             for (int i = 0; i < moviesList.length(); i++) {
@@ -143,13 +154,13 @@ public class MovieList extends AppCompatActivity {
                 String movieListRating = movies.get("vote_average").toString();
                 String movieListId = movies.get("id").toString();
                 MovieListModel movieListModel = new MovieListModel(movieListName, movieListReleaseDate, movieListImage, movieListRating, movieListId);
-                movieListArray.add(movieListModel);
+                movieListsArray.add(movieListModel);
             }
-            return movieListArray;
+            return movieListsArray;
         }
 
-        private ArrayList<MovieListModel> jsonTvParser(String jsonTvList) throws JSONException{
-            ArrayList<MovieListModel> tvListArray = new ArrayList<>();
+        private ArrayList<MovieListModel> jsonTvParser(String jsonTvList, ArrayList<MovieListModel> tvListArray) throws JSONException{
+            //ArrayList<MovieListModel> tvListArray = new ArrayList<>();
             JSONObject tvListObject = new JSONObject(jsonTvList);
             JSONArray tvList = tvListObject.getJSONArray("results");
             for (int i = 0; i < tvList.length(); i++) {
@@ -164,8 +175,8 @@ public class MovieList extends AppCompatActivity {
             }
             return tvListArray;
         }
-        private ArrayList<MovieListModel> jsonCelebsParser(String jsonCelebsList) throws JSONException{
-            ArrayList<MovieListModel> celebsListArray = new ArrayList<>();
+        private ArrayList<MovieListModel> jsonCelebsParser(String jsonCelebsList, ArrayList<MovieListModel> celebsListArray) throws JSONException{
+            //ArrayList<MovieListModel> celebsListArray = new ArrayList<>();
             JSONObject celebsListObject = new JSONObject(jsonCelebsList);
             JSONArray celebsList = celebsListObject.getJSONArray("results");
             for (int i = 0; i < celebsList.length(); i++) {
@@ -188,11 +199,11 @@ public class MovieList extends AppCompatActivity {
             BufferedReader reader = null;
             String jsonData = null;
             ArrayList<String> jsonArray = new ArrayList<>();
-            for (String param : params){
+            for (int i=1;i<6;i++){
                 try {
                     //Log.v("url", param);
                     //setting the urlConnection
-                    URL url = new URL(param);
+                    URL url = new URL(params[0]+i);
                     urlConnection = (HttpURLConnection) url.openConnection();
                     urlConnection.setRequestMethod("GET");
                     urlConnection.connect();
@@ -242,7 +253,9 @@ public class MovieList extends AppCompatActivity {
                 if(type.compareTo("movie") == 0) {
                     // Log.v("type", type);
                     try {
-                        movieListsArray = jsonMovieParser(jsonArray.get(0));
+                        for (int i = 0; i < 5; i++) {
+                            movieListsArray = jsonMovieParser(jsonArray.get(i), movieListsArray);
+                        }
                         movieListAdapter = new MovieListAdapter(movieListsArray);
                         recyclerViewMovieList.setAdapter(movieListAdapter);
                     } catch (JSONException e) {
@@ -252,7 +265,9 @@ public class MovieList extends AppCompatActivity {
                 }
                 else if (type.compareTo("tv") == 0){
                     try {
-                        tvListArray = jsonTvParser(jsonArray.get(0));
+                        for (int i = 0; i < 5; i++) {
+                            tvListArray = jsonTvParser(jsonArray.get(i),tvListArray);
+                        }
                         movieListAdapter = new MovieListAdapter(tvListArray);
                         recyclerViewMovieList.setAdapter(movieListAdapter);
                     } catch (JSONException e) {
@@ -261,16 +276,15 @@ public class MovieList extends AppCompatActivity {
                 }
                 else if (type.compareTo("person") == 0){
                     try {
-                        celebsListArray = jsonCelebsParser(jsonArray.get(0));
+                        for (int i = 0; i < 5; i++) {
+                            celebsListArray = jsonCelebsParser(jsonArray.get(i), celebsListArray);
+                        }
                         movieListAdapter = new MovieListAdapter(celebsListArray);
                         recyclerViewMovieList.setAdapter(movieListAdapter);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                 }
-
-
         }
     }
 }

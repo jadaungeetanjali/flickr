@@ -167,7 +167,6 @@ public class HorizontalListFragment extends Fragment {
         private int mCount;
         private ArrayList<ListDataModel> dataList;
 
-
         class MyViewHolder extends RecyclerView.ViewHolder{
             TextView childViewTitle;
             TextView childViewVote;
