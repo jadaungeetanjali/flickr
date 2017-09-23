@@ -18,5 +18,6 @@
     <color name="colorSuccessDark">#2E7D32</color>
     <color name="colorSecondary">#9E9E9E</color>
     <color name="colorSecondaryLight">#E0E0E0</color>
+    <color name="colorSecondaryExtraLight">#F5F5F5</color>
     <color name="colorSecondaryDark">#424242</color>
 </resources>

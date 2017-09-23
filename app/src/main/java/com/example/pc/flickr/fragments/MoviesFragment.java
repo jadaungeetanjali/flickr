@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.example.pc.flickr.MoviesDetails;
 import com.example.pc.flickr.R;
+import com.example.pc.flickr.json_parsers.DetailJsonParser;
 import com.example.pc.flickr.models.CastModel;
 import com.example.pc.flickr.models.DetailItemModel;
 import com.example.pc.flickr.models.ReviewModel;
@@ -72,37 +73,39 @@ public class MoviesFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_movies, container, false);
 
         //Initalizing detail layout members view
-        title = (TextView) rootView.findViewById(R.id.main_title);
-        overview = (TextView) rootView.findViewById(R.id.overview);
-        vote_average = (TextView) rootView.findViewById(R.id.vote_average);
-        tagline = (TextView) rootView.findViewById(R.id.tagline);
-        release_date = (TextView) rootView.findViewById(R.id.release_date);
-        language = (TextView) rootView.findViewById(R.id.language);
-        poster = (ImageView) rootView.findViewById(R.id.poster);
-        internet_connectivity = (TextView) rootView.findViewById(R.id.internet_connectivity);
-        button = (Button) rootView.findViewById(R.id.detail_wishlist);
-        progressBar = (ProgressBar) rootView.findViewById(R.id.detail_progressBar);
-        mainContainer = (LinearLayout) rootView.findViewById(R.id.detail_mainContainer);
+        title = (TextView) rootView.findViewById(R.id.detail_movie_maintitle);
+        overview = (TextView) rootView.findViewById(R.id.detail_movie_overview);
+        vote_average = (TextView) rootView.findViewById(R.id.detail_movie_vote_average_textView);
+        tagline = (TextView) rootView.findViewById(R.id.detail_movie_tagline);
+        release_date = (TextView) rootView.findViewById(R.id.detail_movie_releaseTitle);
+        language = (TextView) rootView.findViewById(R.id.detail_movie_language);
+        poster = (ImageView) rootView.findViewById(R.id.detail_movie_poster);
+        internet_connectivity = (TextView) rootView.findViewById(R.id.detail_movie_internet_connectivity);
+        button = (Button) rootView.findViewById(R.id.detail_movie_watchlist);
+        progressBar = (ProgressBar) rootView.findViewById(R.id.detail_movie_progressBar);
+        mainContainer = (LinearLayout) rootView.findViewById(R.id.detail_movie_mainContainer);
 
         //Initalizing Cast Recycler view
-        recyclerViewCast = (RecyclerView) rootView.findViewById(R.id.castRecyclerView);
+        recyclerViewCast = (RecyclerView) rootView.findViewById(R.id.detail_movie_castRecyclerView);
         LinearLayoutManager layoutManagerCast = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewCast.setLayoutManager(layoutManagerCast);
         recyclerViewCast.setItemAnimator(new DefaultItemAnimator());
 
         //Initalizing Review Recycler View
-        recyclerViewReviews = (RecyclerView) rootView.findViewById(R.id.reviewsRecyclerView);
+        recyclerViewReviews = (RecyclerView) rootView.findViewById(R.id.detail_movie_reviewsRecyclerView);
         LinearLayoutManager layoutManagerReviews = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerViewReviews.setLayoutManager(layoutManagerReviews);
         recyclerViewReviews.setItemAnimator(new DefaultItemAnimator());
 
         //Initalizing Sismilar Recycler View
-        recyclerViewSimilar = (RecyclerView) rootView.findViewById(R.id.similarMoviesRecyclerView);
+        recyclerViewSimilar = (RecyclerView) rootView.findViewById(R.id.detail_movie_similarMoviesRecyclerView);
         LinearLayoutManager layoutManagerSimilar = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewSimilar.setLayoutManager(layoutManagerSimilar);
         recyclerViewSimilar.setItemAnimator(new DefaultItemAnimator());
 
-
+        Bundle bundle = getArguments();
+        id = bundle.getString("id");
+        type = bundle.getString("type");
         ArrayList<String> urlList = new ArrayList<>();
         urlList.add("https://api.themoviedb.org/3/movie/" + id + "?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
         urlList.add("https://api.themoviedb.org/3/movie/" + id + "/credits?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
@@ -274,71 +277,6 @@ public class MoviesFragment extends Fragment {
 
     public class FetchTask extends AsyncTask<String, Void, ArrayList<String>> {
         // jsonMovieParser to parse the jsonData of MovieDetails
-        private DetailItemModel jsonMovieParser(String jsonMovie)throws JSONException {
-            // fetching data in json
-            JSONObject movieObject = new JSONObject(jsonMovie);
-            String title = movieObject.get("title").toString();
-            String overview = movieObject.get("overview").toString();
-            String vote_average = movieObject.get("vote_average").toString();
-            String tagline = movieObject.get("tagline").toString();
-            String release_date = movieObject.get("release_date").toString();
-            String language = movieObject.get("original_language").toString();
-            String poster = movieObject.get("poster_path").toString();
-            //creating object of DetailItemModel class to initialise constructor with movieDetails
-            DetailItemModel DetailItemModel=new DetailItemModel(title, overview, vote_average, tagline, release_date, language, poster);
-
-            return DetailItemModel;
-        }
-        // jsonCastParser to parse the jsonData for cast
-        private ArrayList<CastModel> jsonCastParser(String jsonCast) throws JSONException {
-            ArrayList<CastModel> castArray = new ArrayList<>();
-            JSONObject castObject = new JSONObject(jsonCast);
-            JSONArray castList = castObject.getJSONArray("cast");
-            for (int i = 0; i < castList.length(); i++) {
-                JSONObject cast = castList.getJSONObject(i);
-                String itemId = cast.get("id").toString();
-                String name = cast.get("name").toString();
-                String character = cast.get("character").toString();
-                String image = cast.get("profile_path").toString();
-
-                CastModel castModel = new CastModel(id,name,character,image);
-                castArray.add(castModel);
-            }
-            return castArray;
-        }
-        // jsonReviewsParser to parse the jsonData for reviews
-        private ArrayList<ReviewModel> jsonReviewsParser(String jsonReviews) throws JSONException {
-            ArrayList<ReviewModel> reviewsArray = new ArrayList<>();
-            JSONObject reviewsObject = new JSONObject(jsonReviews);
-            JSONArray reviewsList = reviewsObject.getJSONArray("results");
-            for (int i = 0; i < reviewsList.length(); i++) {
-                JSONObject review = reviewsList.getJSONObject(i);
-                String author = review.get("author").toString();
-                String content = review.get("content").toString();
-
-                ReviewModel reviewModel = new ReviewModel(author, content);
-                reviewsArray.add(reviewModel);
-            }
-            return reviewsArray;
-        }
-        // jsonSimilarMoviesParser to parse the jsonData for SimilarMovies
-        private ArrayList<SimilarItemModel> jsonSimilarMoviesParser(String jsonSimilarMovies) throws JSONException {
-            ArrayList<SimilarItemModel> similarMoviesArray = new ArrayList<>();
-            JSONObject similarMoviesObject = new JSONObject(jsonSimilarMovies);
-            JSONArray similarMoviesList = similarMoviesObject.getJSONArray("results");
-            for (int i = 0; i < similarMoviesList.length(); i++) {
-                JSONObject similarMovies = similarMoviesList.getJSONObject(i);
-                String similarItemName = similarMovies.get("title").toString();
-                String similarItemVoteAverage = similarMovies.get("vote_average").toString();
-                String similarItemPoster = similarMovies.get("poster_path").toString();
-                String similarItemId = similarMovies.get("id").toString();
-                SimilarItemModel SimilarItemModel = new SimilarItemModel(similarItemId, similarItemName, similarItemVoteAverage, similarItemPoster);
-                similarMoviesArray.add(SimilarItemModel);
-            }
-            return similarMoviesArray;
-        }
-
-
         //doInBackground method to set up url connection and return jsonData
         @Override
         protected ArrayList<String> doInBackground(String... params) {
@@ -400,7 +338,8 @@ public class MoviesFragment extends Fragment {
             ArrayList<ReviewModel> reviewArray = new ArrayList<>();
             ArrayList<SimilarItemModel> similarMoviesArray = new ArrayList<>();
             try {
-                final DetailItemModel DetailItemModel = jsonMovieParser(jsonArray.get(0));
+                DetailJsonParser detailJsonParser = new DetailJsonParser();
+                final DetailItemModel DetailItemModel = detailJsonParser.jsonMovieDetailParser(jsonArray.get(0));
                 Log.v("title",DetailItemModel.getTitle());
                 title.setText(DetailItemModel.getTitle());
                 overview.setText(DetailItemModel.getOverview());
@@ -410,16 +349,16 @@ public class MoviesFragment extends Fragment {
                 language.setText(DetailItemModel.getLanguage());
                 Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w500"+DetailItemModel.getImg_url()).into(poster);
 
-                castArray = jsonCastParser(jsonArray.get(1));
+                castArray = detailJsonParser.jsonMovieCastParser(jsonArray.get(1));
                 castAdapter = new CastAdapter(castArray);
                 recyclerViewCast.setAdapter(castAdapter);
 
-                reviewArray = jsonReviewsParser(jsonArray.get(2));
+                reviewArray = detailJsonParser.jsonMovieReviewsParser(jsonArray.get(2));
                 //Log.v("review",jsonArray.get(2));
                 reviewAdapter = new ReviewAdapter(reviewArray);
                 recyclerViewReviews.setAdapter(reviewAdapter);
 
-                similarMoviesArray = jsonSimilarMoviesParser(jsonArray.get(3));
+                similarMoviesArray = detailJsonParser.jsonSimilarMoviesParser(jsonArray.get(3));
                 similarMoviesAdapter = new SimilarMoviesAdapter(similarMoviesArray);
                 recyclerViewSimilar.setAdapter(similarMoviesAdapter);
                 progressBar.setVisibility(View.GONE);

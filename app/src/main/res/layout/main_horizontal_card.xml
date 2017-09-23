@@ -4,10 +4,10 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="300dp"
-    android:elevation="4dp"
+    android:elevation="2dp"
     android:background="#fff"
-    android:layout_marginBottom="15dp"
-    android:layout_margin="6dp">
+    android:layout_marginBottom="24dp"
+    android:layout_marginTop="1dp">
     <LinearLayout
         android:id="@+id/main_horizontal_card_Button"
         android:layout_width="match_parent"
@@ -30,13 +30,15 @@
             android:layout_height="wrap_content"
             android:text="MORE"
             android:textSize="12sp"
-            android:textColor="@color/colorDanger"
+            android:textColor="@color/colorSuccessDark"
             android:layout_marginRight="15dp"/>
     </LinearLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/main_child_recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="5dp"
+        >
 
     </android.support.v7.widget.RecyclerView>
 

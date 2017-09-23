@@ -228,7 +228,7 @@ public class HorizontalListFragment extends Fragment {
             final int radius = 10;
             final int margin = 5;
             final Transformation transformation = new RoundedCornersTransformation(radius, margin);
-            Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w500"+dataModel.getImg_url()).transform(transformation)
+            Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w500"+dataModel.getImg_url())
                     .into(holder.childImageView,new com.squareup.picasso.Callback() {
 
                         @Override

@@ -3,6 +3,7 @@ package com.example.pc.flickr;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -21,6 +22,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.pc.flickr.fragments.MoviesFragment;
 import com.example.pc.flickr.models.CastModel;
 import com.example.pc.flickr.models.DetailItemModel;
 import com.example.pc.flickr.models.ReviewModel;
@@ -56,25 +58,10 @@ public class MoviesDetails extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Bundle bundle = this.getIntent().getExtras();
         type = bundle.getString("type");
-        id = bundle.getString("id");
+        MoviesFragment moviesFragment = new MoviesFragment();
+        moviesFragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().add(R.id.detail_fragment_container,moviesFragment).commit();
 
-
-        switch (type) {
-            case "movies":
-
-                break;
-            case "tv":
-                urlList.add("https://api.themoviedb.org/3/tv/" + id + "?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
-                urlList.add("https://api.themoviedb.org/3/tv/" + id + "/credits?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
-                urlList.add("https://api.themoviedb.org/3/movie/" + id + "/reviews?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
-                urlList.add("https://api.themoviedb.org/3/tv/" + id + "/similar?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
-                break;
-            default:
-                urlList.add("https://api.themoviedb.org/3/movie/" + id + "?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
-                urlList.add("https://api.themoviedb.org/3/movie/" + id + "/credits?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
-                urlList.add("https://api.themoviedb.org/3/movie/" + id + "/reviews?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
-                urlList.add("https://api.themoviedb.org/3/movie/" + id + "/similar?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
-        }
     }
     // CastAdapter class to populate data in castRecyclerView
 }
