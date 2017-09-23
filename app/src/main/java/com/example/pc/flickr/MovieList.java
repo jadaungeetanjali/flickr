@@ -57,13 +57,14 @@ public class MovieList extends AppCompatActivity {
             TextView movieListNameTextView;
             TextView movieListReleaseDateTextView;
             TextView movieListRatingTextView;
-
+            TextView movieListIdTextView;
             public movieListViewHolder(View itemView) {
                 super(itemView);
                 movieListNameTextView = (TextView) itemView.findViewById(R.id.movie_name);
                 movieListImageView = (ImageView) itemView.findViewById(R.id.movie_poster);
                 movieListReleaseDateTextView = (TextView) itemView.findViewById(R.id.movie_realease_date);
                 movieListRatingTextView = (TextView) itemView.findViewById(R.id.movie_ratings);
+                movieListIdTextView = (TextView) itemView.findViewById(R.id.movie_id);
             }
         }
 
@@ -83,6 +84,7 @@ public class MovieList extends AppCompatActivity {
             holder.movieListNameTextView.setText(movieListModel.getName());
             holder.movieListReleaseDateTextView.setText(movieListModel.getReleaseDate());
             holder.movieListRatingTextView.setText(movieListModel.getRating());
+            holder.movieListIdTextView.setText(movieListModel.getId());
             Picasso.with(getBaseContext()).load("https://image.tmdb.org/t/p/w500" + movieListModel.getImage()).into(holder.movieListImageView);
         }
 
@@ -96,12 +98,14 @@ public class MovieList extends AppCompatActivity {
         public String releaseDate;
         public String image;
         public String rating;
+        public String id;
 
-        public MovieListModel(String name,String releaseDate,String image, String rating){
+        public MovieListModel(String name,String releaseDate,String image, String rating, String id){
             this.name = name;
             this.releaseDate = releaseDate;
             this.image = image;
             this.rating = rating;
+            this.id = id;
         }
 
         public String getReleaseDate() {
@@ -119,6 +123,10 @@ public class MovieList extends AppCompatActivity {
         public String getRating() {
             return rating;
         }
+
+        public String getId() {
+            return id;
+        }
     }
 
     public class FetchTask extends AsyncTask<String, Void, ArrayList<String>> {
@@ -133,11 +141,46 @@ public class MovieList extends AppCompatActivity {
                 String movieListReleaseDate = movies.get("release_date").toString();
                 String movieListImage = movies.get("poster_path").toString();
                 String movieListRating = movies.get("vote_average").toString();
-                MovieListModel movieListModel = new MovieListModel(movieListName, movieListReleaseDate, movieListImage, movieListRating  );
+                String movieListId = movies.get("id").toString();
+                MovieListModel movieListModel = new MovieListModel(movieListName, movieListReleaseDate, movieListImage, movieListRating, movieListId);
                 movieListArray.add(movieListModel);
             }
             return movieListArray;
         }
+
+        private ArrayList<MovieListModel> jsonTvParser(String jsonTvList) throws JSONException{
+            ArrayList<MovieListModel> tvListArray = new ArrayList<>();
+            JSONObject tvListObject = new JSONObject(jsonTvList);
+            JSONArray tvList = tvListObject.getJSONArray("results");
+            for (int i = 0; i < tvList.length(); i++) {
+                JSONObject tvShows = tvList.getJSONObject(i);
+                String tvListName = tvShows.get("name").toString();
+                String tvListAirDate = tvShows.get("first_air_date").toString();
+                String tvListImage = tvShows.get("poster_path").toString();
+                String tvListRating = tvShows.get("vote_average").toString();
+                String tvListId = tvShows.get("id").toString();
+                MovieListModel movieListModel = new MovieListModel(tvListName, tvListAirDate, tvListImage, tvListRating, tvListId);
+                tvListArray.add(movieListModel);
+            }
+            return tvListArray;
+        }
+        private ArrayList<MovieListModel> jsonCelebsParser(String jsonCelebsList) throws JSONException{
+            ArrayList<MovieListModel> celebsListArray = new ArrayList<>();
+            JSONObject celebsListObject = new JSONObject(jsonCelebsList);
+            JSONArray celebsList = celebsListObject.getJSONArray("results");
+            for (int i = 0; i < celebsList.length(); i++) {
+                JSONObject celebs = celebsList.getJSONObject(i);
+                String celebsListName = celebs.get("name").toString();
+                //String tvListAirDate = tvShows.get("first_air_date").toString();
+                String celebsListImage = celebs.get("profile_path").toString();
+                //String celebsListRating = tvShows.get("vote_average").toString();
+                String celebsListId = celebs.get("id").toString();
+                MovieListModel movieListModel = new MovieListModel(celebsListName, "", celebsListImage, "", celebsListId);
+                celebsListArray.add(movieListModel);
+            }
+            return celebsListArray;
+        }
+
 
         @Override
         protected ArrayList<String> doInBackground(String... params) {
@@ -192,13 +235,41 @@ public class MovieList extends AppCompatActivity {
         protected void onPostExecute(ArrayList<String> jsonArray) {
             super.onPostExecute(jsonArray);
             ArrayList<MovieListModel> movieListsArray = new ArrayList<>();
-            try {
-                movieListsArray = jsonMovieParser(jsonArray.get(0));
-                movieListAdapter = new MovieListAdapter(movieListsArray);
-                recyclerViewMovieList.setAdapter(movieListAdapter);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            ArrayList<MovieListModel> tvListArray = new ArrayList<>();
+            ArrayList<MovieListModel> celebsListArray = new ArrayList<>();
+
+                //Log.v("type", type);
+                if(type.compareTo("movie") == 0) {
+                    // Log.v("type", type);
+                    try {
+                        movieListsArray = jsonMovieParser(jsonArray.get(0));
+                        movieListAdapter = new MovieListAdapter(movieListsArray);
+                        recyclerViewMovieList.setAdapter(movieListAdapter);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                else if (type.compareTo("tv") == 0){
+                    try {
+                        tvListArray = jsonTvParser(jsonArray.get(0));
+                        movieListAdapter = new MovieListAdapter(tvListArray);
+                        recyclerViewMovieList.setAdapter(movieListAdapter);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else if (type.compareTo("person") == 0){
+                    try {
+                        celebsListArray = jsonCelebsParser(jsonArray.get(0));
+                        movieListAdapter = new MovieListAdapter(celebsListArray);
+                        recyclerViewMovieList.setAdapter(movieListAdapter);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
 
         }
     }
