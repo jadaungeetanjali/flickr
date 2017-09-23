@@ -273,14 +273,6 @@ public class MoviesDetails extends AppCompatActivity {
     }
 
 
-    //DetailItemModel class is created to initialise all the variables using constructor
-
-    // CastModel class to initialise all the variables of castRecyclerView
-
-    // ReviewModel class to initialise all the variables of reviewsRecyclerView
-
-    // SimilarItemModel class to initialise all the variables of similarMoviesRecyclerView
-
     public class FetchTask extends AsyncTask<String, Void, ArrayList<String>> {
         // jsonMovieParser to parse the jsonData of MovieDetails
         private DetailItemModel jsonMovieParser(String jsonMovie)throws JSONException {

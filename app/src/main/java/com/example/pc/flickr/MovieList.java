@@ -36,17 +36,18 @@ public class MovieList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_list);
+        recyclerViewMovieList = (RecyclerView) findViewById(R.id.recyclerView_movieList);
+        LinearLayoutManager layoutManagerMovieList = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        recyclerViewMovieList.setLayoutManager(layoutManagerMovieList);
+        recyclerViewMovieList.setItemAnimator(new DefaultItemAnimator());
         Bundle bundle  = this.getIntent().getExtras();
         type = bundle.getString("type");
         subType = bundle.getString("subType");
         Log.i("data",type + " / " + subType);
-        //recyclerViewMovieList = (RecyclerView) findViewById(R.id.reviewsRecyclerView);
-        //LinearLayoutManager layoutManagerReviews = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        //recyclerViewMovieList.setLayoutManager(layoutManagerReviews);
-        //recyclerViewMovieList.setItemAnimator(new DefaultItemAnimator());
-        //String url = "https://api.themoviedb.org/3/movie/popular?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US&page=1";
-        //FetchTask callMovieData = new FetchTask();
-        //callMovieData.execute(url);
+        ArrayList<String> urlList = new ArrayList<>();
+        urlList.add("https://api.themoviedb.org/3/" + type + "/" + subType + "?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US&page=1");
+        FetchTask callMovieData = new FetchTask();
+        callMovieData.execute(urlList.get(0));
     }
     private class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.movieListViewHolder> {
         private ArrayList<MovieListModel> movieListArrayList;
@@ -146,6 +147,7 @@ public class MovieList extends AppCompatActivity {
             ArrayList<String> jsonArray = new ArrayList<>();
             for (String param : params){
                 try {
+                    //Log.v("url", param);
                     //setting the urlConnection
                     URL url = new URL(param);
                     urlConnection = (HttpURLConnection) url.openConnection();
@@ -191,12 +193,13 @@ public class MovieList extends AppCompatActivity {
             super.onPostExecute(jsonArray);
             ArrayList<MovieListModel> movieListsArray = new ArrayList<>();
             try {
-                movieListsArray = jsonMovieParser(jsonArray.get(1));
+                movieListsArray = jsonMovieParser(jsonArray.get(0));
+                movieListAdapter = new MovieListAdapter(movieListsArray);
+                recyclerViewMovieList.setAdapter(movieListAdapter);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            movieListAdapter = new MovieListAdapter(movieListsArray);
-            recyclerViewMovieList.setAdapter(movieListAdapter);
+
         }
     }
 }

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:padding="5dp"
+    android:layout_height="122dp"
+    android:background="#fff"
     >
     <ImageView
         android:id="@+id/movie_poster"
@@ -15,29 +16,44 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="3"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp">
         <TextView
             android:id="@+id/movie_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="MovieName"
             android:padding="2dp"
-            android:textSize="14sp"/>
+            android:textSize="14sp"
+            android:textStyle="bold"/>
         <TextView
             android:id="@+id/movie_realease_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="ReleaseDate"
             android:padding="2dp"
-            android:textSize="14sp"/>
-        <TextView
-            android:id="@+id/movie_ratings"
+            android:textSize="14sp"
+            android:textStyle="bold"/>
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ratings"
-            android:padding="2dp"
-            android:textSize="14sp"/>
+            android:orientation="horizontal">
 
+            <RatingBar
+                style="@style/Widget.AppCompat.RatingBar.Small"
+                android:layout_width="15dp"
+                android:layout_height="22dp"
+                android:rating="10"
+                android:numStars="0" />
+            <TextView
+                android:id="@+id/movie_ratings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ratings"
+                android:padding="2dp"
+                android:textSize="14sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>
