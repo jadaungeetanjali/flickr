@@ -4,6 +4,7 @@ import com.example.pc.flickr.models.CastModel;
 import com.example.pc.flickr.models.DetailItemModel;
 import com.example.pc.flickr.models.ReviewModel;
 import com.example.pc.flickr.models.SimilarItemModel;
+import com.example.pc.flickr.models.VideoModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,7 +32,7 @@ public class DetailJsonParser {
         return DetailItemModel;
     }
 
-    public ArrayList<CastModel> jsonMovieCastParser(String jsonCast) throws JSONException {
+    public ArrayList<CastModel> jsonCastParser(String jsonCast) throws JSONException {
         ArrayList<CastModel> castArray = new ArrayList<>();
         JSONObject castObject = new JSONObject(jsonCast);
         JSONArray castList = castObject.getJSONArray("cast");
@@ -46,6 +47,22 @@ public class DetailJsonParser {
             castArray.add(castModel);
         }
         return castArray;
+    }
+    public ArrayList<VideoModel> jsonVideoParser(String jsonVideos) throws JSONException {
+        ArrayList<VideoModel> videoArray = new ArrayList<>();
+        JSONObject videoObject = new JSONObject(jsonVideos);
+        JSONArray videoList = videoObject.getJSONArray("results");
+        for (int i = 0; i < videoList.length(); i++) {
+            JSONObject video = videoList.getJSONObject(i);
+            String itemId = video.get("id").toString();
+            String name = video.get("name").toString();
+            String type = video.get("type").toString();
+            String image = video.get("key").toString();
+
+            VideoModel videoModel = new VideoModel(itemId,name,type,image);
+            videoArray.add(videoModel);
+        }
+        return videoArray;
     }
 
     public ArrayList<ReviewModel> jsonMovieReviewsParser(String jsonReviews) throws JSONException {
@@ -63,7 +80,7 @@ public class DetailJsonParser {
         return reviewsArray;
     }
 
-    public ArrayList<SimilarItemModel> jsonSimilarMoviesParser(String jsonSimilarMovies) throws JSONException {
+    public ArrayList<SimilarItemModel> jsonSimilarParser(String jsonSimilarMovies) throws JSONException {
         ArrayList<SimilarItemModel> similarMoviesArray = new ArrayList<>();
         JSONObject similarMoviesObject = new JSONObject(jsonSimilarMovies);
         JSONArray similarMoviesList = similarMoviesObject.getJSONArray("results");
@@ -78,4 +95,26 @@ public class DetailJsonParser {
         }
         return similarMoviesArray;
     }
+
+
+
+
+
+    //Tv Parsers
+
+    public DetailItemModel jsonTvDetailParser(String jsonMovie)throws JSONException {
+        // fetching data in json
+        JSONObject movieObject = new JSONObject(jsonMovie);
+        String title = movieObject.get("name").toString();
+        String overview = movieObject.get("overview").toString();
+        String vote_average = movieObject.get("vote_average").toString();
+        String tagline = movieObject.get("status").toString();
+        String release_date = movieObject.get("first_air_date").toString();
+        String language = movieObject.get("original_language").toString();
+        String poster = movieObject.get("poster_path").toString();
+        //creating object of DetailItemModel class to initialise constructor with movieDetails
+        DetailItemModel DetailItemModel=new DetailItemModel(title, overview, vote_average, tagline, release_date, language, poster);
+        return DetailItemModel;
+    }
+
 }

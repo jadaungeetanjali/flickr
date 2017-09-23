@@ -374,7 +374,7 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
                     android:layout_marginLeft="10dp"
-                    android:text="Similar Movies"
+                    android:text="Similar"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 

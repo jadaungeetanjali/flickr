@@ -29,6 +29,7 @@ import com.example.pc.flickr.models.CastModel;
 import com.example.pc.flickr.models.DetailItemModel;
 import com.example.pc.flickr.models.ReviewModel;
 import com.example.pc.flickr.models.SimilarItemModel;
+import com.example.pc.flickr.models.VideoModel;
 import com.example.pc.flickr.models.WishListModel;
 import com.example.pc.flickr.services.FirebaseCurd;
 import com.squareup.picasso.Picasso;
@@ -53,7 +54,8 @@ public class MoviesFragment extends Fragment {
     private CastAdapter castAdapter;
     private ReviewAdapter reviewAdapter;
     private SimilarMoviesAdapter similarMoviesAdapter;
-    RecyclerView recyclerViewCast, recyclerViewReviews, recyclerViewSimilar;
+    private VideoAdapter videoAdapter;
+    RecyclerView recyclerViewCast, recyclerViewReviews, recyclerViewSimilar,recyclerViewVideo;
     private TextView title, overview, vote_average, tagline, release_date, language, internet_connectivity;
     private ProgressBar progressBar;
     private ImageView poster;
@@ -103,14 +105,33 @@ public class MoviesFragment extends Fragment {
         recyclerViewSimilar.setLayoutManager(layoutManagerSimilar);
         recyclerViewSimilar.setItemAnimator(new DefaultItemAnimator());
 
+        recyclerViewVideo = (RecyclerView) rootView.findViewById(R.id.detail_movie_videosRecyclerView);
+        LinearLayoutManager layoutManagerVideo = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewVideo.setLayoutManager(layoutManagerVideo);
+        recyclerViewVideo.setItemAnimator(new DefaultItemAnimator());
+
         Bundle bundle = getArguments();
         id = bundle.getString("id");
         type = bundle.getString("type");
         ArrayList<String> urlList = new ArrayList<>();
-        urlList.add("https://api.themoviedb.org/3/movie/" + id + "?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
-        urlList.add("https://api.themoviedb.org/3/movie/" + id + "/credits?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
-        urlList.add("https://api.themoviedb.org/3/movie/" + id + "/reviews?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
-        urlList.add("https://api.themoviedb.org/3/movie/" + id + "/similar?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
+        switch (type){
+            case "movies":
+                urlList.add("https://api.themoviedb.org/3/movie/" + id + "?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
+                urlList.add("https://api.themoviedb.org/3/movie/" + id + "/credits?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
+                urlList.add("https://api.themoviedb.org/3/movie/" + id + "/reviews?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
+                urlList.add("https://api.themoviedb.org/3/movie/" + id + "/similar?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
+                urlList.add("https://api.themoviedb.org/3/movie/" + id + "/videos?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
+                break;
+            case "tv":
+                urlList.add("https://api.themoviedb.org/3/tv/" + id + "?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
+                urlList.add("https://api.themoviedb.org/3/tv/" + id + "/credits?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
+                urlList.add("https://api.themoviedb.org/3/movie/" + id + "/reviews?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
+                urlList.add("https://api.themoviedb.org/3/movie/" + id + "/similar?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
+                urlList.add("https://api.themoviedb.org/3/movie/" + id + "/videos?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
+                break;
+            default:
+        }
+
         ConnectivityManager connectivityManager = (ConnectivityManager)  getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         if ((networkInfo != null) && networkInfo.isConnected()) {
@@ -118,7 +139,7 @@ public class MoviesFragment extends Fragment {
             ScrollView scrollView = (ScrollView) rootView.findViewById(R.id.detail_movie_scrollView);
             scrollView.setVisibility(View.VISIBLE);
             FetchTask callMovieData = new FetchTask();
-            callMovieData.execute(urlList.get(0), urlList.get(1), urlList.get(2), urlList.get(3));
+            callMovieData.execute(urlList.get(0), urlList.get(1), urlList.get(2), urlList.get(3),urlList.get(4));
         }
         else{
             Toast.makeText(getContext(), "Please Connect to internet...", Toast.LENGTH_SHORT).show();
@@ -273,6 +294,57 @@ public class MoviesFragment extends Fragment {
         }
     }
 
+    private class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.videoViewHolder> {
+        private ArrayList<VideoModel> videoArrayList;
+
+        class videoViewHolder extends RecyclerView.ViewHolder {
+            ImageView videoImageView;
+            TextView videoNameTextView ;
+            ProgressBar videoProgressBar;
+
+            public videoViewHolder(View itemView) {
+                super(itemView);
+                videoProgressBar = (ProgressBar) itemView.findViewById(R.id.video_progressBar);
+                videoNameTextView = (TextView) itemView.findViewById(R.id.video_textView); //change id to similarMovieName
+                videoImageView = (ImageView) itemView.findViewById(R.id.video_imageView); //change id to similarMovieImage
+            }
+        }
+
+        public VideoAdapter(ArrayList<VideoModel> arrayList) {
+            this.videoArrayList = arrayList;
+        }
+
+        @Override
+        public videoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_video_listitem, parent, false); //change layout id
+            return new videoViewHolder(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(final videoViewHolder holder, int position) {
+            VideoModel videoModel = videoArrayList.get(position);
+            holder.videoNameTextView.setText(videoModel.getName());
+            Picasso.with(getContext()).load("https://img.youtube.com/vi/"+videoModel.getImage()+"/0.jpg")
+                    .into(holder.videoImageView,new com.squareup.picasso.Callback() {
+
+                        @Override
+                        public void onSuccess() {
+                            holder.videoProgressBar.setVisibility(View.GONE);
+                            holder.videoImageView.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onError() {
+
+                        }
+                    });
+        }
+
+        @Override
+        public int getItemCount() {
+            return videoArrayList.size();
+        }
+    }
 
 
     public class FetchTask extends AsyncTask<String, Void, ArrayList<String>> {
@@ -337,9 +409,26 @@ public class MoviesFragment extends Fragment {
             ArrayList<CastModel> castArray = new ArrayList<>();
             ArrayList<ReviewModel> reviewArray = new ArrayList<>();
             ArrayList<SimilarItemModel> similarMoviesArray = new ArrayList<>();
+            ArrayList<VideoModel> videosArray = new ArrayList<>();
             try {
+
                 DetailJsonParser detailJsonParser = new DetailJsonParser();
-                final DetailItemModel DetailItemModel = detailJsonParser.jsonMovieDetailParser(jsonArray.get(0));
+                final DetailItemModel DetailItemModel;
+                switch (type){
+                    case "movies":
+                        DetailItemModel = detailJsonParser.jsonMovieDetailParser(jsonArray.get(0));
+                        reviewArray = detailJsonParser.jsonMovieReviewsParser(jsonArray.get(2));
+                        //Log.v("review",jsonArray.get(2));
+                        reviewAdapter = new ReviewAdapter(reviewArray);
+                        recyclerViewReviews.setAdapter(reviewAdapter);
+                        break;
+                    case "tv":
+                        DetailItemModel = detailJsonParser.jsonTvDetailParser(jsonArray.get(0));
+                        break;
+                    default:
+                        DetailItemModel = detailJsonParser.jsonMovieDetailParser(jsonArray.get(0));
+                }
+
                 Log.v("title",DetailItemModel.getTitle());
                 title.setText(DetailItemModel.getTitle());
                 overview.setText(DetailItemModel.getOverview());
@@ -349,18 +438,20 @@ public class MoviesFragment extends Fragment {
                 language.setText(DetailItemModel.getLanguage());
                 Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w500"+DetailItemModel.getImg_url()).into(poster);
 
-                castArray = detailJsonParser.jsonMovieCastParser(jsonArray.get(1));
+                castArray = detailJsonParser.jsonCastParser(jsonArray.get(1));
                 castAdapter = new CastAdapter(castArray);
                 recyclerViewCast.setAdapter(castAdapter);
 
-                reviewArray = detailJsonParser.jsonMovieReviewsParser(jsonArray.get(2));
-                //Log.v("review",jsonArray.get(2));
-                reviewAdapter = new ReviewAdapter(reviewArray);
-                recyclerViewReviews.setAdapter(reviewAdapter);
 
-                similarMoviesArray = detailJsonParser.jsonSimilarMoviesParser(jsonArray.get(3));
+                similarMoviesArray = detailJsonParser.jsonSimilarParser(jsonArray.get(3));
                 similarMoviesAdapter = new SimilarMoviesAdapter(similarMoviesArray);
                 recyclerViewSimilar.setAdapter(similarMoviesAdapter);
+
+                videosArray = detailJsonParser.jsonVideoParser(jsonArray.get(4));
+                videoAdapter = new VideoAdapter(videosArray);
+                recyclerViewVideo.setAdapter(videoAdapter);
+
+
                 progressBar.setVisibility(View.GONE);
                 mainContainer.setVisibility(View.VISIBLE);
                 button.setOnClickListener(new View.OnClickListener() {

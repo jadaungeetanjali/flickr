@@ -58,10 +58,11 @@ public class MoviesDetails extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Bundle bundle = this.getIntent().getExtras();
         type = bundle.getString("type");
-        MoviesFragment moviesFragment = new MoviesFragment();
-        moviesFragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().add(R.id.detail_fragment_container,moviesFragment).commit();
-
+        if ((type.equals("movies")) || (type.equals("tv")) ) {
+            MoviesFragment moviesFragment = new MoviesFragment();
+            moviesFragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().add(R.id.detail_fragment_container, moviesFragment).commit();
+        }
     }
     // CastAdapter class to populate data in castRecyclerView
 }
