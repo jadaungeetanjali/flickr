@@ -75,8 +75,6 @@ public class FetchApiService extends IntentService {
 
             }
             DatabaseInsert(listDataModel);
-            //
-            sendBroadcast();
         }
     }
 

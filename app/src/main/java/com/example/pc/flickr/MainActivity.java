@@ -10,6 +10,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,6 +22,7 @@ import com.example.pc.flickr.services.FetchApiService;
 
 public class MainActivity extends AppCompatActivity {
     private BroadcastReceiver serviceReceiver;
+    private Boolean reciverHandler=true;
 
     public Fragment currentFragment;
     @Override
@@ -95,15 +97,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        serviceReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Toast.makeText(getApplicationContext(), "New Data Synced", Toast.LENGTH_SHORT).show();
-                fragmentTranstion(currentFragment);
-            }
-        };
-        LocalBroadcastManager.getInstance(this)
-                .registerReceiver(serviceReceiver, new IntentFilter("myBroadcastIntent"));
 
     }
 
