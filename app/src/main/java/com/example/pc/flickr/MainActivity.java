@@ -1,17 +1,28 @@
 package com.example.pc.flickr;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import com.example.pc.flickr.fragments.HorizontalListFragment;
 import com.example.pc.flickr.services.FetchApiService;
 
 public class MainActivity extends AppCompatActivity {
+    private BroadcastReceiver serviceReceiver;
 
+    public Fragment currentFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,21 +61,25 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText("CELEBS"));
 
         fragmentTranstion(moviesFragment);
+        currentFragment = moviesFragment;
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition() == 0){
                     //Movies Fragment will be added
                     fragmentTranstion(moviesFragment);
+                    currentFragment = moviesFragment;
                 }
 
                 else if (tab.getPosition() == 1){
                     //Tv Fragment will be added
                     fragmentTranstion(tvFragment);
+                    currentFragment = moviesFragment;
                 }
 
                 else {
                     //Celebs Fragment will be added
+                    currentFragment = moviesFragment;
                     fragmentTranstion(celebsFragment);
                 }
             }
@@ -80,10 +95,37 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        serviceReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Toast.makeText(getApplicationContext(), "New Data Synced", Toast.LENGTH_SHORT).show();
+                fragmentTranstion(currentFragment);
+            }
+        };
+        LocalBroadcastManager.getInstance(this)
+                .registerReceiver(serviceReceiver, new IntentFilter("myBroadcastIntent"));
+
     }
 
     private void fragmentTranstion(Fragment fragment) {
         getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container,fragment).commit();
 
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.user_menu_option:
+                Intent intent = new Intent(this,UserActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

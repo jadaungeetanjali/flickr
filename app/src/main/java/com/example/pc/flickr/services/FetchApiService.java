@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.example.pc.flickr.data.MovieDbApiContract;
@@ -74,10 +75,16 @@ public class FetchApiService extends IntentService {
 
             }
             DatabaseInsert(listDataModel);
-            //Toast.makeText(this, "New Data Synced", Toast.LENGTH_SHORT).show();
+            //
+            sendBroadcast();
         }
     }
 
+    private void sendBroadcast() {
+        Intent intent = new Intent("myBroadcastIntent");
+        intent.putExtra("service", "Data Fetched");
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
     private ArrayList<String> fetchTask(String urls[]){
         ArrayList<String> jsonArray = new ArrayList<>();
         for (String urlString : urls){
