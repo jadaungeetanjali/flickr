@@ -461,7 +461,7 @@ public class MoviesFragment extends Fragment {
                         WishListModel wishListModel = new WishListModel(
                                 "tyagideepu133",id,type,DetailItemModel.getTitle(),DetailItemModel.getImg_url(),DetailItemModel.getVote_avg());
                         FirebaseCurd firebaseCurd = new FirebaseCurd();
-                        firebaseCurd.addWhistListModel(wishListModel);
+                        firebaseCurd.addWatchListModel(wishListModel);
                     }
                 });
             } catch (JSONException e) {

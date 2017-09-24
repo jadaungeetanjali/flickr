@@ -5,13 +5,14 @@ package com.example.pc.flickr.models;
  */
 
 public class WishListModel{
-    private String id;
     private String itemId;
     private String itemType;
     private String itemName;
     private String imgUrl;
     private String userId;
     private String itemRating;
+
+    public WishListModel(){}
 
     public WishListModel(String userId, String itemId, String itemType, String itemName, String imgUrl, String rating){
         this.userId = userId;

@@ -2,6 +2,7 @@ package com.example.pc.flickr;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -15,7 +16,9 @@ public class UserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
-
+        Toolbar toolbar = (Toolbar) findViewById(R.id.user_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final UserlistFragment userlistFragment = new UserlistFragment();
         buttonLinearLayout = (LinearLayout) findViewById(R.id.user_activity_button);
@@ -28,10 +31,10 @@ public class UserActivity extends AppCompatActivity {
         favoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bundle.putString("type","favorite");
+                bundle.putString("type","Favorite");
                 buttonLinearLayout.setVisibility(View.GONE);
                 userlistFragment.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction().add(R.id.user_activity,userlistFragment).commit();
+                getSupportFragmentManager().beginTransaction().add(R.id.user_fragment_container,userlistFragment).commit();
 
             }
         });
@@ -39,30 +42,30 @@ public class UserActivity extends AppCompatActivity {
         ratingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bundle.putString("type","rating");
+                bundle.putString("type","Rating");
                 buttonLinearLayout.setVisibility(View.GONE);
                 userlistFragment.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction().add(R.id.user_activity,userlistFragment).commit();
+                getSupportFragmentManager().beginTransaction().add(R.id.user_fragment_container,userlistFragment).commit();
             }
         });
 
         watchListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bundle.putString("type","watchlist");
+                bundle.putString("type","WatchList");
                 buttonLinearLayout.setVisibility(View.GONE);
                 userlistFragment.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction().add(R.id.user_activity,userlistFragment).commit();
+                getSupportFragmentManager().beginTransaction().add(R.id.user_fragment_container,userlistFragment).commit();
             }
         });
 
         wishListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bundle.putString("type","wishlist");
+                bundle.putString("type","WishList");
                 buttonLinearLayout.setVisibility(View.GONE);
                 userlistFragment.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction().add(R.id.user_activity,userlistFragment).commit();
+                getSupportFragmentManager().beginTransaction().add(R.id.user_fragment_container,userlistFragment).commit();
             }
         });
 
@@ -72,10 +75,8 @@ public class UserActivity extends AppCompatActivity {
                 bundle.putString("type","profile");
                 buttonLinearLayout.setVisibility(View.GONE);
                 userlistFragment.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction().add(R.id.user_activity,userlistFragment).commit();
+                getSupportFragmentManager().beginTransaction().add(R.id.user_fragment_container,userlistFragment).commit();
             }
         });
-
-
     }
 }
