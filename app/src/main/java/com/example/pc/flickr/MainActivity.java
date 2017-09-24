@@ -74,12 +74,12 @@ public class MainActivity extends AppCompatActivity {
                 else if (tab.getPosition() == 1){
                     //Tv Fragment will be added
                     fragmentTranstion(tvFragment);
-                    currentFragment = moviesFragment;
+                    currentFragment = tvFragment;
                 }
 
                 else {
                     //Celebs Fragment will be added
-                    currentFragment = moviesFragment;
+                    currentFragment = celebsFragment;
                     fragmentTranstion(celebsFragment);
                 }
             }
