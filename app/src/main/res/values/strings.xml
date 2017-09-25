@@ -10,4 +10,8 @@
         <item>Rating</item>
         <item>Favorite</item>
     </string-array>
+
+    <string name="user_name"></string>
+    <string name="user_id"></string>
+    <string name="user_email"></string>
 </resources>
