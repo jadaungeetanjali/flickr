@@ -23,7 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.pc.flickr.MovieList;
+import com.example.pc.flickr.MoreList;
 import com.example.pc.flickr.MoviesDetails;
 import com.example.pc.flickr.R;
 import com.example.pc.flickr.data.MovieDbApiContract;
@@ -151,7 +151,7 @@ public class HorizontalListFragment extends Fragment {
                         sType = "person";
                         sPosition = 2;
                     }
-                    Intent intent = new Intent(getContext(),MovieList.class);
+                    Intent intent = new Intent(getContext(),MoreList.class);
                     Bundle mBundle = new Bundle();
                     mBundle.putString("type",sType);
                     mBundle.putString("subType",subType[(sPosition*4)+position]);
@@ -179,7 +179,6 @@ public class HorizontalListFragment extends Fragment {
         private Cursor cursor;
         private int mCount;
         private ArrayList<ListDataModel> dataList;
-
 
         class MyViewHolder extends RecyclerView.ViewHolder{
             TextView childViewTitle;

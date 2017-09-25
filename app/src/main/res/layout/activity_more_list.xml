@@ -2,10 +2,11 @@
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        tools:context="com.example.pc.flickr.MovieList"
+        tools:context="com.example.pc.flickr.MoreList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="#eff0f1">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,7 +16,7 @@
         android:layout_gravity="center_vertical"
         >
     <TextView
-        android:id="@+id/movieListHeading"
+        android:id="@+id/moreListHeading"
         android:layout_width="wrap_content"
         android:textSize="18sp"
         android:layout_marginLeft="10dp"
@@ -28,8 +29,9 @@
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/recyclerView_movieList"
-        android:background="#eff0f1">
+        android:id="@+id/recyclerView_moreList"
+        android:background="#eff0f1"
+        android:elevation="2dp">
 
     </android.support.v7.widget.RecyclerView>
     </LinearLayout>
