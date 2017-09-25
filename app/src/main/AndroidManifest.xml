@@ -38,8 +38,20 @@
             android:name=".services.FetchApiService"
             android:exported="false" />
 
-        <activity android:name=".MovieList" />
-        <activity android:name=".UserActivity"></activity>
+        <activity android:name=".MovieList"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+
+
+        </activity>
+        <activity android:name=".UserActivity"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
     </application>
 
 </manifest>

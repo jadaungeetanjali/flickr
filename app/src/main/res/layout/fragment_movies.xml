@@ -145,6 +145,7 @@
                     android:paddingRight="16dp">
 
                     <ImageView
+                        android:id="@+id/detail_movie_wishlist_button"
                         android:layout_width="57dp"
                         android:layout_height="57dp"
                         android:src="@android:drawable/ic_input_add" />

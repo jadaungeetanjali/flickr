@@ -59,7 +59,7 @@ public class FirebaseCurd {
     }
 
     //Post method of firebase are here
-    public void addWhistListModel(WishListModel wishListModel){
+    public void addWishListModel(WishListModel wishListModel){
         HashMap<String, Object> result = new HashMap<>();
         result.put("userId",wishListModel.getUserId());
         result.put("itemId", wishListModel.getItemId());

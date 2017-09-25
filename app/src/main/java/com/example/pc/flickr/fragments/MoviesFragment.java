@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,7 +59,7 @@ public class MoviesFragment extends Fragment {
     RecyclerView recyclerViewCast, recyclerViewReviews, recyclerViewSimilar,recyclerViewVideo;
     private TextView title, overview, vote_average, tagline, release_date, language, internet_connectivity;
     private ProgressBar progressBar;
-    private ImageView poster;
+    private ImageView poster,wishListButton;
     private LinearLayout mainContainer;
     private Button button;
     private String type, id;
@@ -84,6 +85,8 @@ public class MoviesFragment extends Fragment {
         poster = (ImageView) rootView.findViewById(R.id.detail_movie_poster);
         internet_connectivity = (TextView) rootView.findViewById(R.id.detail_movie_internet_connectivity);
         button = (Button) rootView.findViewById(R.id.detail_movie_watchlist);
+        wishListButton = (ImageView) rootView.findViewById(R.id.detail_movie_wishlist_button);
+
         progressBar = (ProgressBar) rootView.findViewById(R.id.detail_movie_progressBar);
         mainContainer = (LinearLayout) rootView.findViewById(R.id.detail_movie_mainContainer);
 
@@ -428,8 +431,8 @@ public class MoviesFragment extends Fragment {
                     default:
                         DetailItemModel = detailJsonParser.jsonMovieDetailParser(jsonArray.get(0));
                 }
-
-                Log.v("title",DetailItemModel.getTitle());
+                Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.detail_toolbar);
+                toolbar.setTitle(DetailItemModel.getTitle());
                 title.setText(DetailItemModel.getTitle());
                 overview.setText(DetailItemModel.getOverview());
                 vote_average.setText(DetailItemModel.getVote_avg());
@@ -464,6 +467,18 @@ public class MoviesFragment extends Fragment {
                         firebaseCurd.addWatchListModel(wishListModel);
                     }
                 });
+                wishListButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.v("movie",DetailItemModel.getTitle());
+                        WishListModel wishListModel = new WishListModel(
+                                "tyagideepu133",id,type,DetailItemModel.getTitle(),DetailItemModel.getImg_url(),DetailItemModel.getVote_avg());
+                        FirebaseCurd firebaseCurd = new FirebaseCurd();
+                        firebaseCurd.addWishListModel(wishListModel);
+                    }
+                });
+
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
