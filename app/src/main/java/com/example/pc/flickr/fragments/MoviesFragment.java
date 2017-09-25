@@ -2,6 +2,7 @@ package com.example.pc.flickr.fragments;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -28,6 +29,7 @@ import com.example.pc.flickr.R;
 import com.example.pc.flickr.json_parsers.DetailJsonParser;
 import com.example.pc.flickr.models.CastModel;
 import com.example.pc.flickr.models.DetailItemModel;
+import com.example.pc.flickr.models.ListDataModel;
 import com.example.pc.flickr.models.ReviewModel;
 import com.example.pc.flickr.models.SimilarItemModel;
 import com.example.pc.flickr.models.VideoModel;
@@ -90,19 +92,19 @@ public class MoviesFragment extends Fragment {
         progressBar = (ProgressBar) rootView.findViewById(R.id.detail_movie_progressBar);
         mainContainer = (LinearLayout) rootView.findViewById(R.id.detail_movie_mainContainer);
 
-        //Initalizing Cast Recycler view
+        //Initializing Cast Recycler view
         recyclerViewCast = (RecyclerView) rootView.findViewById(R.id.detail_movie_castRecyclerView);
         LinearLayoutManager layoutManagerCast = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewCast.setLayoutManager(layoutManagerCast);
         recyclerViewCast.setItemAnimator(new DefaultItemAnimator());
 
-        //Initalizing Review Recycler View
+        //Initializing Review Recycler View
         recyclerViewReviews = (RecyclerView) rootView.findViewById(R.id.detail_movie_reviewsRecyclerView);
         LinearLayoutManager layoutManagerReviews = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerViewReviews.setLayoutManager(layoutManagerReviews);
         recyclerViewReviews.setItemAnimator(new DefaultItemAnimator());
 
-        //Initalizing Sismilar Recycler View
+        //Initializing Similar Recycler View
         recyclerViewSimilar = (RecyclerView) rootView.findViewById(R.id.detail_movie_similarMoviesRecyclerView);
         LinearLayoutManager layoutManagerSimilar = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewSimilar.setLayoutManager(layoutManagerSimilar);
@@ -166,6 +168,18 @@ public class MoviesFragment extends Fragment {
                 castNameTextView = (TextView) itemView.findViewById(R.id.castName);
                 castImageView = (ImageView) itemView.findViewById(R.id.castImageView);
                 castCharacterTextView = (TextView) itemView.findViewById(R.id.castCharacter);
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getContext(),MoviesDetails.class);
+                        Bundle mBundle = new Bundle();
+                        CastModel castModel = castArrayList.get(getAdapterPosition());
+                        mBundle.putString("type","celebs");
+                        mBundle.putString("id",castModel.getId());
+                        intent.putExtras(mBundle);
+                        startActivity(intent);
+                    }
+                });
             }
         }
 
@@ -257,6 +271,18 @@ public class MoviesFragment extends Fragment {
                 similarMovieNameTextView = (TextView) itemView.findViewById(R.id.main_child_title_textView); //change id to similarMovieName
                 similarMovieImageView = (ImageView) itemView.findViewById(R.id.main_child_imageView); //change id to similarMovieImage
                 similarMovieVoteAverageTextView = (TextView) itemView.findViewById(R.id.main_child_vote_textView); //change id to similarMovieVote
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getContext(),MoviesDetails.class);
+                        Bundle mBundle = new Bundle();
+                        SimilarItemModel similarItemModel = similarMoviesArrayList.get(getAdapterPosition());
+                        mBundle.putString("type",type);
+                        mBundle.putString("id",similarItemModel.getSimilarItemId());
+                        intent.putExtras(mBundle);
+                        startActivity(intent);
+                    }
+                });
             }
         }
 
@@ -308,8 +334,8 @@ public class MoviesFragment extends Fragment {
             public videoViewHolder(View itemView) {
                 super(itemView);
                 videoProgressBar = (ProgressBar) itemView.findViewById(R.id.video_progressBar);
-                videoNameTextView = (TextView) itemView.findViewById(R.id.video_textView); //change id to similarMovieName
-                videoImageView = (ImageView) itemView.findViewById(R.id.video_imageView); //change id to similarMovieImage
+                videoNameTextView = (TextView) itemView.findViewById(R.id.video_textView);
+                videoImageView = (ImageView) itemView.findViewById(R.id.video_imageView);
             }
         }
 
@@ -351,7 +377,6 @@ public class MoviesFragment extends Fragment {
 
 
     public class FetchTask extends AsyncTask<String, Void, ArrayList<String>> {
-        // jsonMovieParser to parse the jsonData of MovieDetails
         //doInBackground method to set up url connection and return jsonData
         @Override
         protected ArrayList<String> doInBackground(String... params) {

@@ -28,4 +28,8 @@ public class CastModel{
     public String getImage() {
         return image;
     }
+
+    public String getId() {
+        return id;
+    }
 }

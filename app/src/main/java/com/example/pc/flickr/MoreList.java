@@ -1,5 +1,6 @@
 package com.example.pc.flickr;
 
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pc.flickr.json_parsers.MoreListJsonParser;
+import com.example.pc.flickr.models.ListDataModel;
 import com.example.pc.flickr.models.MoreListModel;
 import com.squareup.picasso.Picasso;
 
@@ -93,13 +96,32 @@ public class MoreList extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(moreListViewHolder holder, int position) {
-            MoreListModel moreListModel = moreListArrayList.get(position);
+        public void onBindViewHolder(moreListViewHolder holder, final int position) {
+            final MoreListModel moreListModel = moreListArrayList.get(position);
             holder.moreListNameTextView.setText(moreListModel.getName());
             holder.moreListReleaseDateTextView.setText(moreListModel.getReleaseDate());
             holder.moreListRatingTextView.setText(moreListModel.getRating());
             holder.moreListIdTextView.setText(moreListModel.getId());
             Picasso.with(getBaseContext()).load("https://image.tmdb.org/t/p/w500" + moreListModel.getImage()).into(holder.moreListImageView);
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String type2;
+                    Intent intent = new Intent(MoreList.this,MoviesDetails.class);
+                    if (type.equals("movie")){
+                        type2 = "movies";
+                    }
+                    else {
+                        type2=type;
+                    }
+                    Bundle mBundle = new Bundle();
+                    mBundle.putString("type",type2);
+                    mBundle.putString("id",moreListModel.getId());
+                    Log.i("string",type +" / " +moreListModel.getId() );
+                    intent.putExtras(mBundle);
+                    startActivity(intent);
+                }
+            });
         }
 
         @Override

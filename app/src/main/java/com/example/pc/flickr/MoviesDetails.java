@@ -3,6 +3,9 @@ package com.example.pc.flickr;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
+
+import com.example.pc.flickr.fragments.CelebsFragment;
 import com.example.pc.flickr.fragments.MoviesFragment;
 
 
@@ -19,10 +22,15 @@ public class MoviesDetails extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Bundle bundle = this.getIntent().getExtras();
         type = bundle.getString("type");
-        if ((type.equals("movies")) || (type.equals("tv")) ) {
+        if ((type.equals("movies")) || (type.equals("tv"))  ) {
             MoviesFragment moviesFragment = new MoviesFragment();
             moviesFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().add(R.id.detail_fragment_container, moviesFragment).commit();
+        }
+        if((type.equals("celebs"))){
+            CelebsFragment celebsFragment = new CelebsFragment();
+            celebsFragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().add(R.id.detail_fragment_container, celebsFragment).commit();
         }
     }
     // CastAdapter class to populate data in castRecyclerView
