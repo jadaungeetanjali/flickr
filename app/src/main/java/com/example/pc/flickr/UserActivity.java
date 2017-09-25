@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.example.pc.flickr.fragments.UserlistFragment;
+import com.firebase.ui.auth.AuthUI;
 
 public class UserActivity extends AppCompatActivity {
     public Button favoriteButton, ratingButton, watchListButton, wishListButton, profileButton;
@@ -63,16 +64,6 @@ public class UserActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 bundle.putString("type","WishList");
-                buttonLinearLayout.setVisibility(View.GONE);
-                userlistFragment.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction().add(R.id.user_fragment_container,userlistFragment).commit();
-            }
-        });
-
-        profileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bundle.putString("type","profile");
                 buttonLinearLayout.setVisibility(View.GONE);
                 userlistFragment.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction().add(R.id.user_fragment_container,userlistFragment).commit();

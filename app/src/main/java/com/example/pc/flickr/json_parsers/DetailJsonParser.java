@@ -96,7 +96,21 @@ public class DetailJsonParser {
         return similarMoviesArray;
     }
 
-
+    public ArrayList<SimilarItemModel> jsonTvSimilarParser(String jsonSimilarMovies) throws JSONException {
+        ArrayList<SimilarItemModel> similarMoviesArray = new ArrayList<>();
+        JSONObject similarMoviesObject = new JSONObject(jsonSimilarMovies);
+        JSONArray similarMoviesList = similarMoviesObject.getJSONArray("results");
+        for (int i = 0; i < similarMoviesList.length(); i++) {
+            JSONObject similarMovies = similarMoviesList.getJSONObject(i);
+            String similarItemName = similarMovies.get("name").toString();
+            String similarItemVoteAverage = similarMovies.get("vote_average").toString();
+            String similarItemPoster = similarMovies.get("poster_path").toString();
+            String similarItemId = similarMovies.get("id").toString();
+            SimilarItemModel SimilarItemModel = new SimilarItemModel(similarItemId, similarItemName, similarItemVoteAverage, similarItemPoster);
+            similarMoviesArray.add(SimilarItemModel);
+        }
+        return similarMoviesArray;
+    }
 
 
 

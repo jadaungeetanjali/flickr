@@ -1,24 +1,42 @@
 package com.example.pc.flickr;
 
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pc.flickr.fragments.HorizontalListFragment;
+import com.example.pc.flickr.fragments.UserlistFragment;
+import com.example.pc.flickr.models.NavigationModel;
+import com.example.pc.flickr.models.WishListModel;
 import com.example.pc.flickr.services.FetchApiService;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,6 +44,13 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private static final int RC_SIGN_IN =1;
     public Fragment currentFragment;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private String[] mDrawerStringList,mDrawerIconList;
+    private DrawerLayout mDrawerLayout;
+    private RecyclerView mDrawerList;
+    private NavigationListAdapter navigationListAdapter;
+    private CharSequence mTitle,mDrawerTitle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,13 +60,46 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         Intent intent = new Intent(this,FetchApiService.class);
         startService(intent);
-
-        //Firebase auth
         mFirebaseAuth = FirebaseAuth.getInstance();
 
+        // Navigation Drawer .............................
+        mDrawerStringList = getResources().getStringArray(R.array.navigation_drawer_items_array);
+        mDrawerIconList= getResources().getStringArray(R.array.navigation_drawer_icons_array);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList = (RecyclerView) findViewById(R.id.main_left_drawer);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        mDrawerList.setLayoutManager(mLayoutManager);
+        mDrawerList.setItemAnimator(new DefaultItemAnimator());
+        ArrayList<NavigationModel> navigationModels = new ArrayList<>();
+        for (int i = 0; i <mDrawerStringList.length;i++){
+            int resourceId = this.getResources().
+                    getIdentifier(mDrawerIconList[i], "string", this.getPackageName());
+            NavigationModel navigationModel = new NavigationModel(resourceId,mDrawerStringList[i]);
+            navigationModels.add(navigationModel);
+        }
+        navigationListAdapter = new NavigationListAdapter(navigationModels);
+        mDrawerList.setAdapter(navigationListAdapter);
+        mTitle = mDrawerTitle = getTitle();
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                R.string.drawer_open, R.string.drawer_close) {
 
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                getSupportActionBar().setTitle(mTitle);
+            }
 
-        //Firebase auth till here
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                getSupportActionBar().setTitle(mDrawerTitle);
+            }
+        };
+
+        // Set the drawer toggle as the DrawerListener
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        // Navigation Drawer till here......................
 
         Bundle moviesBundle = new Bundle();
         String[] movieHeading = {"Now Playing", "Popular", "Top Rated", "Upcoming"};
@@ -134,18 +192,25 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
     public boolean onOptionsItemSelected(MenuItem item) {
+        //Handle Drawer Selection
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.user_menu_option:
                 Intent intent = new Intent(this,UserActivity.class);
                 startActivity(intent);
                 return true;
+            case R.id.user_sign_out:
+                AuthUI.getInstance().signOut(this);
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -163,7 +228,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
+    @Override
+    public void setTitle(CharSequence title) {
+        mTitle = title;
+        getActionBar().setTitle(mTitle);
+    }
 
     @Override
     public void onPause(){
@@ -177,6 +246,56 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onSignedInInitialize(String user_name,String user_id,String user_email){
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("MyPref", 0);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("user_id", user_id);
+        editor.putString("user_email", user_email);
+        editor.putString("user_name", user_name);
+        editor.commit();
+        editor.apply();
+    }
 
+    private class NavigationListAdapter extends RecyclerView.Adapter<NavigationListAdapter.navigationListViewHolder> {
+        private ArrayList<NavigationModel> navigationListArrayList;
+
+        class navigationListViewHolder extends RecyclerView.ViewHolder {
+            ImageView navigationListImageView;
+            TextView navigationListTextView;
+
+            public navigationListViewHolder(View itemView) {
+                super(itemView);
+                navigationListTextView = (TextView) itemView.findViewById(R.id.navigation_textView);
+                navigationListImageView = (ImageView) itemView.findViewById(R.id.navigation_imageViewIcon);
+            }
+        }
+
+        public NavigationListAdapter(ArrayList<NavigationModel> arrayList) {
+            this.navigationListArrayList = arrayList;
+        }
+
+        @Override
+        public navigationListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.navigation_list_item, parent, false);
+            return new navigationListViewHolder(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(navigationListViewHolder holder, int position) {
+            NavigationModel navigationModel = navigationListArrayList.get(position);
+            holder.navigationListTextView.setText(navigationModel.getName());
+            holder.navigationListImageView.setImageResource(navigationModel.getIcon());
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String[] type ={"WatchList","Wishlist","Rating","Favorite"};
+
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return navigationListArrayList.size();
+        }
     }
 }

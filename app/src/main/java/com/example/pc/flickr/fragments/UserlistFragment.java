@@ -53,7 +53,7 @@ public class UserlistFragment extends Fragment {
 
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.user_toolbar);
         toolbar.setTitle(type);
-        FirebaseCurd firebaseCurd = new FirebaseCurd();
+        FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
         switch (type){
             case "WatchList":
                 databaseReference = firebaseCurd.getmWatchListReference();

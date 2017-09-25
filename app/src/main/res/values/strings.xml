@@ -3,7 +3,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
+    <string name="drawer_open">Drawer Open</string>
+    <string name="drawer_close">Drawer Close</string>
+    
     <string-array name="navigation_drawer_items_array">
         <item>WatchList</item>
         <item>WishList</item>
@@ -11,7 +13,14 @@
         <item>Favorite</item>
     </string-array>
 
-    <string name="user_name"></string>
-    <string name="user_id"></string>
-    <string name="user_email"></string>
+    <string-array name="navigation_drawer_icons_array">
+        <item>ic_action_video</item>
+        <item>ic_action_play_over_video</item>
+        <item>ic_action_important</item>
+        <item>ic_action_favorite</item>
+    </string-array>
+
+    <string name="user_name"> </string>
+    <string name="user_id"> </string>
+    <string name="user_email"> </string>
 </resources>

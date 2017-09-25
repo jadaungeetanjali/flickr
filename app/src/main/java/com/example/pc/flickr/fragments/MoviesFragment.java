@@ -130,9 +130,9 @@ public class MoviesFragment extends Fragment {
             case "tv":
                 urlList.add("https://api.themoviedb.org/3/tv/" + id + "?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
                 urlList.add("https://api.themoviedb.org/3/tv/" + id + "/credits?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
-                urlList.add("https://api.themoviedb.org/3/movie/" + id + "/reviews?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
-                urlList.add("https://api.themoviedb.org/3/movie/" + id + "/similar?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
-                urlList.add("https://api.themoviedb.org/3/movie/" + id + "/videos?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
+                urlList.add("https://api.themoviedb.org/3/tv/" + id + "/credits?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
+                urlList.add("https://api.themoviedb.org/3/tv/" + id + "/similar?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
+                urlList.add("https://api.themoviedb.org/3/tv/" + id + "/videos?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
                 break;
             default:
         }
@@ -446,12 +446,14 @@ public class MoviesFragment extends Fragment {
                     case "movies":
                         DetailItemModel = detailJsonParser.jsonMovieDetailParser(jsonArray.get(0));
                         reviewArray = detailJsonParser.jsonMovieReviewsParser(jsonArray.get(2));
-                        //Log.v("review",jsonArray.get(2));
                         reviewAdapter = new ReviewAdapter(reviewArray);
                         recyclerViewReviews.setAdapter(reviewAdapter);
+                        similarMoviesArray = detailJsonParser.jsonSimilarParser(jsonArray.get(3));
+
                         break;
                     case "tv":
                         DetailItemModel = detailJsonParser.jsonTvDetailParser(jsonArray.get(0));
+                        similarMoviesArray = detailJsonParser.jsonTvSimilarParser(jsonArray.get(3));
                         break;
                     default:
                         DetailItemModel = detailJsonParser.jsonMovieDetailParser(jsonArray.get(0));
@@ -471,7 +473,7 @@ public class MoviesFragment extends Fragment {
                 recyclerViewCast.setAdapter(castAdapter);
 
 
-                similarMoviesArray = detailJsonParser.jsonSimilarParser(jsonArray.get(3));
+
                 similarMoviesAdapter = new SimilarMoviesAdapter(similarMoviesArray);
                 recyclerViewSimilar.setAdapter(similarMoviesAdapter);
 
@@ -488,7 +490,7 @@ public class MoviesFragment extends Fragment {
                         Log.v("movie",DetailItemModel.getTitle());
                         WishListModel wishListModel = new WishListModel(
                                 "tyagideepu133",id,type,DetailItemModel.getTitle(),DetailItemModel.getImg_url(),DetailItemModel.getVote_avg());
-                        FirebaseCurd firebaseCurd = new FirebaseCurd();
+                        FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
                         firebaseCurd.addWatchListModel(wishListModel);
                     }
                 });
@@ -498,7 +500,7 @@ public class MoviesFragment extends Fragment {
                         Log.v("movie",DetailItemModel.getTitle());
                         WishListModel wishListModel = new WishListModel(
                                 "tyagideepu133",id,type,DetailItemModel.getTitle(),DetailItemModel.getImg_url(),DetailItemModel.getVote_avg());
-                        FirebaseCurd firebaseCurd = new FirebaseCurd();
+                        FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
                         firebaseCurd.addWishListModel(wishListModel);
                     }
                 });

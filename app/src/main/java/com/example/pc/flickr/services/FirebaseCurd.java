@@ -1,7 +1,12 @@
 package com.example.pc.flickr.services;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.example.pc.flickr.R;
 import com.example.pc.flickr.models.FavoriteModel;
 import com.example.pc.flickr.models.WishListModel;
 import com.google.firebase.database.DataSnapshot;
@@ -28,10 +33,12 @@ public class FirebaseCurd {
     private DatabaseReference mUserReference;
     private DatabaseReference mWatchListReference;
 
-    public FirebaseCurd(){
+    public FirebaseCurd(Activity activity){
         //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        mUserReference = mDatabaseReference.child("Users").child("tyagideepu133");
+        SharedPreferences sharedPref = activity.getSharedPreferences("MyPref", 0);
+        String user_id = sharedPref.getString("user_id",null);
+        mUserReference = mDatabaseReference.child("Users").child(user_id);
         mWishListReference = mUserReference.child("WishList");
         mWatchListReference = mUserReference.child("WatchList");
         mFavoriteReference = mUserReference.child("Favorite");
