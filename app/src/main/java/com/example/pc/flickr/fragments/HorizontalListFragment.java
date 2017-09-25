@@ -18,7 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.pc.flickr.MovieList;
+import com.example.pc.flickr.MoreList;
 import com.example.pc.flickr.MoviesDetails;
 import com.example.pc.flickr.R;
 import com.example.pc.flickr.data.MovieDbApiContract;
@@ -138,7 +138,7 @@ public class HorizontalListFragment extends Fragment {
                         sType = "person";
                         sPosition = 2;
                     }
-                    Intent intent = new Intent(getContext(),MovieList.class);
+                    Intent intent = new Intent(getContext(),MoreList.class);
                     Bundle mBundle = new Bundle();
                     mBundle.putString("type",sType);
                     mBundle.putString("subType",subType[(sPosition*4)+position]);

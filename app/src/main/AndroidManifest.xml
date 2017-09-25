@@ -38,7 +38,7 @@
             android:name=".services.FetchApiService"
             android:exported="false" />
 
-        <activity android:name=".MovieList"></activity>
+        <activity android:name=".MoreList"></activity>
     </application>
 
 </manifest>
