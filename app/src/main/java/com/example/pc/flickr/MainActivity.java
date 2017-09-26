@@ -280,15 +280,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(navigationListViewHolder holder, int position) {
+        public void onBindViewHolder(navigationListViewHolder holder, final int position) {
             NavigationModel navigationModel = navigationListArrayList.get(position);
             holder.navigationListTextView.setText(navigationModel.getName());
             holder.navigationListImageView.setImageResource(navigationModel.getIcon());
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String[] type ={"WatchList","Wishlist","Rating","Favorite"};
-
+                    String[] type ={"WatchList","WishList","Rating","Favorite"};
+                    Intent intent = new Intent(MainActivity.this,UserActivity.class);
+                    Bundle mBundle = new Bundle();
+                    mBundle.putString("type",type[position]);
+                    intent.putExtras(mBundle);
+                    startActivity(intent);
                 }
             });
         }
