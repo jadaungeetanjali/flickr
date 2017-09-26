@@ -91,9 +91,9 @@ public class FirebaseCurd {
     }
     public void addFavoriteModel(FavoriteModel favoriteModel){
         HashMap<String, Object> result = new HashMap<>();
-        result.put("uid",favoriteModel.getUserId());
-        result.put("id", favoriteModel.getItemId());
-        result.put("name", favoriteModel.getItemName());
+        result.put("itemId", favoriteModel.getItemId());
+        result.put("itemType", favoriteModel.getItemType());
+        result.put("itemName", favoriteModel.getItemName());
         result.put("imgUrl", favoriteModel.getImgUrl());
         Log.v("result",result.toString());
         mFavoriteReference.child(favoriteModel.getItemId()).updateChildren(result);

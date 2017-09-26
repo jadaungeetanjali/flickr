@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.example.pc.flickr.MoviesDetails;
 import com.example.pc.flickr.R;
+import com.example.pc.flickr.models.FavoriteModel;
 import com.example.pc.flickr.models.WishListModel;
 import com.example.pc.flickr.services.FirebaseCurd;
 import com.google.firebase.database.DataSnapshot;
@@ -34,9 +35,11 @@ import static android.content.ContentValues.TAG;
  */
 public class UserlistFragment extends Fragment {
     public String type;
-    public UserListAdapter userListAdapter;
+    public WishListAdapter wishListAdapter;
+    public FavoriteListAdapter favoriteListAdapter;
     public RecyclerView recyclerView;
     public ArrayList<WishListModel> arrayList;
+    public ArrayList<FavoriteModel> favoriteList;
     public DatabaseReference databaseReference;
 
     public UserlistFragment() {
@@ -51,6 +54,7 @@ public class UserlistFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_userlist, container, false);
 
         arrayList = new ArrayList<>();
+        favoriteList = new ArrayList<>();
         type = this.getArguments().getString("type");
 
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.user_toolbar);
@@ -63,6 +67,9 @@ public class UserlistFragment extends Fragment {
             case "WishList":
                 databaseReference = firebaseCurd.getmWishListReference();
                 break;
+            case "Favorite":
+                databaseReference = firebaseCurd.getmFavoriteReference();
+                break;
         }
 
 
@@ -71,36 +78,58 @@ public class UserlistFragment extends Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    WishListModel wishListModel = postSnapshot.getValue(WishListModel.class);
-                    arrayList.add(wishListModel);
+        if (type.equals("WatchList")||type.equals("WishList")) {
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                        WishListModel wishListModel = postSnapshot.getValue(WishListModel.class);
+                        arrayList.add(wishListModel);
+                    }
+                    wishListAdapter = new WishListAdapter(arrayList);
+                    recyclerView.setAdapter(wishListAdapter);
                 }
-                userListAdapter = new UserListAdapter(arrayList);
-                recyclerView.setAdapter(userListAdapter);
-            }
 
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
-            }
-        });
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    // Failed to read value
+                    Log.w(TAG, "Failed to read value.", error.toException());
+                }
+            });
+        }
+        else if (type.equals("Favorite")){
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Log.v("output",dataSnapshot.toString());
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                        Log.v("output2",postSnapshot.toString());
+                        FavoriteModel favoriteModel = postSnapshot.getValue(FavoriteModel.class);
+                        if (favoriteModel !=null)
+                            favoriteList.add(favoriteModel);
+                    }
+                    favoriteListAdapter = new FavoriteListAdapter(favoriteList);
+                    recyclerView.setAdapter(favoriteListAdapter);
+                }
 
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    // Failed to read value
+                    Log.w(TAG, "Failed to read value.", error.toException());
+                }
+            });
+        }
         return rootView;
     }
 
-    private class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.userListViewHolder> {
+    private class WishListAdapter extends RecyclerView.Adapter<WishListAdapter.wishListViewHolder> {
         private ArrayList<WishListModel> userListArrayList;
 
-        class userListViewHolder extends RecyclerView.ViewHolder {
+        class wishListViewHolder extends RecyclerView.ViewHolder {
             ImageView userListImageView;
             TextView userListNameTextView;
             TextView userListRatingTextView;
-            public userListViewHolder(View itemView) {
+            public wishListViewHolder(View itemView) {
                 super(itemView);
                 userListNameTextView = (TextView) itemView.findViewById(R.id.user_listview_item_name);
                 userListImageView = (ImageView) itemView.findViewById(R.id.user_listview_item_poster);
@@ -108,18 +137,18 @@ public class UserlistFragment extends Fragment {
             }
         }
 
-        public UserListAdapter(ArrayList<WishListModel> arrayList) {
+        public WishListAdapter(ArrayList<WishListModel> arrayList) {
             this.userListArrayList = arrayList;
         }
 
         @Override
-        public userListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public wishListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_listview_item, parent, false);
-            return new userListViewHolder(itemView);
+            return new wishListViewHolder(itemView);
         }
 
         @Override
-        public void onBindViewHolder(userListViewHolder holder, int position) {
+        public void onBindViewHolder(wishListViewHolder holder, int position) {
             final WishListModel wishListModel = userListArrayList.get(position);
             holder.userListNameTextView.setText(wishListModel.getItemName());
             holder.userListRatingTextView.setText(wishListModel.getItemRating());
@@ -131,6 +160,54 @@ public class UserlistFragment extends Fragment {
                     Bundle mBundle = new Bundle();
                     mBundle.putString("type",wishListModel.getItemType());
                     mBundle.putString("id",wishListModel.getItemId());
+                    intent.putExtras(mBundle);
+                    startActivity(intent);
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return userListArrayList.size();
+        }
+    }
+
+    private class FavoriteListAdapter extends RecyclerView.Adapter<FavoriteListAdapter.favoriteListViewHolder> {
+        private ArrayList<FavoriteModel> userListArrayList;
+
+        class favoriteListViewHolder extends RecyclerView.ViewHolder {
+            ImageView userListImageView;
+            TextView userListNameTextView;
+            TextView userListRatingTextView;
+            public favoriteListViewHolder(View itemView) {
+                super(itemView);
+                userListNameTextView = (TextView) itemView.findViewById(R.id.user_listview_item_name);
+                userListImageView = (ImageView) itemView.findViewById(R.id.user_listview_item_poster);
+            }
+        }
+
+        public FavoriteListAdapter(ArrayList<FavoriteModel> arrayList) {
+            this.userListArrayList = arrayList;
+        }
+
+        @Override
+        public favoriteListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_listview_item, parent, false);
+            return new favoriteListViewHolder(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(favoriteListViewHolder holder, int position) {
+            final FavoriteModel favoriteModel = userListArrayList.get(position);
+            holder.userListNameTextView.setText(favoriteModel.getItemName());
+            Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w500" + favoriteModel.getImgUrl()).into(holder.userListImageView);
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext(),MoviesDetails.class);
+                    Bundle mBundle = new Bundle();
+                    mBundle.putString("type",favoriteModel.getItemType());
+                    mBundle.putString("id",favoriteModel.getItemId());
                     intent.putExtras(mBundle);
                     startActivity(intent);
                 }

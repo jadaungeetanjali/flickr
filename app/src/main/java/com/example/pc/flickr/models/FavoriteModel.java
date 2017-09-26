@@ -5,29 +5,23 @@ package com.example.pc.flickr.models;
  */
 
 public class FavoriteModel{
-    private String id;
     private String itemId;
     private String itemName;
+    private String itemType;
     private String imgUrl;
-    private String userId;
 
-    public FavoriteModel(String userId, String itemId, String itemName, String imgUrl){
-        this.userId = userId;
+    public FavoriteModel(){}
+
+    public FavoriteModel(String itemId, String itemType, String itemName, String imgUrl){
         this.itemId = itemId;
         this.itemName = itemName;
         this.imgUrl = imgUrl;
-    }
-
-    public FavoriteModel(String userId, String id,String itemId, String itemType, String itemName, String imgUrl){
-        this.userId = userId;
-        this.itemId = itemId;
-        this.itemName = itemName;
-        this.imgUrl = imgUrl;
-        this.id = id;
+        this.itemType = itemType;
 
     }
-    public String getId() {
-        return id;
+
+    public String getItemType() {
+        return itemType;
     }
 
     public String getImgUrl() {
@@ -40,9 +34,5 @@ public class FavoriteModel{
 
     public String getItemName() {
         return itemName;
-    }
-
-    public String getUserId() {
-        return userId;
     }
 }

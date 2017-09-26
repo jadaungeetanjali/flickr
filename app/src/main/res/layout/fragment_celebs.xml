@@ -47,8 +47,7 @@
                     android:id="@+id/detail_celebs_biography"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:textSize="14sp"
-                    android:text="Nancy Campbell Cartwright (born October 25, 1957) is an American film and television actress, comedian and voice artist. She is best known for her long-running role as Bart Simpson on the animated television series The Simpsons. Cartwright voices other characters for the show, including Nelson Muntz, Ralph Wiggum, Todd Flanders, Kearney and Database.\n\nBorn in Dayton, Ohio, Cartwright moved to Hollywood in 1978 and trained alongside voice actor Daws Butler. Her first professional role was voicing Gloria in the animated series Richie Rich, which she followed with a starring role in the television movie Marian Rose White (1982) and her first feature film, Twilight Zone: The Movie (1983).\n\nAfter continuing to search for acting work, in 1987 Cartwright auditioned for a role in a series of animated shorts about a dysfunctional family that was to appear on The Tracey Ullman Show. Cartwright intended to audition for the role of Lisa Simpson, the middle child; when she arrived at the audition, she found the role of Bart—Lisa's brother—to be more interesting"/>
+                    android:textSize="14sp" />
                 </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -60,8 +59,7 @@
                     android:id="@+id/detail_celebs_profile"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/movie_poster"/>
+                    android:layout_weight="1" />
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -87,32 +85,17 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="10dp"
                         android:textSize="16sp" />
+                    <Button
+                        android:id="@+id/detail_celebs_favorite_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#fff"
+                        android:text="Add to Favorite"
+                        android:layout_marginTop="5dp"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:background="@color/colorSuccess"/>
                 </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:background="#fff"
-                android:elevation="2dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:text="Known For"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/detail_celebs_knownFor_RecyclerView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="200dp"
-                    android:layout_marginBottom="20dp">
-                </android.support.v7.widget.RecyclerView>
             </LinearLayout>
             <LinearLayout
                 android:layout_marginTop="25dp"
