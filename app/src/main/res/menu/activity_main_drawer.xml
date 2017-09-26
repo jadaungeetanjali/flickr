@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_wishlist"
+            android:icon="@drawable/ic_action_video"
+            android:title="@string/nav_wishlist" />
+        <item
+            android:id="@+id/nav_watchlist"
+            android:icon="@drawable/ic_action_play_over_video"
+            android:title="@string/nav_watchlist" />
+        <item
+            android:id="@+id/nav_favorite"
+            android:icon="@drawable/ic_action_favorite"
+            android:title="@string/nav_favorite" />
+
+        <item
+            android:id="@+id/nav_rating"
+            android:icon="@drawable/ic_action_important"
+            android:title="@string/nav_rating" />
+    </group>
+    <item android:title="User">
+        <menu>
+            <item
+                android:id="@+id/nav_about_sign_out"
+                android:title="@string/nav_sign_out" />
+        </menu>
+    </item>
+</menu>

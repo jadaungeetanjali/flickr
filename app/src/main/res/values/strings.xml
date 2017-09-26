@@ -7,20 +7,27 @@
     <string name="drawer_close">Drawer Close</string>
     
     <string-array name="navigation_drawer_items_array">
-        <item>WatchList</item>
         <item>WishList</item>
-        <item>Rating</item>
+        <item>WatchList</item>
         <item>Favorite</item>
+        <item>Rating</item>
     </string-array>
 
-    <string-array name="navigation_drawer_icons_array">
-        <item>ic_action_video</item>
-        <item>ic_action_play_over_video</item>
-        <item>ic_action_important</item>
-        <item>ic_action_favorite</item>
-    </string-array>
+    <!-- ******Navbar String********** -->
 
-    <string name="user_name"> </string>
-    <string name="user_id"> </string>
-    <string name="user_email"> </string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="openDrawer">open_drawer</string>
+    <string name="closeDrawer">close_drawer</string>
+    <string name="nav_wishlist">WishList</string>
+    <string name="nav_watchlist">WatchList</string>
+    <string name="nav_favorite">Favorite</string>
+    <string name="nav_rating">Rating</string>
+    <string name="nav_sign_out">Sign Out</string>
+    <!-- ******************************* -->
+
+
+    <string name="user_name"></string>
+    <string name="user_id"></string>
+    <string name="user_email"></string>
 </resources>

@@ -1,125 +1,91 @@
 package com.example.pc.flickr;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pc.flickr.fragments.HorizontalListFragment;
-import com.example.pc.flickr.fragments.UserlistFragment;
-import com.example.pc.flickr.models.NavigationModel;
-import com.example.pc.flickr.models.WishListModel;
 import com.example.pc.flickr.services.FetchApiService;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
-    private static final int RC_SIGN_IN =1;
+    private static final int RC_SIGN_IN = 1;
     public Fragment currentFragment;
     private ActionBarDrawerToggle mDrawerToggle;
-    private String[] mDrawerStringList,mDrawerIconList;
     private DrawerLayout mDrawerLayout;
-    private RecyclerView mDrawerList;
-    private NavigationListAdapter navigationListAdapter;
-    private CharSequence mTitle,mDrawerTitle;
+    private NavigationView navigationView;
+    private View navHeader;
+    private TextView navHeaderName, navHeaderEmail;
+    private CharSequence mTitle, mDrawerTitle;
+    private ImageView navHeaderImg;
+    private int navItemIndex;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
-        Intent intent = new Intent(this,FetchApiService.class);
+        Intent intent = new Intent(this, FetchApiService.class);
         startService(intent);
         mFirebaseAuth = FirebaseAuth.getInstance();
 
         // Navigation Drawer .............................
-        mDrawerStringList = getResources().getStringArray(R.array.navigation_drawer_items_array);
-        mDrawerIconList= getResources().getStringArray(R.array.navigation_drawer_icons_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (RecyclerView) findViewById(R.id.main_left_drawer);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
-        mDrawerList.setLayoutManager(mLayoutManager);
-        mDrawerList.setItemAnimator(new DefaultItemAnimator());
-        ArrayList<NavigationModel> navigationModels = new ArrayList<>();
-        for (int i = 0; i <mDrawerStringList.length;i++){
-            int resourceId = this.getResources().
-                    getIdentifier(mDrawerIconList[i], "string", this.getPackageName());
-            NavigationModel navigationModel = new NavigationModel(resourceId,mDrawerStringList[i]);
-            navigationModels.add(navigationModel);
-        }
-        navigationListAdapter = new NavigationListAdapter(navigationModels);
-        mDrawerList.setAdapter(navigationListAdapter);
-        mTitle = mDrawerTitle = getTitle();
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-                R.string.drawer_open, R.string.drawer_close) {
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        // Navigation view header
+        navHeader = navigationView.getHeaderView(0);
+        navHeaderName = (TextView) navHeader.findViewById(R.id.main_drawer_name);
+        navHeaderEmail = (TextView) navHeader.findViewById(R.id.main_drawer_email);
+        navHeaderImg = (ImageView) navHeader.findViewById(R.id.main_drawer_avatar);
+        //activityTitles = getResources().getStringArray(R.array.navigation_drawer_items_array);
+        //loadNavHeader();
+        setUpNavigationView();
 
-            /** Called when a drawer has settled in a completely closed state. */
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-                getSupportActionBar().setTitle(mTitle);
-            }
-
-            /** Called when a drawer has settled in a completely open state. */
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle(mDrawerTitle);
-            }
-        };
-
-        // Set the drawer toggle as the DrawerListener
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
         // Navigation Drawer till here......................
 
         Bundle moviesBundle = new Bundle();
         String[] movieHeading = {"Now Playing", "Popular", "Top Rated", "Upcoming"};
-        moviesBundle.putString("type","movies");
+        moviesBundle.putString("type", "movies");
         moviesBundle.putStringArray("urlHeading", movieHeading);
-        final HorizontalListFragment moviesFragment =new HorizontalListFragment();
+        final HorizontalListFragment moviesFragment = new HorizontalListFragment();
         moviesFragment.setArguments(moviesBundle);
 
         Bundle tvBundle = new Bundle();
         String[] tvHeading = {"Airing Today", "Popular", "Top Rated", "On The Air"};
-        tvBundle.putString("type","tv");
+        tvBundle.putString("type", "tv");
         tvBundle.putStringArray("urlHeading", tvHeading);
-        final HorizontalListFragment tvFragment =new HorizontalListFragment();
+        final HorizontalListFragment tvFragment = new HorizontalListFragment();
         tvFragment.setArguments(tvBundle);
 
         Bundle celebsBundle = new Bundle();
         String[] celebsHeading = {"Popular"};
-        celebsBundle.putString("type","celebs");
+        celebsBundle.putString("type", "celebs");
         celebsBundle.putStringArray("urlHeading", celebsHeading);
-        final HorizontalListFragment celebsFragment =new HorizontalListFragment();
+        final HorizontalListFragment celebsFragment = new HorizontalListFragment();
         celebsFragment.setArguments(celebsBundle);
 
 
@@ -133,19 +99,15 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                if (tab.getPosition() == 0){
+                if (tab.getPosition() == 0) {
                     //Movies Fragment will be added
                     fragmentTranstion(moviesFragment);
                     currentFragment = moviesFragment;
-                }
-
-                else if (tab.getPosition() == 1){
+                } else if (tab.getPosition() == 1) {
                     //Tv Fragment will be added
                     fragmentTranstion(tvFragment);
                     currentFragment = tvFragment;
-                }
-
-                else {
+                } else {
                     //Celebs Fragment will be added
                     currentFragment = celebsFragment;
                     fragmentTranstion(celebsFragment);
@@ -167,10 +129,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-                if (firebaseUser != null){
-                    onSignedInInitialize(firebaseUser.getDisplayName(),firebaseUser.getUid(),firebaseUser.getEmail());
-                }
-                else {
+                if (firebaseUser != null) {
+                    onSignedInInitialize(firebaseUser.getDisplayName(), firebaseUser.getUid(), firebaseUser.getEmail());
+                } else {
                     //onSignedOutCleanup();
                     startActivityForResult(
                             AuthUI.getInstance()
@@ -188,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void fragmentTranstion(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container,fragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, fragment).commit();
 
     }
 
@@ -198,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
         inflater.inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
     public boolean onOptionsItemSelected(MenuItem item) {
         //Handle Drawer Selection
         if (mDrawerToggle.onOptionsItemSelected(item)) {
@@ -205,29 +167,27 @@ public class MainActivity extends AppCompatActivity {
         }
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.user_menu_option:
-                Intent intent = new Intent(this,UserActivity.class);
-                startActivity(intent);
-                return true;
             case R.id.user_sign_out:
                 AuthUI.getInstance().signOut(this);
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
     @Override
-    public void onActivityResult(int requestCode,int resultCode, Intent data){
-        super.onActivityResult(requestCode,resultCode,data);
-        if (requestCode == RC_SIGN_IN){
-            if (resultCode == RESULT_OK){
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            if (resultCode == RESULT_OK) {
                 Toast.makeText(this, "User Signed in!!", Toast.LENGTH_SHORT).show();
-            }else if (resultCode == RESULT_CANCELED){
+            } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "Sign in canceled!!", Toast.LENGTH_SHORT).show();
                 finish();
             }
         }
 
     }
+
     @Override
     public void setTitle(CharSequence title) {
         mTitle = title;
@@ -235,17 +195,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         super.onPause();
         mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
     }
+
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         mFirebaseAuth.addAuthStateListener(mAuthStateListener);
     }
 
-    public void onSignedInInitialize(String user_name,String user_id,String user_email){
+    public void onSignedInInitialize(String user_name, String user_id, String user_email) {
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("MyPref", 0);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("user_id", user_id);
@@ -255,51 +216,86 @@ public class MainActivity extends AppCompatActivity {
         editor.apply();
     }
 
-    private class NavigationListAdapter extends RecyclerView.Adapter<NavigationListAdapter.navigationListViewHolder> {
-        private ArrayList<NavigationModel> navigationListArrayList;
+    private void loadNavHeader() {
+        SharedPreferences sharedPref = this.getSharedPreferences("MyPref", 0);
+        String user_name = sharedPref.getString("user_name", null);
+        String user_email = sharedPref.getString("user_email", null);
+        navHeaderName.setText(user_name);
+        navHeaderEmail.setText(user_email);
+    }
 
-        class navigationListViewHolder extends RecyclerView.ViewHolder {
-            ImageView navigationListImageView;
-            TextView navigationListTextView;
-
-            public navigationListViewHolder(View itemView) {
-                super(itemView);
-                navigationListTextView = (TextView) itemView.findViewById(R.id.navigation_textView);
-                navigationListImageView = (ImageView) itemView.findViewById(R.id.navigation_imageViewIcon);
-            }
+    private Bundle getBundle() {
+        Bundle bundle = new Bundle();
+        switch (navItemIndex) {
+            case 0:
+                bundle.putString("type", "WishList");
+                return bundle;
+            case 1:
+                bundle.putString("type", "WatchList");
+                return bundle;
+            case 2:
+                bundle.putString("type", "Favorite");
+                return bundle;
+            case 3:
+                bundle.putString("type", "Rating");
+                return bundle;
         }
+        return bundle;
+    }
 
-        public NavigationListAdapter(ArrayList<NavigationModel> arrayList) {
-            this.navigationListArrayList = arrayList;
-        }
-
-        @Override
-        public navigationListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.navigation_list_item, parent, false);
-            return new navigationListViewHolder(itemView);
-        }
-
-        @Override
-        public void onBindViewHolder(navigationListViewHolder holder, final int position) {
-            NavigationModel navigationModel = navigationListArrayList.get(position);
-            holder.navigationListTextView.setText(navigationModel.getName());
-            holder.navigationListImageView.setImageResource(navigationModel.getIcon());
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String[] type ={"WatchList","WishList","Rating","Favorite"};
-                    Intent intent = new Intent(MainActivity.this,UserActivity.class);
-                    Bundle mBundle = new Bundle();
-                    mBundle.putString("type",type[position]);
-                    intent.putExtras(mBundle);
-                    startActivity(intent);
+    private void setUpNavigationView() {
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    //Replacing the main content with ContentFragment Which is our Inbox View;
+                    case R.id.nav_wishlist:
+                        navItemIndex = 0;
+                        break;
+                    case R.id.nav_watchlist:
+                        navItemIndex = 1;
+                        break;
+                    case R.id.nav_favorite:
+                        navItemIndex = 2;
+                        break;
+                    case R.id.nav_rating:
+                        navItemIndex = 3;
+                        break;
+                    case R.id.nav_about_sign_out:
+                        AuthUI.getInstance().signOut(MainActivity.this);
+                        mDrawerLayout.closeDrawers();
+                        return true;
+                    default:
+                        navItemIndex = 0;
                 }
-            });
-        }
 
-        @Override
-        public int getItemCount() {
-            return navigationListArrayList.size();
-        }
+                //Checking if the item is in checked state or not, if not make it in checked state
+                if (menuItem.isChecked()) {
+                    menuItem.setChecked(false);
+                } else {
+                    menuItem.setChecked(true);
+                }
+                menuItem.setChecked(true);
+                Bundle bundle = getBundle();
+                Intent intent = new Intent(MainActivity.this,UserActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                return true;
+            }
+        });
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer) {
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+            }
+        };
+        mDrawerLayout.setDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
     }
 }
