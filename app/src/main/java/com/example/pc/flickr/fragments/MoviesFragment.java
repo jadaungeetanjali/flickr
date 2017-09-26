@@ -278,7 +278,7 @@ public class MoviesFragment extends Fragment {
                 similarMovieProgressBar = (ProgressBar) itemView.findViewById(R.id.main_image_progressBar);
                 similarMovieNameTextView = (TextView) itemView.findViewById(R.id.main_child_title_textView); //change id to similarMovieName
                 similarMovieImageView = (ImageView) itemView.findViewById(R.id.main_child_imageView); //change id to similarMovieImage
-                similarMovieVoteAverageTextView = (TextView) itemView.findViewById(R.id.main_child_vote_textView); //change id to similarMovieVote
+                similarMovieVoteAverageTextView = (TextView) itemView.findViewById(R.id.main_child_vote_textView);
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
