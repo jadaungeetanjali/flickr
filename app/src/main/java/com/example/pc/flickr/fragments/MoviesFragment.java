@@ -68,7 +68,7 @@ public class MoviesFragment extends Fragment {
     RecyclerView recyclerViewCast, recyclerViewReviews, recyclerViewSimilar,recyclerViewVideo;
     private TextView title, overview, vote_average, tagline, release_date, language, internet_connectivity;
     private ProgressBar progressBar;
-    private ImageView poster,wishListButton;
+    private ImageView poster,wishListButton,wishListButton2;
     private LinearLayout mainContainer;
     private Button button;
     private String type, id;
@@ -96,7 +96,7 @@ public class MoviesFragment extends Fragment {
         internet_connectivity = (TextView) rootView.findViewById(R.id.detail_movie_internet_connectivity);
         button = (Button) rootView.findViewById(R.id.detail_movie_watchlist);
         wishListButton = (ImageView) rootView.findViewById(R.id.detail_movie_wishlist_button);
-
+        wishListButton2 = (ImageView) rootView.findViewById(R.id.detail_movie_wishlist_button_2);
         progressBar = (ProgressBar) rootView.findViewById(R.id.detail_movie_progressBar);
         mainContainer = (LinearLayout) rootView.findViewById(R.id.detail_movie_mainContainer);
 
@@ -490,6 +490,31 @@ public class MoviesFragment extends Fragment {
                 recyclerViewVideo.setAdapter(videoAdapter);
                 FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
                 DatabaseReference mWatchListReference = firebaseCurd.getmWatchListReference();
+                DatabaseReference mWishListReference = firebaseCurd.getmWishListReference();
+                mWishListReference.child(id).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        WishListModel wishListModel = dataSnapshot.getValue(WishListModel.class);
+                        if (wishListModel != null){
+                            wishListButton.setVisibility(View.GONE);
+                            wishListButton2.setVisibility(View.VISIBLE);
+                            wishList = true;
+                        }
+                        else {
+                            wishList = false;
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        Log.w(TAG, "Failed to read value.", error.toException());
+                    }
+                });
+
+
+
 
                 mWatchListReference.child(id).addValueEventListener(new ValueEventListener() {
                     @Override
@@ -544,13 +569,44 @@ public class MoviesFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
 
+                        if (!wishList) {
+                            Log.v("movie", DetailItemModel.getTitle());
+                            WishListModel wishListModel = new WishListModel(
+                                    "tyagideepu133", id, type, DetailItemModel.getTitle(), DetailItemModel.getImg_url(), DetailItemModel.getVote_avg());
+                            FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
+                            firebaseCurd.addWishListModel(wishListModel);
+                            Toast.makeText(getContext(), "Added to WishList", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
+                            DatabaseReference wishListReference = firebaseCurd.getmWishListReference();
+                            wishListReference.child(id).removeValue();
+                            wishListButton.setVisibility(View.VISIBLE);
+                            wishListButton2.setVisibility(View.GONE);
+                            Toast.makeText(getContext(), "Removed from WishList", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                wishListButton2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                        Log.v("movie",DetailItemModel.getTitle());
-                        WishListModel wishListModel = new WishListModel(
-                                "tyagideepu133",id,type,DetailItemModel.getTitle(),DetailItemModel.getImg_url(),DetailItemModel.getVote_avg());
-                        FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
-                        firebaseCurd.addWishListModel(wishListModel);
-                        Toast.makeText(getContext(), "Added to WishList", Toast.LENGTH_SHORT).show();
+                        if (!wishList) {
+                            Log.v("movie", DetailItemModel.getTitle());
+                            WishListModel wishListModel = new WishListModel(
+                                    "tyagideepu133", id, type, DetailItemModel.getTitle(), DetailItemModel.getImg_url(), DetailItemModel.getVote_avg());
+                            FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
+                            firebaseCurd.addWishListModel(wishListModel);
+                            Toast.makeText(getContext(), "Added to WishList", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
+                            DatabaseReference wishListReference = firebaseCurd.getmWishListReference();
+                            wishListReference.child(id).removeValue();
+                            wishListButton.setVisibility(View.VISIBLE);
+                            wishListButton2.setVisibility(View.GONE);
+                            Toast.makeText(getContext(), "Removed from WishList", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
 
