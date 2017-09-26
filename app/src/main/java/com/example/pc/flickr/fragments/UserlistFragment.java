@@ -1,6 +1,7 @@
 package com.example.pc.flickr.fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.pc.flickr.MoviesDetails;
 import com.example.pc.flickr.R;
 import com.example.pc.flickr.models.WishListModel;
 import com.example.pc.flickr.services.FirebaseCurd;
@@ -118,10 +120,21 @@ public class UserlistFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(userListViewHolder holder, int position) {
-            WishListModel WishListModel = userListArrayList.get(position);
-            holder.userListNameTextView.setText(WishListModel.getItemName());
-            holder.userListRatingTextView.setText(WishListModel.getItemRating());
-            Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w500" + WishListModel.getImgUrl()).into(holder.userListImageView);
+            final WishListModel wishListModel = userListArrayList.get(position);
+            holder.userListNameTextView.setText(wishListModel.getItemName());
+            holder.userListRatingTextView.setText(wishListModel.getItemRating());
+            Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w500" + wishListModel.getImgUrl()).into(holder.userListImageView);
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext(),MoviesDetails.class);
+                    Bundle mBundle = new Bundle();
+                    mBundle.putString("type",wishListModel.getItemType());
+                    mBundle.putString("id",wishListModel.getItemId());
+                    intent.putExtras(mBundle);
+                    startActivity(intent);
+                }
+            });
         }
 
         @Override

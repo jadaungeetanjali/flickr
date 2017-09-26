@@ -8,6 +8,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -35,6 +36,10 @@ import com.example.pc.flickr.models.SimilarItemModel;
 import com.example.pc.flickr.models.VideoModel;
 import com.example.pc.flickr.models.WishListModel;
 import com.example.pc.flickr.services.FirebaseCurd;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -49,6 +54,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -65,6 +72,7 @@ public class MoviesFragment extends Fragment {
     private LinearLayout mainContainer;
     private Button button;
     private String type, id;
+    private Boolean wishList, watchList;
 
     public MoviesFragment() {
         // Required empty public constructor
@@ -480,28 +488,69 @@ public class MoviesFragment extends Fragment {
                 videosArray = detailJsonParser.jsonVideoParser(jsonArray.get(4));
                 videoAdapter = new VideoAdapter(videosArray);
                 recyclerViewVideo.setAdapter(videoAdapter);
+                FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
+                DatabaseReference mWatchListReference = firebaseCurd.getmWatchListReference();
+
+                mWatchListReference.child(id).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        WishListModel wishListModel = dataSnapshot.getValue(WishListModel.class);
+                        if (wishListModel != null){
+                            button.setBackgroundColor(ContextCompat.getColor(getContext(),R.color.colorDanger));
+                            button.setText("Remove form WatchList");
+                            progressBar.setVisibility(View.GONE);
+                            mainContainer.setVisibility(View.VISIBLE);
+                            watchList = true;
+                        }
+                        else {
+                            watchList = false;
+                            progressBar.setVisibility(View.GONE);
+                            mainContainer.setVisibility(View.VISIBLE);
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        Log.w(TAG, "Failed to read value.", error.toException());
+                    }
+                });
 
 
-                progressBar.setVisibility(View.GONE);
-                mainContainer.setVisibility(View.VISIBLE);
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.v("movie",DetailItemModel.getTitle());
-                        WishListModel wishListModel = new WishListModel(
-                                "tyagideepu133",id,type,DetailItemModel.getTitle(),DetailItemModel.getImg_url(),DetailItemModel.getVote_avg());
                         FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
-                        firebaseCurd.addWatchListModel(wishListModel);
+                        if (!watchList) {
+                            WishListModel wishListModel = new WishListModel(
+                                    "tyagideepu133", id, type, DetailItemModel.getTitle(), DetailItemModel.getImg_url(), DetailItemModel.getVote_avg());
+
+                            firebaseCurd.addWatchListModel(wishListModel);
+                            button.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorDanger));
+                            Toast.makeText(getContext(), "Added to WatchList", Toast.LENGTH_SHORT).show();
+                            button.setText("Remove form WatchList");
+                        }
+                        else {
+                            DatabaseReference watchlistReference = firebaseCurd.getmWatchListReference();
+                            watchlistReference.child(id).removeValue();
+                            button.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorSuccess));
+                            Toast.makeText(getContext(), "Removed from WatchList", Toast.LENGTH_SHORT).show();
+                            button.setText("ADD TO WatchLIST");
+                        }
                     }
                 });
                 wishListButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+
                         Log.v("movie",DetailItemModel.getTitle());
                         WishListModel wishListModel = new WishListModel(
                                 "tyagideepu133",id,type,DetailItemModel.getTitle(),DetailItemModel.getImg_url(),DetailItemModel.getVote_avg());
                         FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
                         firebaseCurd.addWishListModel(wishListModel);
+                        Toast.makeText(getContext(), "Added to WishList", Toast.LENGTH_SHORT).show();
                     }
                 });
 
