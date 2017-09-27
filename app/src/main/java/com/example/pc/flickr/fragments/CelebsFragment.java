@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,6 +62,8 @@ public class CelebsFragment extends Fragment {
     public ImageView profile;
     public String id, type;
     private Button button;
+    private ProgressBar progressBar;
+    private LinearLayout mainContainer;
     private Boolean favorite = false;
 
     public CelebsFragment() {
@@ -86,6 +89,8 @@ public class CelebsFragment extends Fragment {
         recyclerViewCelebImages.setLayoutManager(layoutManagerCelebImages);
         recyclerViewCelebImages.setItemAnimator(new DefaultItemAnimator());
         button = (Button) rootView.findViewById(R.id.detail_celebs_favorite_button);
+        progressBar = (ProgressBar) rootView.findViewById(R.id.detail_celebs_mainContainer_progressBar);
+        mainContainer = (LinearLayout) rootView.findViewById(R.id.detail_celebs_mainContainer);
 
         Bundle bundle = getArguments();
         type = bundle.getString("type");
@@ -111,10 +116,12 @@ public class CelebsFragment extends Fragment {
 
         class celebsImagesViewHolder extends RecyclerView.ViewHolder {
             ImageView celebsImagesImageView;
+            ProgressBar celebsImagesImageViewProgressBar;
 
             public celebsImagesViewHolder(View itemView) {
                 super(itemView);
                 celebsImagesImageView = (ImageView) itemView.findViewById(R.id.celeb_images);
+                celebsImagesImageViewProgressBar = (ProgressBar) itemView.findViewById(R.id.celeb_images_progressBar);
             }
         }
 
@@ -132,7 +139,19 @@ public class CelebsFragment extends Fragment {
         public void onBindViewHolder(final celebsImagesViewHolder holder, int position) {
             CelebImageModel celebImageModel = celebImageModelArrayList.get(position);
             Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w500" + celebImageModel.getCelebImage())
-                    .into(holder.celebsImagesImageView);
+                    .into(holder.celebsImagesImageView,new com.squareup.picasso.Callback() {
+
+                        @Override
+                        public void onSuccess() {
+                            holder.celebsImagesImageViewProgressBar.setVisibility(View.GONE);
+                            holder.celebsImagesImageView.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onError() {
+
+                        }
+                    });
 
         }
 
@@ -293,14 +312,14 @@ public class CelebsFragment extends Fragment {
                         if (favoriteModel != null){
                             button.setBackgroundColor(ContextCompat.getColor(getContext(),R.color.colorDanger));
                             button.setText("Remove form WatchList");
-                            //progressBar.setVisibility(View.GONE);
-                            //mainContainer.setVisibility(View.VISIBLE);
+                            progressBar.setVisibility(View.GONE);
+                            mainContainer.setVisibility(View.VISIBLE);
                             favorite = true;
                         }
                         else {
                             favorite = false;
-                            //progressBar.setVisibility(View.GONE);
-                            //mainContainer.setVisibility(View.VISIBLE);
+                            progressBar.setVisibility(View.GONE);
+                            mainContainer.setVisibility(View.VISIBLE);
                         }
 
                     }

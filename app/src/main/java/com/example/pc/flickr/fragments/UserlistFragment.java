@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.pc.flickr.MoviesDetails;
@@ -41,6 +42,7 @@ public class UserlistFragment extends Fragment {
     public ArrayList<WishListModel> arrayList;
     public ArrayList<FavoriteModel> favoriteList;
     public DatabaseReference databaseReference;
+    private ProgressBar progressBar;
 
     public UserlistFragment() {
         // Required empty public constructor
@@ -77,7 +79,7 @@ public class UserlistFragment extends Fragment {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-
+        progressBar = (ProgressBar) rootView.findViewById(R.id.user_listview_progressBar);
         if (type.equals("WatchList")||type.equals("WishList")) {
             databaseReference.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -88,6 +90,8 @@ public class UserlistFragment extends Fragment {
                     }
                     wishListAdapter = new WishListAdapter(arrayList);
                     recyclerView.setAdapter(wishListAdapter);
+                    progressBar.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
                 }
 
                 @Override
@@ -110,6 +114,8 @@ public class UserlistFragment extends Fragment {
                     }
                     favoriteListAdapter = new FavoriteListAdapter(favoriteList);
                     recyclerView.setAdapter(favoriteListAdapter);
+                    progressBar.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
                 }
 
                 @Override
@@ -129,11 +135,13 @@ public class UserlistFragment extends Fragment {
             ImageView userListImageView;
             TextView userListNameTextView;
             TextView userListRatingTextView;
+            ProgressBar userListImageViewProgressBar;
             public wishListViewHolder(View itemView) {
                 super(itemView);
                 userListNameTextView = (TextView) itemView.findViewById(R.id.user_listview_item_name);
                 userListImageView = (ImageView) itemView.findViewById(R.id.user_listview_item_poster);
                 userListRatingTextView = (TextView) itemView.findViewById(R.id.user_listview_item_rating_value);
+                userListImageViewProgressBar = (ProgressBar) itemView.findViewById(R.id.user_listview_item_poster_progressBar);
             }
         }
 
@@ -148,11 +156,24 @@ public class UserlistFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(wishListViewHolder holder, int position) {
+        public void onBindViewHolder(final wishListViewHolder holder, int position) {
             final WishListModel wishListModel = userListArrayList.get(position);
             holder.userListNameTextView.setText(wishListModel.getItemName());
             holder.userListRatingTextView.setText(wishListModel.getItemRating());
-            Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w500" + wishListModel.getImgUrl()).into(holder.userListImageView);
+            Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w500" + wishListModel.getImgUrl())
+                    .into(holder.userListImageView,new com.squareup.picasso.Callback() {
+
+                        @Override
+                        public void onSuccess() {
+                            holder.userListImageViewProgressBar.setVisibility(View.GONE);
+                            holder.userListImageView.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onError() {
+
+                        }
+                    });
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -178,11 +199,12 @@ public class UserlistFragment extends Fragment {
         class favoriteListViewHolder extends RecyclerView.ViewHolder {
             ImageView userListImageView;
             TextView userListNameTextView;
-            TextView userListRatingTextView;
+            ProgressBar userListImageViewProgressBar;
             public favoriteListViewHolder(View itemView) {
                 super(itemView);
                 userListNameTextView = (TextView) itemView.findViewById(R.id.user_listview_item_name);
                 userListImageView = (ImageView) itemView.findViewById(R.id.user_listview_item_poster);
+                userListImageViewProgressBar = (ProgressBar) itemView.findViewById(R.id.user_listview_item_poster_progressBar);
             }
         }
 
@@ -197,10 +219,23 @@ public class UserlistFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(favoriteListViewHolder holder, int position) {
+        public void onBindViewHolder(final favoriteListViewHolder holder, int position) {
             final FavoriteModel favoriteModel = userListArrayList.get(position);
             holder.userListNameTextView.setText(favoriteModel.getItemName());
-            Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w500" + favoriteModel.getImgUrl()).into(holder.userListImageView);
+            Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w500" + favoriteModel.getImgUrl()).
+                    into(holder.userListImageView,new com.squareup.picasso.Callback() {
+
+                        @Override
+                        public void onSuccess() {
+                            holder.userListImageViewProgressBar.setVisibility(View.GONE);
+                            holder.userListImageView.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onError() {
+
+                        }
+                    });
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

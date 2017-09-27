@@ -131,6 +131,9 @@ public class MoreList extends AppCompatActivity {
                     if (type.equals("movie")){
                         type2 = "movies";
                     }
+                    else if(type.equals("person")){
+                        type2="celebs";
+                    }
                     else {
                         type2=type;
                     }

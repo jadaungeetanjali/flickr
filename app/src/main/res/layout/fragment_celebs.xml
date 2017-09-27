@@ -6,218 +6,225 @@
     android:orientation="vertical">
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorSecondaryLight"
-        >
-
-    <LinearLayout
-        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:background="@color/colorSecondaryLight">
         <LinearLayout
-            android:id="@+id/detail_celebs_mainContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:weightSum="1">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <ProgressBar
+                android:id="@+id/detail_celebs_mainContainer_progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:visibility="visible"
+                android:layout_gravity="center"
+                android:layout_marginTop="200dp"
+                android:layout_height="match_parent" />
             <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/detail_celebs_mainContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#fff"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/detail_celebs_mainTitle"
+                android:orientation="vertical"
+                android:weightSum="1">
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="5dp"
-                    android:text="Race 2"
-                    android:textSize="22sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:paddingTop="10dp"
-                android:background="#fff"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/detail_celebs_biography"
+                    android:background="#fff"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/detail_celebs_mainTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="5dp"
+                        android:text="Race 2"
+                        android:textSize="22sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:textSize="14sp" />
-                </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:paddingTop="10dp"
-                android:background="#fff"
-                android:orientation="horizontal">
-                <ImageView
-                    android:id="@+id/detail_celebs_profile"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="10dp"
-                        android:textSize="18sp"
-                        android:text="Born:"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/detail_celebs_born"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="10dp"
-                        android:textSize="16sp" />
-                    <TextView
-                        android:id="@+id/detail_celebs_placeOfBirth"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="10dp"
-                        android:textSize="16sp" />
-                    <Button
-                        android:id="@+id/detail_celebs_favorite_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="#fff"
-                        android:text="Add to Favorite"
-                        android:layout_marginTop="5dp"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="20dp"
-                        android:background="@color/colorSuccess"/>
-                </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_marginTop="25dp"
-                android:background="#fff"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:elevation="2dp"
-                android:orientation="horizontal">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:background="#fff"
                     android:orientation="vertical">
                     <TextView
-                        android:id="@+id/textView"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/detail_celebs_biography"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:textSize="14sp" />
+                    </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:paddingTop="10dp"
+                    android:background="#fff"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:id="@+id/detail_celebs_profile"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginLeft="10dp"
-                        android:text="Personal Details"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
+                        android:layout_weight="1" />
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="10dp"
+                            android:textSize="18sp"
+                            android:text="Born:"
+                            android:textStyle="bold"/>
+                        <TextView
+                            android:id="@+id/detail_celebs_born"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="10dp"
+                            android:textSize="16sp" />
+                        <TextView
+                            android:id="@+id/detail_celebs_placeOfBirth"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="10dp"
+                            android:textSize="16sp" />
+                        <Button
+                            android:id="@+id/detail_celebs_favorite_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#fff"
+                            android:text="Add to Favorite"
+                            android:layout_marginTop="5dp"
+                            android:paddingLeft="20dp"
+                            android:paddingRight="20dp"
+                            android:background="@color/colorSuccess"/>
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginTop="25dp"
+                    android:background="#fff"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:elevation="2dp"
+                    android:orientation="horizontal">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="10dp">
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginLeft="10dp"
+                            android:text="Personal Details"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
-                            <TextView
+                            android:orientation="vertical"
+                            android:padding="10dp">
+                            <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:paddingBottom="3dp"
-                                android:paddingTop="5dp"
-                                android:text="Born"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
-                            <TextView
-                                android:id="@+id/detail_celebs_bornDate"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:paddingBottom="3dp"
+                                    android:paddingTop="5dp"
+                                    android:text="Born"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold" />
+                                <TextView
+                                    android:id="@+id/detail_celebs_bornDate"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:padding="5dp"
+                                    android:textColor="@color/colorSecondary"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+                            <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:padding="5dp"
-                                android:textColor="@color/colorSecondary"
-                                android:textSize="14sp" />
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                                android:orientation="vertical">
 
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingBottom="3dp"
-                                android:paddingTop="5dp"
-                                android:text="Birth Place"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:paddingBottom="3dp"
+                                    android:paddingTop="5dp"
+                                    android:text="Birth Place"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold" />
 
-                            <TextView
-                                android:id="@+id/detail_celebs_birthPlace"
+                                <TextView
+                                    android:id="@+id/detail_celebs_birthPlace"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:padding="5dp"
+                                    android:textColor="@color/colorSecondary"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+                            <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:padding="5dp"
-                                android:textColor="@color/colorSecondary"
-                                android:textSize="14sp" />
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                                android:orientation="vertical">
 
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingBottom="3dp"
-                                android:paddingTop="5dp"
-                                android:text="Also Known As"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:paddingBottom="3dp"
+                                    android:paddingTop="5dp"
+                                    android:text="Also Known As"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold" />
 
-                            <TextView
-                                android:id="@+id/detail_celebs_alsoKnownAs"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:padding="5dp"
-                                android:textColor="@color/colorSecondary"
-                                android:textSize="14sp" />
+                                <TextView
+                                    android:id="@+id/detail_celebs_alsoKnownAs"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:padding="5dp"
+                                    android:textColor="@color/colorSecondary"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
-                </LinearLayout>
-                </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:background="#fff"
-                android:elevation="2dp"
-                android:orientation="vertical">
-
-                <TextView
+                    </LinearLayout>
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginLeft="10dp"
-                    android:text="Images"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:layout_marginTop="20dp"
+                    android:background="#fff"
+                    android:elevation="2dp"
+                    android:orientation="vertical">
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/detail_celebs_imagesRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_marginBottom="20dp"
-                    >
-                </android.support.v7.widget.RecyclerView>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="10dp"
+                        android:text="Images"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/detail_celebs_imagesRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_marginBottom="20dp"
+                        >
+                    </android.support.v7.widget.RecyclerView>
+                </LinearLayout>
+
             </LinearLayout>
-
         </LinearLayout>
-    </LinearLayout>
     </ScrollView>
 </LinearLayout>
