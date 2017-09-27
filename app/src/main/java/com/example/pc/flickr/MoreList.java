@@ -9,11 +9,13 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,22 +39,25 @@ public class MoreList extends AppCompatActivity {
     RecyclerView recyclerViewMoreList;
     private MoreListAdapter moreListAdapter;
     public String type,subType;
-    TextView moreListHeading;
+    private ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_more_list);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.more_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         recyclerViewMoreList = (RecyclerView) findViewById(R.id.recyclerView_moreList);
+        progressBar = (ProgressBar) findViewById(R.id.more_progressBar);
         LinearLayoutManager layoutManagerMovieList = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerViewMoreList.setLayoutManager(layoutManagerMovieList);
         recyclerViewMoreList.setItemAnimator(new DefaultItemAnimator());
         Bundle bundle  = this.getIntent().getExtras();
         type = bundle.getString("type");
         subType = bundle.getString("subType");
-        //Log.i("data",type + " / " + subType);
-        //to update heading of moreList
-        moreListHeading = (TextView) findViewById(R.id.moreListHeading);
+        getSupportActionBar().setTitle(subType);
         String url="https://api.themoviedb.org/3/" + type + "/" + subType + "?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US&page=";
 
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
@@ -75,6 +80,7 @@ public class MoreList extends AppCompatActivity {
             TextView moreListReleaseDateTextView;
             TextView moreListRatingTextView;
             TextView moreListIdTextView;
+            ProgressBar moreListProgressBar;
             public moreListViewHolder(View itemView) {
                 super(itemView);
                 moreListNameTextView = (TextView) itemView.findViewById(R.id.more_list_name);
@@ -82,6 +88,7 @@ public class MoreList extends AppCompatActivity {
                 moreListReleaseDateTextView = (TextView) itemView.findViewById(R.id.more_list_release_date);
                 moreListRatingTextView = (TextView) itemView.findViewById(R.id.more_list_ratings);
                 moreListIdTextView = (TextView) itemView.findViewById(R.id.more_list_id);
+                moreListProgressBar = (ProgressBar) itemView.findViewById(R.id.more_list_poster_progressBar);
             }
         }
 
@@ -96,13 +103,26 @@ public class MoreList extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(moreListViewHolder holder, final int position) {
+        public void onBindViewHolder(final moreListViewHolder holder, final int position) {
             final MoreListModel moreListModel = moreListArrayList.get(position);
             holder.moreListNameTextView.setText(moreListModel.getName());
             holder.moreListReleaseDateTextView.setText(moreListModel.getReleaseDate());
             holder.moreListRatingTextView.setText(moreListModel.getRating());
             holder.moreListIdTextView.setText(moreListModel.getId());
-            Picasso.with(getBaseContext()).load("https://image.tmdb.org/t/p/w500" + moreListModel.getImage()).into(holder.moreListImageView);
+            Picasso.with(getBaseContext()).load("https://image.tmdb.org/t/p/w500" + moreListModel.getImage())
+                    .into(holder.moreListImageView,new com.squareup.picasso.Callback() {
+
+                        @Override
+                        public void onSuccess() {
+                            holder.moreListProgressBar.setVisibility(View.GONE);
+                            holder.moreListImageView.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onError() {
+
+                        }
+                    });
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -197,7 +217,8 @@ public class MoreList extends AppCompatActivity {
                             movieListsArray = moreListJsonParser.jsonMovieListParser(jsonArray.get(i), movieListsArray);
                             moreListAdapter = new MoreListAdapter(movieListsArray);
                             recyclerViewMoreList.setAdapter(moreListAdapter);
-                            moreListHeading.setText(subType);
+                            progressBar.setVisibility(View.GONE);
+                            recyclerViewMoreList.setVisibility(View.VISIBLE);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -211,7 +232,8 @@ public class MoreList extends AppCompatActivity {
                             tvListArray = moreListJsonParser.jsonTvListParser(jsonArray.get(i),tvListArray);
                             moreListAdapter = new MoreListAdapter(tvListArray);
                             recyclerViewMoreList.setAdapter(moreListAdapter);
-                            moreListHeading.setText(subType);
+                            progressBar.setVisibility(View.GONE);
+                            recyclerViewMoreList.setVisibility(View.VISIBLE);
                         }
 
                     } catch (JSONException e) {
@@ -225,7 +247,8 @@ public class MoreList extends AppCompatActivity {
                             celebsListArray = moreListJsonParser.jsonCelebsListParser(jsonArray.get(i), celebsListArray);
                             moreListAdapter = new MoreListAdapter(celebsListArray);
                             recyclerViewMoreList.setAdapter(moreListAdapter);
-                            moreListHeading.setText(subType);
+                            progressBar.setVisibility(View.GONE);
+                            recyclerViewMoreList.setVisibility(View.VISIBLE);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
