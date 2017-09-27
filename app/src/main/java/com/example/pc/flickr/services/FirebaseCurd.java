@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.example.pc.flickr.R;
 import com.example.pc.flickr.models.FavoriteModel;
+import com.example.pc.flickr.models.UserModel;
 import com.example.pc.flickr.models.WishListModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,14 +32,20 @@ public class FirebaseCurd {
     private DatabaseReference mWishListReference;
     private DatabaseReference mFavoriteReference;
     private DatabaseReference mUserReference;
+    private DatabaseReference mUsersReference;
     private DatabaseReference mWatchListReference;
+    private DatabaseReference mDataReference;
+
+
 
     public FirebaseCurd(Activity activity){
         //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         SharedPreferences sharedPref = activity.getSharedPreferences("MyPref", 0);
         String user_id = sharedPref.getString("user_id",null);
-        mUserReference = mDatabaseReference.child("Users").child(user_id);
+        mUserReference = mDatabaseReference.child("User").child(user_id);
+        mUsersReference = mDatabaseReference.child("User");
+        mDataReference = mDatabaseReference.child("Data").child(user_id);
         mWishListReference = mUserReference.child("WishList");
         mWatchListReference = mUserReference.child("WatchList");
         mFavoriteReference = mUserReference.child("Favorite");
@@ -65,6 +72,14 @@ public class FirebaseCurd {
         return mWishListReference;
     }
 
+    public DatabaseReference getmDataReference() {
+        return mDataReference;
+    }
+
+    public DatabaseReference getmUsersReference() {
+        return mUsersReference;
+    }
+
     //Post method of firebase are here
     public void addWishListModel(WishListModel wishListModel){
         HashMap<String, Object> result = new HashMap<>();
@@ -76,6 +91,15 @@ public class FirebaseCurd {
         result.put("itemRating", wishListModel.getItemRating());
         Log.v("result",result.toString());
         mWishListReference.child(wishListModel.getItemId()).updateChildren(result);
+    }
+
+    public void addUserModel(UserModel userModel){
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("userId",userModel.getUserId());
+        result.put("userName", userModel.getUserName());
+        result.put("userEmail", userModel.getUserEmail());
+        result.put("userImgUrl", userModel.getUserImgUrl());
+        mWishListReference.child(userModel.getUserId()).updateChildren(result);
     }
 
     public void addWatchListModel(WishListModel watchListModel){
