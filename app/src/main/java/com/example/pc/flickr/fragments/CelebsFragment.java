@@ -240,6 +240,11 @@ public class CelebsFragment extends Fragment {
             return celebImageArray;
         }
         @Override
+        protected void onCancelled(){
+            super.onCancelled();
+        }
+
+        @Override
         protected ArrayList<String> doInBackground(String... params) {
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;

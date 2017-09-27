@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -76,7 +77,9 @@ public class UserlistFragment extends Fragment {
 
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.user_listview);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        //RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        //recyclerView.setLayoutManager(mLayoutManager);
+        GridLayoutManager mLayoutManager = new GridLayoutManager(getContext(),2);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         progressBar = (ProgressBar) rootView.findViewById(R.id.user_listview_progressBar);
