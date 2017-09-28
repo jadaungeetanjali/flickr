@@ -616,5 +616,4 @@ public class MoviesFragment extends Fragment {
             }
         }
     }
-    
 }

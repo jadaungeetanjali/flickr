@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.example.pc.flickr.MoviesDetails;
 import com.example.pc.flickr.R;
+import com.example.pc.flickr.json_parsers.DetailJsonParser;
 import com.example.pc.flickr.models.CastModel;
 import com.example.pc.flickr.models.FavoriteModel;
 import com.example.pc.flickr.models.SimilarItemModel;
@@ -55,7 +56,8 @@ import static android.content.ContentValues.TAG;
  */
 public class CelebsFragment extends Fragment {
     private CelebsImagesAdapter celebsImagesAdapter;
-    RecyclerView recyclerViewCelebKnownFor;
+    private CelebsMovieCreditAdapter celebsMovieCreditAdapter;
+    RecyclerView recyclerViewCelebMovieCredit;
     RecyclerView recyclerViewCelebImages;
     public TextView title, biography, dateOfBirth, placeOfBirth, alsoKnownAs, detailDOB, detailPlaceOfBirth ;
     public ImageView profile;
@@ -81,10 +83,17 @@ public class CelebsFragment extends Fragment {
         detailDOB = (TextView) rootView.findViewById(R.id.detail_celebs_bornDate);
         detailPlaceOfBirth = (TextView) rootView.findViewById(R.id.detail_celebs_birthPlace);
         profile = (ImageView) rootView.findViewById(R.id.detail_celebs_profile);
+
         recyclerViewCelebImages = (RecyclerView) rootView.findViewById(R.id.detail_celebs_imagesRecyclerView);
         LinearLayoutManager layoutManagerCelebImages= new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewCelebImages.setLayoutManager(layoutManagerCelebImages);
         recyclerViewCelebImages.setItemAnimator(new DefaultItemAnimator());
+
+        recyclerViewCelebMovieCredit = (RecyclerView) rootView.findViewById(R.id.detail_celebs_movieCreditsRecyclerView);
+        LinearLayoutManager layoutManagerCelebsMovieCredit= new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewCelebMovieCredit.setLayoutManager(layoutManagerCelebsMovieCredit);
+        recyclerViewCelebMovieCredit.setItemAnimator(new DefaultItemAnimator());
+
         button = (Button) rootView.findViewById(R.id.detail_celebs_favorite_button);
 
         Bundle bundle = getArguments();
@@ -93,12 +102,13 @@ public class CelebsFragment extends Fragment {
         ArrayList<String> urlList = new ArrayList<>();
         urlList.add("https://api.themoviedb.org/3/person/" +id+ "?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
         urlList.add("https://api.themoviedb.org/3/person/" +id+ "/images?api_key=fe56cdee4dfea0c18403e0965acfa23b");
+        urlList.add("https://api.themoviedb.org/3/person/" +id+ "/movie_credits?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
 
         ConnectivityManager connectivityManager = (ConnectivityManager)  getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         if ((networkInfo != null) && networkInfo.isConnected()) {
             FetchTask fetchCelebsData = new FetchTask();
-            fetchCelebsData.execute(urlList.get(0), urlList.get(1));
+            fetchCelebsData.execute(urlList.get(0), urlList.get(1), urlList.get(2));
         }
         else{
             Toast.makeText(getContext(), "Please Connect to internet...", Toast.LENGTH_SHORT).show();
@@ -106,6 +116,72 @@ public class CelebsFragment extends Fragment {
         return rootView;
     }
 
+    private class CelebsMovieCreditAdapter extends RecyclerView.Adapter<CelebsMovieCreditAdapter.celebsMovieCreditViewHolder> {
+        private ArrayList<SimilarItemModel> celebsMovieCreditArrayList;
+
+        class celebsMovieCreditViewHolder extends RecyclerView.ViewHolder {
+            ImageView celebsMovieCreditImageView;
+            TextView celebsMovieCreditNameTextView ;
+            TextView celebsMovieCreditVoteAverageTextView;
+            ProgressBar celebsMovieCreditProgressBar;
+
+            public celebsMovieCreditViewHolder(View itemView) {
+                super(itemView);
+                celebsMovieCreditNameTextView = (TextView) itemView.findViewById(R.id.main_child_title_textView); //change id to similarMovieName
+                celebsMovieCreditImageView = (ImageView) itemView.findViewById(R.id.main_child_imageView); //change id to similarMovieImage
+                celebsMovieCreditVoteAverageTextView = (TextView) itemView.findViewById(R.id.main_child_vote_textView);
+                celebsMovieCreditProgressBar = (ProgressBar) itemView.findViewById(R.id.main_image_progressBar);
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getContext(),MoviesDetails.class);
+                        Bundle mBundle = new Bundle();
+                        SimilarItemModel similarItemModel = celebsMovieCreditArrayList.get(getAdapterPosition());
+                        mBundle.putString("type",type);
+                        mBundle.putString("id",similarItemModel.getSimilarItemId());
+                        intent.putExtras(mBundle);
+                        startActivity(intent);
+                    }
+                });
+            }
+        }
+
+        public CelebsMovieCreditAdapter(ArrayList<SimilarItemModel> arrayList) {
+            this.celebsMovieCreditArrayList = arrayList;
+        }
+
+        @Override
+        public celebsMovieCreditViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_vertical_card, parent, false); //change layout id
+            return new celebsMovieCreditViewHolder(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(final celebsMovieCreditViewHolder holder, int position) {
+            SimilarItemModel similarItemModel = celebsMovieCreditArrayList.get(position);
+            holder.celebsMovieCreditNameTextView.setText(similarItemModel.getSimilarItemName());
+            Log.v("output", similarItemModel.getSimilarItemName());
+            holder.celebsMovieCreditVoteAverageTextView.setText(similarItemModel.getSimilarItemVoteAverage());
+            Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w500"+similarItemModel.getSimilarItemimage())
+                    .into(holder.celebsMovieCreditImageView, new com.squareup.picasso.Callback(){
+                        @Override
+                        public void onSuccess() {
+                            holder.celebsMovieCreditProgressBar.setVisibility(View.GONE);
+                            holder.celebsMovieCreditImageView.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onError() {
+
+                        }
+                    });
+        }
+
+        @Override
+        public int getItemCount() {
+            return celebsMovieCreditArrayList.size();
+        }
+    }
     private class CelebsImagesAdapter extends RecyclerView.Adapter<CelebsImagesAdapter.celebsImagesViewHolder> {
         private ArrayList<CelebImageModel> celebImageModelArrayList;
 
@@ -141,6 +217,8 @@ public class CelebsFragment extends Fragment {
             return celebImageModelArrayList.size();
         }
     }
+
+
     private class CelebsModel{
         public String title;
         public String biography;
@@ -220,6 +298,23 @@ public class CelebsFragment extends Fragment {
             }
             return celebImageArray;
         }
+
+        public ArrayList<SimilarItemModel> jsonCelebMovieCreditParser(String jsonCelebMovieCredit) throws JSONException {
+            ArrayList<SimilarItemModel> celebMovieCreditArray = new ArrayList<>();
+            JSONObject celebMovieCreditObject = new JSONObject(jsonCelebMovieCredit);
+            JSONArray celebMovieCreditList = celebMovieCreditObject.getJSONArray("cast");
+            for (int i = 0; i < celebMovieCreditList.length(); i++) {
+                JSONObject movieCredit = celebMovieCreditList.getJSONObject(i);
+                String movieCreditName = movieCredit.get("title").toString();
+                String movieCreditVoteAverage = movieCredit.get("vote_average").toString();
+                String movieCreditPoster = movieCredit.get("poster_path").toString();
+                String movieCreditId = movieCredit.get("id").toString();
+                SimilarItemModel SimilarItemModel = new SimilarItemModel(movieCreditId, movieCreditName, movieCreditVoteAverage, movieCreditPoster);
+                celebMovieCreditArray.add(SimilarItemModel);
+            }
+            return celebMovieCreditArray;
+        }
+
         @Override
         protected ArrayList<String> doInBackground(String... params) {
             HttpURLConnection urlConnection = null;
@@ -272,6 +367,7 @@ public class CelebsFragment extends Fragment {
         protected void onPostExecute(ArrayList<String> jsonArray) {
             super.onPostExecute(jsonArray);
             ArrayList<CelebImageModel> celebImageModelArray = new ArrayList<>();
+            ArrayList<SimilarItemModel> celebMovieCreditArray = new ArrayList<>();
             try {
                 final CelebsModel celebsModel = jsonCelebsParser(jsonArray.get(0));
                 title.setText(celebsModel.getTitle());
@@ -343,9 +439,17 @@ public class CelebsFragment extends Fragment {
             }
             try {
                 celebImageModelArray = jsonCelebImageParser(jsonArray.get(1));
-                Log.v("output", celebImageModelArray.get(0).toString());
+                //Log.v("output", celebImageModelArray.get(0).toString());
                 celebsImagesAdapter = new CelebsImagesAdapter(celebImageModelArray);
                 recyclerViewCelebImages.setAdapter(celebsImagesAdapter );
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                celebMovieCreditArray = jsonCelebMovieCreditParser(jsonArray.get(2));
+                celebsMovieCreditAdapter = new CelebsMovieCreditAdapter(celebMovieCreditArray);
+                recyclerViewCelebMovieCredit.setAdapter(celebsMovieCreditAdapter);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
