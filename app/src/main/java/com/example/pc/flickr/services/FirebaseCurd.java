@@ -53,10 +53,10 @@ public class FirebaseCurd {
         mFriendsReference = mDatabaseReference.child("Friends").child(user_id);
         mRequestReference = mDatabaseReference.child("Requests");
         mRequestsReference = mDatabaseReference.child("Requests").child(user_id);
-        mDataReference = mDatabaseReference.child("Data").child(user_id);
-        mWishListReference = mDataReference.child("WishList");
-        mWatchListReference = mDataReference.child("WatchList");
-        mFavoriteReference = mDataReference.child("Favorite");
+        mDataReference = mDatabaseReference.child("Data");
+        mWishListReference = mDataReference.child(user_id).child("WishList");
+        mWatchListReference = mDataReference.child(user_id).child("WatchList");
+        mFavoriteReference = mDataReference.child(user_id).child("Favorite");
 
     }
     //Get Refrences
