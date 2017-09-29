@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.pc.flickr.MainActivity;
 import com.example.pc.flickr.MoviesDetails;
 import com.example.pc.flickr.R;
 import com.example.pc.flickr.fragments.CelebsFragment;
@@ -29,6 +30,7 @@ public class CelebAdapters {
 
     public static class CelebsMovieCreditAdapter extends RecyclerView.Adapter<CelebsMovieCreditAdapter.celebsMovieCreditViewHolder> {
         public ArrayList<SimilarItemModel> celebsMovieCreditArrayList;
+        public Context movieCreditContext;
 
         class celebsMovieCreditViewHolder extends RecyclerView.ViewHolder {
             ImageView celebsMovieCreditImageView;
@@ -42,10 +44,11 @@ public class CelebAdapters {
                 celebsMovieCreditImageView = (ImageView) itemView.findViewById(R.id.main_child_imageView);
                 celebsMovieCreditVoteAverageTextView = (TextView) itemView.findViewById(R.id.main_child_vote_textView);
                 celebsMovieCreditProgressBar = (ProgressBar) itemView.findViewById(R.id.main_image_progressBar);
-                /*itemView.setOnClickListener(new View.OnClickListener() {
+               /* itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(getContext(),MoviesDetails.class);
+
+                        Intent intent = new Intent(movieCreditContext,MoviesDetails.class);
                         Bundle mBundle = new Bundle();
                         SimilarItemModel similarItemModel = celebsMovieCreditArrayList.get(getAdapterPosition());
                         mBundle.putString("type",type);
@@ -57,8 +60,9 @@ public class CelebAdapters {
             }
         }
 
-        public CelebsMovieCreditAdapter(ArrayList<SimilarItemModel> arrayList) {
+        public CelebsMovieCreditAdapter(Context context, ArrayList<SimilarItemModel> arrayList) {
             this.celebsMovieCreditArrayList = arrayList;
+            this.movieCreditContext = context;
         }
 
         @Override
@@ -73,7 +77,7 @@ public class CelebAdapters {
             holder.celebsMovieCreditNameTextView.setText(similarItemModel.getSimilarItemName());
             Log.v("output", similarItemModel.getSimilarItemName());
             holder.celebsMovieCreditVoteAverageTextView.setText(similarItemModel.getSimilarItemVoteAverage());
-            Picasso.with().load("https://image.tmdb.org/t/p/w500"+similarItemModel.getSimilarItemimage())
+            Picasso.with(movieCreditContext).load("https://image.tmdb.org/t/p/w500"+similarItemModel.getSimilarItemimage())
                     .into(holder.celebsMovieCreditImageView, new com.squareup.picasso.Callback(){
                         @Override
                         public void onSuccess() {
@@ -96,6 +100,7 @@ public class CelebAdapters {
 
     public static class CelebsImagesAdapter extends RecyclerView.Adapter<CelebsImagesAdapter.celebsImagesViewHolder> {
         public ArrayList<CelebImageModel> celebImageModelArrayList;
+        public Context imageContext;
 
         class celebsImagesViewHolder extends RecyclerView.ViewHolder {
             ImageView celebsImagesImageView;
@@ -106,8 +111,9 @@ public class CelebAdapters {
             }
         }
 
-        public CelebsImagesAdapter(ArrayList<CelebImageModel> arrayList) {
+        public CelebsImagesAdapter(Context context, ArrayList<CelebImageModel> arrayList) {
             this.celebImageModelArrayList = arrayList;
+            this.imageContext = context;
         }
 
         @Override
@@ -119,7 +125,7 @@ public class CelebAdapters {
         @Override
         public void onBindViewHolder(final celebsImagesViewHolder holder, int position) {
             CelebImageModel celebImageModel = celebImageModelArrayList.get(position);
-            Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w500" + celebImageModel.getCelebImage())
+            Picasso.with(imageContext).load("https://image.tmdb.org/t/p/w500" + celebImageModel.getCelebImage())
                     .into(holder.celebsImagesImageView);
 
         }

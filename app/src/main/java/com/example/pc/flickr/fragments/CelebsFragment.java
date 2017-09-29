@@ -130,7 +130,7 @@ public class CelebsFragment extends Fragment {
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
             String jsonData = null;
-            ArrayList<String> jsonArray = new ArrayList<>();
+            ArrayList<String> jsonArray = new ArrayList<String>();
             for (String param : params){
                 try {
                     //setting the urlConnection
@@ -251,7 +251,7 @@ public class CelebsFragment extends Fragment {
             try {
                 celebImageModelArray = detailCelebsJsonParser.jsonCelebImageParser(jsonArray.get(1));
                 //Log.v("output", celebImageModelArray.get(0).toString());
-                celebsImagesAdapter = new CelebAdapters.CelebsImagesAdapter(celebImageModelArray);
+                celebsImagesAdapter = new CelebAdapters.CelebsImagesAdapter(getContext(), celebImageModelArray);
                 recyclerViewCelebImages.setAdapter(celebsImagesAdapter );
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -259,7 +259,7 @@ public class CelebsFragment extends Fragment {
 
             try {
                 celebMovieCreditArray = detailCelebsJsonParser.jsonCelebMovieCreditParser(jsonArray.get(2));
-                celebsMovieCreditAdapter = new CelebAdapters.CelebsMovieCreditAdapter(celebMovieCreditArray);
+                celebsMovieCreditAdapter = new CelebAdapters.CelebsMovieCreditAdapter(getContext(), celebMovieCreditArray);
                 recyclerViewCelebMovieCredit.setAdapter(celebsMovieCreditAdapter);
             } catch (JSONException e) {
                 e.printStackTrace();
