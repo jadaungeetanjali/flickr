@@ -22,6 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.pc.flickr.Adapters.CelebAdapters;
 import com.example.pc.flickr.MoviesDetails;
 import com.example.pc.flickr.R;
 import com.example.pc.flickr.json_parsers.DetailCelebsJsonParser;
@@ -58,8 +59,8 @@ import static android.content.ContentValues.TAG;
  * A simple {@link Fragment} subclass.
  */
 public class CelebsFragment extends Fragment {
-    private CelebsImagesAdapter celebsImagesAdapter;
-    private CelebsMovieCreditAdapter celebsMovieCreditAdapter;
+    private CelebAdapters.CelebsImagesAdapter celebsImagesAdapter;
+    private CelebAdapters.CelebsMovieCreditAdapter celebsMovieCreditAdapter;
     RecyclerView recyclerViewCelebMovieCredit;
     RecyclerView recyclerViewCelebImages;
     public TextView title, biography, dateOfBirth, placeOfBirth, alsoKnownAs, detailDOB, detailPlaceOfBirth ;
@@ -119,107 +120,7 @@ public class CelebsFragment extends Fragment {
         return rootView;
     }
 
-    private class CelebsMovieCreditAdapter extends RecyclerView.Adapter<CelebsMovieCreditAdapter.celebsMovieCreditViewHolder> {
-        private ArrayList<SimilarItemModel> celebsMovieCreditArrayList;
 
-        class celebsMovieCreditViewHolder extends RecyclerView.ViewHolder {
-            ImageView celebsMovieCreditImageView;
-            TextView celebsMovieCreditNameTextView ;
-            TextView celebsMovieCreditVoteAverageTextView;
-            ProgressBar celebsMovieCreditProgressBar;
-
-            public celebsMovieCreditViewHolder(View itemView) {
-                super(itemView);
-                celebsMovieCreditNameTextView = (TextView) itemView.findViewById(R.id.main_child_title_textView); //change id to similarMovieName
-                celebsMovieCreditImageView = (ImageView) itemView.findViewById(R.id.main_child_imageView); //change id to similarMovieImage
-                celebsMovieCreditVoteAverageTextView = (TextView) itemView.findViewById(R.id.main_child_vote_textView);
-                celebsMovieCreditProgressBar = (ProgressBar) itemView.findViewById(R.id.main_image_progressBar);
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getContext(),MoviesDetails.class);
-                        Bundle mBundle = new Bundle();
-                        SimilarItemModel similarItemModel = celebsMovieCreditArrayList.get(getAdapterPosition());
-                        mBundle.putString("type",type);
-                        mBundle.putString("id",similarItemModel.getSimilarItemId());
-                        intent.putExtras(mBundle);
-                        startActivity(intent);
-                    }
-                });
-            }
-        }
-
-        public CelebsMovieCreditAdapter(ArrayList<SimilarItemModel> arrayList) {
-            this.celebsMovieCreditArrayList = arrayList;
-        }
-
-        @Override
-        public celebsMovieCreditViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_vertical_card, parent, false); //change layout id
-            return new celebsMovieCreditViewHolder(itemView);
-        }
-
-        @Override
-        public void onBindViewHolder(final celebsMovieCreditViewHolder holder, int position) {
-            SimilarItemModel similarItemModel = celebsMovieCreditArrayList.get(position);
-            holder.celebsMovieCreditNameTextView.setText(similarItemModel.getSimilarItemName());
-            Log.v("output", similarItemModel.getSimilarItemName());
-            holder.celebsMovieCreditVoteAverageTextView.setText(similarItemModel.getSimilarItemVoteAverage());
-            Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w500"+similarItemModel.getSimilarItemimage())
-                    .into(holder.celebsMovieCreditImageView, new com.squareup.picasso.Callback(){
-                        @Override
-                        public void onSuccess() {
-                            holder.celebsMovieCreditProgressBar.setVisibility(View.GONE);
-                            holder.celebsMovieCreditImageView.setVisibility(View.VISIBLE);
-                        }
-
-                        @Override
-                        public void onError() {
-
-                        }
-                    });
-        }
-
-        @Override
-        public int getItemCount() {
-            return celebsMovieCreditArrayList.size();
-        }
-    }
-    private class CelebsImagesAdapter extends RecyclerView.Adapter<CelebsImagesAdapter.celebsImagesViewHolder> {
-        private ArrayList<CelebImageModel> celebImageModelArrayList;
-
-        class celebsImagesViewHolder extends RecyclerView.ViewHolder {
-            ImageView celebsImagesImageView;
-
-            public celebsImagesViewHolder(View itemView) {
-                super(itemView);
-                celebsImagesImageView = (ImageView) itemView.findViewById(R.id.celeb_images);
-            }
-        }
-
-        public CelebsImagesAdapter(ArrayList<CelebImageModel> arrayList) {
-            this.celebImageModelArrayList = arrayList;
-        }
-
-        @Override
-        public celebsImagesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.celeb_images_textview, parent, false); //change layout id
-            return new celebsImagesViewHolder(itemView);
-        }
-
-        @Override
-        public void onBindViewHolder(final celebsImagesViewHolder holder, int position) {
-            CelebImageModel celebImageModel = celebImageModelArrayList.get(position);
-            Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w500" + celebImageModel.getCelebImage())
-                    .into(holder.celebsImagesImageView);
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return celebImageModelArrayList.size();
-        }
-    }
 
 
     public class FetchTask extends AsyncTask<String, Void, ArrayList<String>> {
@@ -350,7 +251,7 @@ public class CelebsFragment extends Fragment {
             try {
                 celebImageModelArray = detailCelebsJsonParser.jsonCelebImageParser(jsonArray.get(1));
                 //Log.v("output", celebImageModelArray.get(0).toString());
-                celebsImagesAdapter = new CelebsImagesAdapter(celebImageModelArray);
+                celebsImagesAdapter = new CelebAdapters.CelebsImagesAdapter(celebImageModelArray);
                 recyclerViewCelebImages.setAdapter(celebsImagesAdapter );
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -358,7 +259,7 @@ public class CelebsFragment extends Fragment {
 
             try {
                 celebMovieCreditArray = detailCelebsJsonParser.jsonCelebMovieCreditParser(jsonArray.get(2));
-                celebsMovieCreditAdapter = new CelebsMovieCreditAdapter(celebMovieCreditArray);
+                celebsMovieCreditAdapter = new CelebAdapters.CelebsMovieCreditAdapter(celebMovieCreditArray);
                 recyclerViewCelebMovieCredit.setAdapter(celebsMovieCreditAdapter);
             } catch (JSONException e) {
                 e.printStackTrace();
