@@ -126,8 +126,8 @@ public class FindFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
-                    DatabaseReference friendsReference = firebaseCurd.getmFriendsReference();
-                    firebaseCurd.addFriendModel(userModel);
+                    DatabaseReference friendsReference = firebaseCurd.getmRequestsReference();
+                    firebaseCurd.addRequestModel(userModel);
                 }
             });
         }

@@ -38,6 +38,8 @@ public class FirebaseCurd {
     private DatabaseReference mWatchListReference;
     private DatabaseReference mDataReference;
     private DatabaseReference mFriendsReference;
+    private DatabaseReference mRequestsReference;
+    private DatabaseReference mRequestReference;
     private String user_id;
 
 
@@ -48,7 +50,9 @@ public class FirebaseCurd {
         user_id = sharedPref.getString("user_id",null);
         mUserReference = mDatabaseReference.child("User").child(user_id);
         mUsersReference = mDatabaseReference.child("User");
-        mFriendsReference = mDatabaseReference.child("Friends").child(user_id);;
+        mFriendsReference = mDatabaseReference.child("Friends").child(user_id);
+        mRequestReference = mDatabaseReference.child("Requests");
+        mRequestsReference = mDatabaseReference.child("Requests").child(user_id);
         mDataReference = mDatabaseReference.child("Data").child(user_id);
         mWishListReference = mDataReference.child("WishList");
         mWatchListReference = mDataReference.child("WatchList");
@@ -88,6 +92,10 @@ public class FirebaseCurd {
         return mFriendsReference;
     }
 
+    public DatabaseReference getmRequestsReference() {
+        return mRequestsReference;
+    }
+
     //Post method of firebase are here
     public void addWishListModel(WishListModel wishListModel){
         HashMap<String, Object> result = new HashMap<>();
@@ -110,13 +118,22 @@ public class FirebaseCurd {
         mUsersReference.child(userModel.getUserId()).updateChildren(result);
     }
 
-    public void addFriendModel(UserModel friendModel){
+    public void addFriendModel(FriendModel friendModel){
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("friendId", friendModel.getFriendId());
+        result.put("friendName", friendModel.getFriendName());
+        result.put("friendEmail", friendModel.getFriendEmail());
+        result.put("friendImgUrl", friendModel.getFriendImgUrl());
+        mFriendsReference.child(friendModel.getFriendId()).updateChildren(result);
+    }
+
+    public void addRequestModel(UserModel friendModel){
         HashMap<String, Object> result = new HashMap<>();
         result.put("friendId", friendModel.getUserId());
         result.put("friendName", friendModel.getUserName());
         result.put("friendEmail", friendModel.getUserEmail());
         result.put("friendImgUrl", friendModel.getUserImgUrl());
-        mFriendsReference.child(friendModel.getUserId()).updateChildren(result);
+        mRequestReference.child(friendModel.getUserId()).child(friendModel.getUserId()).updateChildren(result);
     }
 
     public void addWatchListModel(WishListModel watchListModel){
