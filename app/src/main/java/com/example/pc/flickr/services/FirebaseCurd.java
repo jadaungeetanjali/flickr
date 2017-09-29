@@ -11,6 +11,7 @@ import com.example.pc.flickr.models.FavoriteModel;
 import com.example.pc.flickr.models.FriendModel;
 import com.example.pc.flickr.models.UserModel;
 import com.example.pc.flickr.models.WishListModel;
+import com.firebase.ui.auth.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -83,6 +84,10 @@ public class FirebaseCurd {
         return mUsersReference;
     }
 
+    public DatabaseReference getmFriendsReference() {
+        return mFriendsReference;
+    }
+
     //Post method of firebase are here
     public void addWishListModel(WishListModel wishListModel){
         HashMap<String, Object> result = new HashMap<>();
@@ -105,13 +110,13 @@ public class FirebaseCurd {
         mUsersReference.child(userModel.getUserId()).updateChildren(result);
     }
 
-    public void addFriendModel(FriendModel friendModel){
+    public void addFriendModel(UserModel friendModel){
         HashMap<String, Object> result = new HashMap<>();
-        result.put("friendId", friendModel.getFriendId());
-        result.put("friendName", friendModel.getFriendName());
-        result.put("friendEmail", friendModel.getFriendEmail());
-        result.put("friendImgUrl", friendModel.getFriendImgUrl());
-        mFriendsReference.child(friendModel.getFriendId()).updateChildren(result);
+        result.put("friendId", friendModel.getUserId());
+        result.put("friendName", friendModel.getUserName());
+        result.put("friendEmail", friendModel.getUserEmail());
+        result.put("friendImgUrl", friendModel.getUserImgUrl());
+        mFriendsReference.child(friendModel.getUserId()).updateChildren(result);
     }
 
     public void addWatchListModel(WishListModel watchListModel){

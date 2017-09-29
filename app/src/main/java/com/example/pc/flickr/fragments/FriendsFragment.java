@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.example.pc.flickr.FriendListActivity;
 import com.example.pc.flickr.R;
-import com.example.pc.flickr.models.UserModel;
+import com.example.pc.flickr.models.FriendModel;
 import com.example.pc.flickr.services.FirebaseCurd;
 import com.firebase.ui.auth.User;
 import com.google.firebase.database.DataSnapshot;
@@ -34,7 +34,7 @@ import static android.content.ContentValues.TAG;
  */
 public class FriendsFragment extends Fragment {
     private RecyclerView recyclerView;
-    private ArrayList<UserModel> friendsArrayList;
+    private ArrayList<FriendModel> friendsArrayList;
     private FriendsAdapter friendsAdapter;
     public FriendsFragment() {
         // Required empty public constructor
@@ -53,13 +53,13 @@ public class FriendsFragment extends Fragment {
         friendsArrayList = new ArrayList<>();
 
         FirebaseCurd firebaseCurd =new  FirebaseCurd(getActivity());
-        DatabaseReference usersReference = firebaseCurd.getmUsersReference();
-        usersReference.addValueEventListener(new ValueEventListener() {
+        DatabaseReference friendsReference = firebaseCurd.getmFriendsReference();
+        friendsReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    UserModel userModel = postSnapshot.getValue(UserModel.class);
-                    friendsArrayList.add(userModel);
+                    FriendModel friendModel = postSnapshot.getValue(FriendModel.class);
+                    friendsArrayList.add(friendModel);
                 }
                 friendsAdapter = new FriendsAdapter(friendsArrayList);
                 recyclerView.setAdapter(friendsAdapter);
@@ -76,7 +76,7 @@ public class FriendsFragment extends Fragment {
         return rootView;
     }
     private class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.friendsViewHolder> {
-        private ArrayList<UserModel> arrayList;
+        private ArrayList<FriendModel> arrayList;
 
         class friendsViewHolder extends RecyclerView.ViewHolder {
             ImageView friendImageView;
@@ -90,7 +90,7 @@ public class FriendsFragment extends Fragment {
             }
         }
 
-        public FriendsAdapter(ArrayList<UserModel> arrayList) {
+        public FriendsAdapter(ArrayList<FriendModel> arrayList) {
             this.arrayList = arrayList;
         }
 
@@ -102,9 +102,9 @@ public class FriendsFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(final friendsViewHolder holder, int position) {
-            final UserModel userModel = arrayList.get(position);
-            holder.friendNameTextView.setText(userModel.getUserName());
-            holder.friendEmailTextView.setText(userModel.getUserEmail());
+            final FriendModel friendModel = arrayList.get(position);
+            holder.friendNameTextView.setText(friendModel.getFriendName());
+            holder.friendEmailTextView.setText(friendModel.getFriendEmail());
             /*
             Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w500" + favoriteModel.getImgUrl()).
                     into(holder.userListImageView,new com.squareup.picasso.Callback() {
@@ -125,7 +125,7 @@ public class FriendsFragment extends Fragment {
                 public void onClick(View v) {
                     Intent intent = new Intent(getContext(),FriendListActivity.class);
                     Bundle mBundle = new Bundle();
-                    mBundle.putString("id",userModel.getUserId());
+                    mBundle.putString("id",friendModel.getFriendId());
                     intent.putExtras(mBundle);
                     startActivity(intent);
                 }
