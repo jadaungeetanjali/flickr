@@ -14,7 +14,12 @@ public class UserModel {
 
     public UserModel(){}
 
-    public UserModel(String userId,String userName,String userEmail,String userImgUrl){}
+    public UserModel(String userId,String userName,String userEmail,String userImgUrl){
+        this.userId = userId;
+        this.userName = userName;
+        this.userEmail = userEmail;
+        this.userImgUrl = userImgUrl;
+    }
 
     public String getUserEmail() {
         return userEmail;

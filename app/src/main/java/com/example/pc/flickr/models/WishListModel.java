@@ -14,6 +14,15 @@ public class WishListModel{
 
     public WishListModel(){}
 
+    public WishListModel(String itemId, String itemType, String itemName, String imgUrl, String rating){
+        this.itemId = itemId;
+        this.itemType = itemType;
+        this.itemName = itemName;
+        this.imgUrl = imgUrl;
+        this.itemRating = rating;
+    }
+
+
     public WishListModel(String userId, String itemId, String itemType, String itemName, String imgUrl, String rating){
         this.userId = userId;
         this.itemId = itemId;

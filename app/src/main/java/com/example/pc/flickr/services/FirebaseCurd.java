@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.example.pc.flickr.R;
 import com.example.pc.flickr.models.FavoriteModel;
+import com.example.pc.flickr.models.FriendModel;
 import com.example.pc.flickr.models.UserModel;
 import com.example.pc.flickr.models.WishListModel;
 import com.google.firebase.database.DataSnapshot;
@@ -35,20 +36,22 @@ public class FirebaseCurd {
     private DatabaseReference mUsersReference;
     private DatabaseReference mWatchListReference;
     private DatabaseReference mDataReference;
-
+    private DatabaseReference mFriendsReference;
+    private String user_id;
 
 
     public FirebaseCurd(Activity activity){
         //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         SharedPreferences sharedPref = activity.getSharedPreferences("MyPref", 0);
-        String user_id = sharedPref.getString("user_id",null);
+        user_id = sharedPref.getString("user_id",null);
         mUserReference = mDatabaseReference.child("User").child(user_id);
         mUsersReference = mDatabaseReference.child("User");
+        mFriendsReference = mDatabaseReference.child("Friends").child(user_id);;
         mDataReference = mDatabaseReference.child("Data").child(user_id);
-        mWishListReference = mUserReference.child("WishList");
-        mWatchListReference = mUserReference.child("WatchList");
-        mFavoriteReference = mUserReference.child("Favorite");
+        mWishListReference = mDataReference.child("WishList");
+        mWatchListReference = mDataReference.child("WatchList");
+        mFavoriteReference = mDataReference.child("Favorite");
 
     }
     //Get Refrences
@@ -83,7 +86,7 @@ public class FirebaseCurd {
     //Post method of firebase are here
     public void addWishListModel(WishListModel wishListModel){
         HashMap<String, Object> result = new HashMap<>();
-        result.put("userId",wishListModel.getUserId());
+        result.put("userId",user_id);
         result.put("itemId", wishListModel.getItemId());
         result.put("itemType", wishListModel.getItemType());
         result.put("itemName", wishListModel.getItemName());
@@ -99,12 +102,21 @@ public class FirebaseCurd {
         result.put("userName", userModel.getUserName());
         result.put("userEmail", userModel.getUserEmail());
         result.put("userImgUrl", userModel.getUserImgUrl());
-        mWishListReference.child(userModel.getUserId()).updateChildren(result);
+        mUsersReference.child(userModel.getUserId()).updateChildren(result);
+    }
+
+    public void addFriendModel(FriendModel friendModel){
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("friendId", friendModel.getFriendId());
+        result.put("friendName", friendModel.getFriendName());
+        result.put("friendEmail", friendModel.getFriendEmail());
+        result.put("friendImgUrl", friendModel.getFriendImgUrl());
+        mFriendsReference.child(friendModel.getFriendId()).updateChildren(result);
     }
 
     public void addWatchListModel(WishListModel watchListModel){
         HashMap<String, Object> result = new HashMap<>();
-        result.put("userId",watchListModel.getUserId());
+        result.put("userId",user_id);
         result.put("itemId", watchListModel.getItemId());
         result.put("itemType", watchListModel.getItemType());
         result.put("itemName", watchListModel.getItemName());
@@ -115,6 +127,7 @@ public class FirebaseCurd {
     }
     public void addFavoriteModel(FavoriteModel favoriteModel){
         HashMap<String, Object> result = new HashMap<>();
+        result.put("userId",user_id);
         result.put("itemId", favoriteModel.getItemId());
         result.put("itemType", favoriteModel.getItemType());
         result.put("itemName", favoriteModel.getItemName());

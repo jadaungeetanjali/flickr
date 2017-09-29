@@ -18,6 +18,10 @@
             android:id="@+id/nav_rating"
             android:icon="@drawable/ic_action_important"
             android:title="@string/nav_rating" />
+        <item
+            android:id="@+id/nav_friends"
+            android:icon="@drawable/ic_action_video"
+            android:title="@string/nav_friends" />
     </group>
     <item android:title="User">
         <menu>

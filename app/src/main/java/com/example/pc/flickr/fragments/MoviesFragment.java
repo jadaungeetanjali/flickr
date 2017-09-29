@@ -549,7 +549,7 @@ public class MoviesFragment extends Fragment {
                         FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
                         if (!watchList) {
                             WishListModel wishListModel = new WishListModel(
-                                    "tyagideepu133", id, type, DetailItemModel.getTitle(), DetailItemModel.getImg_url(), DetailItemModel.getVote_avg());
+                                    id, type, DetailItemModel.getTitle(), DetailItemModel.getImg_url(), DetailItemModel.getVote_avg());
 
                             firebaseCurd.addWatchListModel(wishListModel);
                             button.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorDanger));
@@ -571,8 +571,7 @@ public class MoviesFragment extends Fragment {
 
                         if (!wishList) {
                             Log.v("movie", DetailItemModel.getTitle());
-                            WishListModel wishListModel = new WishListModel(
-                                    "tyagideepu133", id, type, DetailItemModel.getTitle(), DetailItemModel.getImg_url(), DetailItemModel.getVote_avg());
+                            WishListModel wishListModel = new WishListModel(id, type, DetailItemModel.getTitle(), DetailItemModel.getImg_url(), DetailItemModel.getVote_avg());
                             FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
                             firebaseCurd.addWishListModel(wishListModel);
                             Toast.makeText(getContext(), "Added to WishList", Toast.LENGTH_SHORT).show();
@@ -594,7 +593,7 @@ public class MoviesFragment extends Fragment {
                         if (!wishList) {
                             Log.v("movie", DetailItemModel.getTitle());
                             WishListModel wishListModel = new WishListModel(
-                                    "tyagideepu133", id, type, DetailItemModel.getTitle(), DetailItemModel.getImg_url(), DetailItemModel.getVote_avg());
+                                   id, type, DetailItemModel.getTitle(), DetailItemModel.getImg_url(), DetailItemModel.getVote_avg());
                             FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
                             firebaseCurd.addWishListModel(wishListModel);
                             Toast.makeText(getContext(), "Added to WishList", Toast.LENGTH_SHORT).show();
