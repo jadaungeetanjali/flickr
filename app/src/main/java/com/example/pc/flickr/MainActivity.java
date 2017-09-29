@@ -222,8 +222,8 @@ public class MainActivity extends AppCompatActivity {
         editor.putString("user_email", user_email);
         editor.putString("user_name", user_name);
         editor.apply();
-        navHeaderName.setText(user_name);
-        navHeaderEmail.setText(user_email);
+        //navHeaderName.setText(user_name);
+        //navHeaderEmail.setText(user_email);
     }
     public void addUser(final String uid, final String user_name,final String email,final String imgUrl){
         final FirebaseCurd firebaseCurd = new FirebaseCurd(MainActivity.this);

@@ -2,6 +2,7 @@ package com.example.pc.flickr.fragments;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -22,8 +23,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.pc.flickr.MoviesDetails;
 import com.example.pc.flickr.R;
+import com.example.pc.flickr.models.CastModel;
 import com.example.pc.flickr.models.FavoriteModel;
+import com.example.pc.flickr.models.SimilarItemModel;
 import com.example.pc.flickr.services.FirebaseCurd;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -43,6 +47,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static android.content.ContentValues.TAG;
 
@@ -370,25 +375,5 @@ public class CelebsFragment extends Fragment {
             }
 
         }
-    }
-
-    /**
-     * A simple {@link Fragment} subclass.
-     */
-    public static class FindFragment extends Fragment {
-
-
-        public FindFragment() {
-            // Required empty public constructor
-        }
-
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            // Inflate the layout for this fragment
-            return inflater.inflate(R.layout.fragment_find, container, false);
-        }
-
     }
 }
