@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/listPreferredItemHeight"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/friends_listItem_avatar_imageView"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        app:srcCompat="@mipmap/ic_launcher_round" />
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="5"
+        android:orientation="vertical"
+        android:paddingLeft="5dp"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/friends_listItem_name_textView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:text="Deepanshu Tyagi"
+            android:padding="5sp"
+            android:textColor="#000"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:gravity="center_vertical"
+            />
+        <TextView
+            android:id="@+id/friends_listItem_email_textView"
+            android:padding="5dp"
+            android:layout_width="match_parent"
+            android:layout_weight="2"
+            android:layout_height="0dp"
+            android:text="tyagideepu133@gmail.com"
+            android:textSize="12dp"
+            android:textColor="@color/colorSecondary"
+            android:gravity="center_vertical" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/colorSecondary"/>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_gravity="center"
+        android:id="@+id/friends_listItem_remove_imageView"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:tint="@color/colorDanger"
+        app:srcCompat="@drawable/ic_action_person" />
+</LinearLayout>

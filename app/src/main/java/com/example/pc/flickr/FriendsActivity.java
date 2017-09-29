@@ -34,7 +34,7 @@ public class FriendsActivity extends AppCompatActivity {
 
        final FindFragment findFragment = new FindFragment();
 
-        fragmentTranstion(friendsFragment);
+        fragmentTranstion(findFragment);
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
