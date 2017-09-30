@@ -67,12 +67,16 @@ public class FindFragment extends Fragment {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                             UserModel userModel = postSnapshot.getValue(UserModel.class);
-                            for (int i= 0;i<friendArrayList.size();i++){
-                                if (friendArrayList.get(i).getFriendId().equals(userModel.getUserId())){
+                            if (friendArrayList.size() > 0) {
+                                for (int i = 0; i <friendArrayList.size(); i++) {
+                                    if (friendArrayList.get(i).getFriendId().equals(userModel.getUserId())) {
 
-                                }else {
-                                    findArrayList.add(userModel);
+                                    } else {
+                                        findArrayList.add(userModel);
+                                    }
                                 }
+                            }else {
+                                findArrayList.add(userModel);
                             }
                         }
                         findAdapter = new FindAdapter(findArrayList);

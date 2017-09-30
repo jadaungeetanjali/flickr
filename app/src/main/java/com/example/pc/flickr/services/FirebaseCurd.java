@@ -41,6 +41,7 @@ public class FirebaseCurd {
     private DatabaseReference mFriendsReference;
     private DatabaseReference mRequestsReference;
     private DatabaseReference mRequestReference;
+    private DatabaseReference mFriendReference;
     private String user_id,user_name,user_email,user_imgUrl;
 
 
@@ -56,6 +57,7 @@ public class FirebaseCurd {
         mUserReference = mDatabaseReference.child("User").child(user_id);
         mUsersReference = mDatabaseReference.child("User");
         mFriendsReference = mDatabaseReference.child("Friends").child(user_id);
+        mFriendReference = mDatabaseReference.child("Friends");
         mRequestReference = mDatabaseReference.child("Requests");
         mRequestsReference = mDatabaseReference.child("Requests").child(user_id);
         mDataReference = mDatabaseReference.child("Data");
@@ -131,6 +133,15 @@ public class FirebaseCurd {
         result.put("friendEmail", friendModel.getFriendEmail());
         result.put("friendImgUrl", friendModel.getFriendImgUrl());
         mFriendsReference.child(friendModel.getFriendId()).updateChildren(result);
+    }
+
+    public void addFriendRequestModel(FriendModel friendModel){
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("friendId", user_id);
+        result.put("friendName", user_name);
+        result.put("friendEmail", user_email);
+        result.put("friendImgUrl", user_imgUrl);
+        mFriendReference.child(friendModel.getFriendId()).child(user_id).updateChildren(result);
     }
 
     public void addRequestModel(UserModel friendModel){
