@@ -125,6 +125,7 @@ public class RequestFragment extends Fragment {
                 public void onClick(View v) {
                     FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
                     firebaseCurd.addFriendModel(friendModel);
+                    firebaseCurd.getmRequestsReference().child(friendModel.getFriendId()).removeValue();
                 }
             });
         }

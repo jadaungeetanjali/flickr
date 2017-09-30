@@ -101,6 +101,7 @@ public class FirebaseCurd {
         return mRequestsReference;
     }
 
+
     //Post method of firebase are here
     public void addWishListModel(WishListModel wishListModel){
         HashMap<String, Object> result = new HashMap<>();
