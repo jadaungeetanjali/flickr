@@ -54,6 +54,7 @@ public class RequestFragment extends Fragment {
         requestsReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                recyclerView.invalidate();
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     FriendModel friendModel = postSnapshot.getValue(FriendModel.class);
                     requestArrayList.add(friendModel);

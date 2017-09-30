@@ -58,6 +58,7 @@ public class FriendsFragment extends Fragment {
         friendsReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                recyclerView.invalidate();
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     FriendModel friendModel = postSnapshot.getValue(FriendModel.class);
                     friendsArrayList.add(friendModel);
