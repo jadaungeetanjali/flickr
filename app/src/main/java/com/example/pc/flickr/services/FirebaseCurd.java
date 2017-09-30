@@ -103,6 +103,13 @@ public class FirebaseCurd {
         return mRequestsReference;
     }
 
+    public DatabaseReference getmFriendReference() {
+        return mFriendReference;
+    }
+
+    public DatabaseReference getmRequestReference() {
+        return mRequestReference;
+    }
 
     //Post method of firebase are here
     public void addWishListModel(WishListModel wishListModel){

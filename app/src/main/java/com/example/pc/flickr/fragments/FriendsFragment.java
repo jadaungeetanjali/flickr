@@ -2,6 +2,7 @@ package com.example.pc.flickr.fragments;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -142,6 +143,9 @@ public class FriendsFragment extends Fragment {
                 public void onClick(View view) {
                     FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
                     firebaseCurd.getmFriendsReference().child(friendModel.getFriendId()).removeValue();
+                    SharedPreferences sharedPref = getContext().getSharedPreferences("MyPref", 0);
+                    String user_id = sharedPref.getString("user_id",null);
+                    firebaseCurd.getmFriendReference().child(friendModel.getFriendId()).child(user_id).removeValue();
                 }
             });
         }

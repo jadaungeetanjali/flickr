@@ -2,6 +2,7 @@ package com.example.pc.flickr.fragments;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -59,7 +60,6 @@ public class FindFragment extends Fragment {
         friendsReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                recyclerView.invalidate();
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     friendArrayList.add(postSnapshot.getValue(FriendModel.class));
                 }
@@ -68,20 +68,30 @@ public class FindFragment extends Fragment {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                             UserModel userModel = postSnapshot.getValue(UserModel.class);
+                            SharedPreferences sharedPref = getContext().getSharedPreferences("MyPref", 0);
+                            String user_id = sharedPref.getString("user_id",null);
                             if (friendArrayList.size() > 0) {
                                 for (int i = 0; i <friendArrayList.size(); i++) {
-                                    if (friendArrayList.get(i).getFriendId().equals(userModel.getUserId())) {
+                                    if (friendArrayList.get(i).getFriendId().equals(userModel.getUserId()) ||
+
+                                            user_id.equals(userModel.getUserId())     ) {
 
                                     } else {
                                         findArrayList.add(userModel);
                                     }
                                 }
                             }else {
-                                findArrayList.add(userModel);
+                                if (userModel.equals(user_id)){
+
+                                }
+                                else {
+                                    findArrayList.add(userModel);
+                                }
                             }
                         }
                         findAdapter = new FindAdapter(findArrayList);
                         recyclerView.setAdapter(findAdapter);
+                        recyclerView.invalidate();
                         //progressBar.setVisibility(View.GONE);
                         //recyclerView.setVisibility(View.VISIBLE);
                     }
