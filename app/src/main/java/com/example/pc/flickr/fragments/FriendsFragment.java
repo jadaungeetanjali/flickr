@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -79,13 +80,17 @@ public class FriendsFragment extends Fragment {
         private ArrayList<FriendModel> arrayList;
 
         class friendsViewHolder extends RecyclerView.ViewHolder {
-            ImageView friendImageView;
+            ImageView friendImageView,removeFriend;
             TextView friendNameTextView,friendEmailTextView;
+            LinearLayout friendsLinearLayout;
+
             //ProgressBar userListImageViewProgressBar;
             public friendsViewHolder(View itemView) {
                 super(itemView);
                 friendNameTextView = (TextView) itemView.findViewById(R.id.friends_listItem_name_textView);
                 friendEmailTextView = (TextView) itemView.findViewById(R.id.friends_listItem_email_textView);
+                friendsLinearLayout = (LinearLayout) itemView.findViewById(R.id.friends_listItem_linearLayout);
+                removeFriend = (ImageView) itemView.findViewById(R.id.friends_listItem_remove_imageView);
                 //userListImageViewProgressBar = (ProgressBar) itemView.findViewById(R.id.user_listview_item_poster_progressBar);
             }
         }
@@ -120,7 +125,7 @@ public class FriendsFragment extends Fragment {
 
                         }
                     });*/
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
+            holder.friendsLinearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getContext(),FriendListActivity.class);
@@ -128,6 +133,14 @@ public class FriendsFragment extends Fragment {
                     mBundle.putString("id",friendModel.getFriendId());
                     intent.putExtras(mBundle);
                     startActivity(intent);
+                }
+            });
+
+            holder.removeFriend.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
+                    firebaseCurd.getmFriendsReference().child(friendModel.getFriendId()).removeValue();
                 }
             });
         }

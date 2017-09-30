@@ -12,6 +12,7 @@
         android:layout_weight="2"
         app:srcCompat="@mipmap/ic_launcher_round" />
     <LinearLayout
+        android:id="@+id/friends_listItem_linearLayout"
         android:layout_width="0dp"
         android:layout_weight="5"
         android:orientation="vertical"
