@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pc.flickr.Adapters.DetailAdapter;
+import com.example.pc.flickr.Connectivity;
 import com.example.pc.flickr.MoviesDetails;
 import com.example.pc.flickr.R;
 import com.example.pc.flickr.json_parsers.DetailJsonParser;
@@ -146,18 +147,8 @@ public class MoviesFragment extends Fragment {
             default:
         }
 
-        ConnectivityManager connectivityManager = (ConnectivityManager)  getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        if ((networkInfo != null) && networkInfo.isConnected()) {
-            internet_connectivity.setVisibility(View.GONE);
-            ScrollView scrollView = (ScrollView) rootView.findViewById(R.id.detail_movie_scrollView);
-            scrollView.setVisibility(View.VISIBLE);
-            FetchTask callMovieData = new FetchTask();
-            callMovieData.execute(urlList.get(0), urlList.get(1), urlList.get(2), urlList.get(3),urlList.get(4));
-        }
-        else{
-            Toast.makeText(getContext(), "Please Connect to internet...", Toast.LENGTH_SHORT).show();
-        }
+        Connectivity connectivity = new Connectivity(urlList, getActivity(),getContext());
+        connectivity.detailConnectivity();
         return rootView;
     }
 

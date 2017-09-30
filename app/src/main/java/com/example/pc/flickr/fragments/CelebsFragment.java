@@ -2,7 +2,6 @@ package com.example.pc.flickr.fragments;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -18,16 +17,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pc.flickr.Adapters.CelebAdapters;
-import com.example.pc.flickr.MoviesDetails;
+import com.example.pc.flickr.Connectivity;
 import com.example.pc.flickr.R;
 import com.example.pc.flickr.json_parsers.DetailCelebsJsonParser;
-import com.example.pc.flickr.json_parsers.DetailJsonParser;
-import com.example.pc.flickr.models.CastModel;
 import com.example.pc.flickr.models.CelebImageModel;
 import com.example.pc.flickr.models.CelebsModel;
 import com.example.pc.flickr.models.FavoriteModel;
@@ -39,9 +35,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -51,7 +45,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static android.content.ContentValues.TAG;
 
@@ -108,22 +101,15 @@ public class CelebsFragment extends Fragment {
         urlList.add("https://api.themoviedb.org/3/person/" +id+ "/images?api_key=fe56cdee4dfea0c18403e0965acfa23b");
         urlList.add("https://api.themoviedb.org/3/person/" +id+ "/movie_credits?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
 
-        ConnectivityManager connectivityManager = (ConnectivityManager)  getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        if ((networkInfo != null) && networkInfo.isConnected()) {
-            FetchTask fetchCelebsData = new FetchTask();
-            fetchCelebsData.execute(urlList.get(0), urlList.get(1), urlList.get(2));
-        }
-        else{
-            Toast.makeText(getContext(), "Please Connect to internet...", Toast.LENGTH_SHORT).show();
-        }
+        Connectivity connectivity = new Connectivity(urlList, getActivity(), getContext());
+        connectivity.celebConnectivity();
         return rootView;
     }
 
 
 
 
-    public class FetchTask extends AsyncTask<String, Void, ArrayList<String>> {
+    public  class FetchTask extends AsyncTask<String, Void, ArrayList<String>> {
 
         @Override
         protected ArrayList<String> doInBackground(String... params) {
