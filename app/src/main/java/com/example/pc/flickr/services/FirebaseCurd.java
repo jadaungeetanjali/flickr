@@ -30,6 +30,7 @@ import static android.content.ContentValues.TAG;
  */
 
 public class FirebaseCurd {
+    private Activity activity;
     private DatabaseReference mDatabaseReference;
     private DatabaseReference mWishListReference;
     private DatabaseReference mFavoriteReference;
@@ -40,14 +41,18 @@ public class FirebaseCurd {
     private DatabaseReference mFriendsReference;
     private DatabaseReference mRequestsReference;
     private DatabaseReference mRequestReference;
-    private String user_id;
+    private String user_id,user_name,user_email,user_imgUrl;
 
 
     public FirebaseCurd(Activity activity){
+        this.activity = activity;
         //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         SharedPreferences sharedPref = activity.getSharedPreferences("MyPref", 0);
         user_id = sharedPref.getString("user_id",null);
+        user_name = sharedPref.getString("user_name", null);
+        user_email = sharedPref.getString("user_email",null);
+        user_imgUrl = sharedPref.getString("user_imgUrl", null);
         mUserReference = mDatabaseReference.child("User").child(user_id);
         mUsersReference = mDatabaseReference.child("User");
         mFriendsReference = mDatabaseReference.child("Friends").child(user_id);
@@ -129,11 +134,11 @@ public class FirebaseCurd {
 
     public void addRequestModel(UserModel friendModel){
         HashMap<String, Object> result = new HashMap<>();
-        result.put("friendId", friendModel.getUserId());
-        result.put("friendName", friendModel.getUserName());
-        result.put("friendEmail", friendModel.getUserEmail());
-        result.put("friendImgUrl", friendModel.getUserImgUrl());
-        mRequestReference.child(friendModel.getUserId()).child(friendModel.getUserId()).updateChildren(result);
+        result.put("friendId", user_id);
+        result.put("friendName", user_name);
+        result.put("friendEmail", user_email);
+        result.put("friendImgUrl", user_imgUrl);
+        mRequestReference.child(friendModel.getUserId()).child(user_id).updateChildren(result);
     }
 
     public void addWatchListModel(WishListModel watchListModel){

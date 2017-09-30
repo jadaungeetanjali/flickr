@@ -30,5 +30,6 @@
     <string name="user_name"></string>
     <string name="user_id"></string>
     <string name="user_email"></string>
+    <string name="user_imgUrl"></string>
     <string name="nav_friends">Friends</string>
 </resources>
