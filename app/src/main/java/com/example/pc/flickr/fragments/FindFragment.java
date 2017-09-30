@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.pc.flickr.FriendListActivity;
 import com.example.pc.flickr.R;
+import com.example.pc.flickr.models.FriendModel;
 import com.example.pc.flickr.models.UserModel;
 import com.example.pc.flickr.services.FirebaseCurd;
 import com.google.firebase.database.DataSnapshot;
@@ -50,20 +51,43 @@ public class FindFragment extends Fragment {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         findArrayList = new ArrayList<>();
+        final ArrayList<FriendModel> friendArrayList = new ArrayList<>();
 
         FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
-        DatabaseReference usersReference = firebaseCurd.getmUsersReference();
-        usersReference.addValueEventListener(new ValueEventListener() {
+        final DatabaseReference usersReference = firebaseCurd.getmUsersReference();
+        DatabaseReference friendsReference = firebaseCurd.getmFriendsReference();
+        friendsReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    UserModel userModel = postSnapshot.getValue(UserModel.class);
-                    findArrayList.add(userModel);
+                    friendArrayList.add(postSnapshot.getValue(FriendModel.class));
                 }
-                findAdapter = new FindAdapter(findArrayList);
-                recyclerView.setAdapter(findAdapter);
-                //progressBar.setVisibility(View.GONE);
-                //recyclerView.setVisibility(View.VISIBLE);
+                usersReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                            UserModel userModel = postSnapshot.getValue(UserModel.class);
+                            for (int i= 0;i<friendArrayList.size();i++){
+                                if (friendArrayList.get(i).getFriendId().equals(userModel.getUserId())){
+
+                                }else {
+                                    findArrayList.add(userModel);
+                                }
+                            }
+                        }
+                        findAdapter = new FindAdapter(findArrayList);
+                        recyclerView.setAdapter(findAdapter);
+                        //progressBar.setVisibility(View.GONE);
+                        //recyclerView.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        Log.w(TAG, "Failed to read value.", error.toException());
+                    }
+                });
+
             }
 
             @Override
