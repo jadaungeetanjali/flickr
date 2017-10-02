@@ -31,6 +31,7 @@ public class CelebAdapters {
     public static class CelebsMovieCreditAdapter extends RecyclerView.Adapter<CelebsMovieCreditAdapter.celebsMovieCreditViewHolder> {
         public ArrayList<SimilarItemModel> celebsMovieCreditArrayList;
         public Context movieCreditContext;
+        public String type;
 
         class celebsMovieCreditViewHolder extends RecyclerView.ViewHolder {
             ImageView celebsMovieCreditImageView;
@@ -44,7 +45,7 @@ public class CelebAdapters {
                 celebsMovieCreditImageView = (ImageView) itemView.findViewById(R.id.main_child_imageView);
                 celebsMovieCreditVoteAverageTextView = (TextView) itemView.findViewById(R.id.main_child_vote_textView);
                 celebsMovieCreditProgressBar = (ProgressBar) itemView.findViewById(R.id.main_image_progressBar);
-               /* itemView.setOnClickListener(new View.OnClickListener() {
+                itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
@@ -54,15 +55,16 @@ public class CelebAdapters {
                         mBundle.putString("type",type);
                         mBundle.putString("id",similarItemModel.getSimilarItemId());
                         intent.putExtras(mBundle);
-                        startActivity(intent);
+                        movieCreditContext.startActivity(intent);
                     }
-                });*/
+                });
             }
         }
 
-        public CelebsMovieCreditAdapter(Context context, ArrayList<SimilarItemModel> arrayList) {
+        public CelebsMovieCreditAdapter(Context context, ArrayList<SimilarItemModel> arrayList, String type) {
             this.celebsMovieCreditArrayList = arrayList;
             this.movieCreditContext = context;
+            this.type = type;
         }
 
         @Override
@@ -101,6 +103,7 @@ public class CelebAdapters {
     public static class CelebsImagesAdapter extends RecyclerView.Adapter<CelebsImagesAdapter.celebsImagesViewHolder> {
         public ArrayList<CelebImageModel> celebImageModelArrayList;
         public Context imageContext;
+        public String type;
 
         class celebsImagesViewHolder extends RecyclerView.ViewHolder {
             ImageView celebsImagesImageView;

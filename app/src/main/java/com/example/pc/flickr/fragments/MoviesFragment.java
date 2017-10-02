@@ -147,7 +147,7 @@ public class MoviesFragment extends Fragment {
             default:
         }
 
-        Connectivity connectivity = new Connectivity(urlList, getActivity(),getContext());
+        Connectivity connectivity = new Connectivity(urlList, getActivity(), getContext());
         connectivity.detailConnectivity();
         return rootView;
     }
@@ -305,7 +305,7 @@ public class MoviesFragment extends Fragment {
 
 
 
-                similarMoviesAdapter = new DetailAdapter.SimilarMoviesAdapter(getContext(), similarMoviesArray);
+                similarMoviesAdapter = new DetailAdapter.SimilarMoviesAdapter(getContext(), similarMoviesArray, type);
                 recyclerViewSimilar.setAdapter(similarMoviesAdapter);
 
                 videosArray = detailJsonParser.jsonVideoParser(jsonArray.get(4));

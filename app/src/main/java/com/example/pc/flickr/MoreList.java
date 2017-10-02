@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.pc.flickr.Adapters.MoreListAdapter;
 import com.example.pc.flickr.json_parsers.MoreListJsonParser;
 import com.example.pc.flickr.models.ListDataModel;
 import com.example.pc.flickr.models.MoreListModel;
@@ -70,85 +71,7 @@ public class MoreList extends AppCompatActivity {
             Toast.makeText(this, "Please Connect to internet...", Toast.LENGTH_SHORT).show();
         }
     }
-    //MoreListAdapter to inflate the data in recyclerView
-    private class MoreListAdapter extends RecyclerView.Adapter<MoreListAdapter.moreListViewHolder> {
-        private ArrayList<MoreListModel> moreListArrayList;
 
-        class moreListViewHolder extends RecyclerView.ViewHolder {
-            ImageView moreListImageView;
-            TextView moreListNameTextView;
-            TextView moreListReleaseDateTextView;
-            TextView moreListRatingTextView;
-            TextView moreListIdTextView;
-            ProgressBar moreListProgressBar;
-            public moreListViewHolder(View itemView) {
-                super(itemView);
-                moreListNameTextView = (TextView) itemView.findViewById(R.id.more_list_name);
-                moreListImageView = (ImageView) itemView.findViewById(R.id.more_list_poster);
-                moreListReleaseDateTextView = (TextView) itemView.findViewById(R.id.more_list_release_date);
-                moreListRatingTextView = (TextView) itemView.findViewById(R.id.more_list_ratings);
-                moreListIdTextView = (TextView) itemView.findViewById(R.id.more_list_id);
-                moreListProgressBar = (ProgressBar) itemView.findViewById(R.id.more_list_poster_progressBar);
-            }
-        }
-
-        public MoreListAdapter(ArrayList<MoreListModel> arrayList) {
-            this.moreListArrayList = arrayList;
-        }
-
-        @Override
-        public moreListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.more_list_textview, parent, false);
-            return new moreListViewHolder(itemView);
-        }
-
-        @Override
-        public void onBindViewHolder(final moreListViewHolder holder, final int position) {
-            final MoreListModel moreListModel = moreListArrayList.get(position);
-            holder.moreListNameTextView.setText(moreListModel.getName());
-            holder.moreListReleaseDateTextView.setText(moreListModel.getReleaseDate());
-            holder.moreListRatingTextView.setText(moreListModel.getRating());
-            holder.moreListIdTextView.setText(moreListModel.getId());
-            Picasso.with(getBaseContext()).load("https://image.tmdb.org/t/p/w500" + moreListModel.getImage())
-                    .into(holder.moreListImageView,new com.squareup.picasso.Callback() {
-
-                        @Override
-                        public void onSuccess() {
-                            holder.moreListProgressBar.setVisibility(View.GONE);
-                            holder.moreListImageView.setVisibility(View.VISIBLE);
-                        }
-
-                        @Override
-                        public void onError() {
-
-                        }
-                    });
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String type2;
-                    Intent intent = new Intent(MoreList.this,MoviesDetails.class);
-                    if (type.equals("movie")){
-                        type2 = "movies";
-                    }
-                    else {
-                        type2=type;
-                    }
-                    Bundle mBundle = new Bundle();
-                    mBundle.putString("type",type2);
-                    mBundle.putString("id",moreListModel.getId());
-                    Log.i("string",type +" / " +moreListModel.getId() );
-                    intent.putExtras(mBundle);
-                    startActivity(intent);
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return moreListArrayList.size();
-        }
-    }
 
     public class FetchTask extends AsyncTask<String, Void, ArrayList<String>> {
 
@@ -214,8 +137,9 @@ public class MoreList extends AppCompatActivity {
                     // Log.v("type", type);
                     try {
                         for (int i = 0; i < 5; i++) {
+
                             movieListsArray = moreListJsonParser.jsonMovieListParser(jsonArray.get(i), movieListsArray);
-                            moreListAdapter = new MoreListAdapter(movieListsArray);
+                            moreListAdapter = new MoreListAdapter(movieListsArray, getBaseContext(),type);
                             recyclerViewMoreList.setAdapter(moreListAdapter);
                             progressBar.setVisibility(View.GONE);
                             recyclerViewMoreList.setVisibility(View.VISIBLE);
@@ -230,7 +154,7 @@ public class MoreList extends AppCompatActivity {
                     try {
                         for (int i = 0; i < 5; i++) {
                             tvListArray = moreListJsonParser.jsonTvListParser(jsonArray.get(i),tvListArray);
-                            moreListAdapter = new MoreListAdapter(tvListArray);
+                            moreListAdapter = new MoreListAdapter(tvListArray, getBaseContext(), type);
                             recyclerViewMoreList.setAdapter(moreListAdapter);
                             progressBar.setVisibility(View.GONE);
                             recyclerViewMoreList.setVisibility(View.VISIBLE);
@@ -245,7 +169,7 @@ public class MoreList extends AppCompatActivity {
                     try {
                         for (int i = 0; i < 5; i++) {
                             celebsListArray = moreListJsonParser.jsonCelebsListParser(jsonArray.get(i), celebsListArray);
-                            moreListAdapter = new MoreListAdapter(celebsListArray);
+                            moreListAdapter = new MoreListAdapter(celebsListArray, getBaseContext(),type);
                             recyclerViewMoreList.setAdapter(moreListAdapter);
                             progressBar.setVisibility(View.GONE);
                             recyclerViewMoreList.setVisibility(View.VISIBLE);

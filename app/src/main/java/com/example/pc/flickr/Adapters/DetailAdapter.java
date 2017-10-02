@@ -45,18 +45,18 @@ public class DetailAdapter {
                 castNameTextView = (TextView) itemView.findViewById(R.id.castName);
                 castImageView = (ImageView) itemView.findViewById(R.id.castImageView);
                 castCharacterTextView = (TextView) itemView.findViewById(R.id.castCharacter);
-               /* itemView.setOnClickListener(new View.OnClickListener() {
+                itemView.setOnClickListener(new View.OnClickListener() {
                    @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(getContext(),MoviesDetails.class);
+                        Intent intent = new Intent(castContext,MoviesDetails.class);
                         Bundle mBundle = new Bundle();
                         CastModel castModel = castArrayList.get(getAdapterPosition());
                         mBundle.putString("type","celebs");
                         mBundle.putString("id",castModel.getId());
                         intent.putExtras(mBundle);
-                        startActivity(intent);
+                        castContext.startActivity(intent);
                     }
-                }); */
+                });
             }
         }
 
@@ -138,6 +138,7 @@ public class DetailAdapter {
     public static class SimilarMoviesAdapter extends RecyclerView.Adapter<SimilarMoviesAdapter.similarMoviesViewHolder> {
         public ArrayList<SimilarItemModel> similarMoviesArrayList;
         public Context similarMovieContext;
+        public String type;
 
         class similarMoviesViewHolder extends RecyclerView.ViewHolder {
             ImageView similarMovieImageView;
@@ -151,24 +152,25 @@ public class DetailAdapter {
                 similarMovieNameTextView = (TextView) itemView.findViewById(R.id.main_child_title_textView); //change id to similarMovieName
                 similarMovieImageView = (ImageView) itemView.findViewById(R.id.main_child_imageView); //change id to similarMovieImage
                 similarMovieVoteAverageTextView = (TextView) itemView.findViewById(R.id.main_child_vote_textView);
-                /*itemView.setOnClickListener(new View.OnClickListener() {
+                itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(getContext(),MoviesDetails.class);
+                        Intent intent = new Intent(similarMovieContext,MoviesDetails.class);
                         Bundle mBundle = new Bundle();
                         SimilarItemModel similarItemModel = similarMoviesArrayList.get(getAdapterPosition());
                         mBundle.putString("type",type);
                         mBundle.putString("id",similarItemModel.getSimilarItemId());
                         intent.putExtras(mBundle);
-                        startActivity(intent);
+                        similarMovieContext.startActivity(intent);
                     }
-                });  */
+                });
             }
         }
 
-        public SimilarMoviesAdapter(Context context, ArrayList<SimilarItemModel> arrayList) {
+        public SimilarMoviesAdapter(Context context, ArrayList<SimilarItemModel> arrayList, String type) {
             this.similarMoviesArrayList = arrayList;
             this.similarMovieContext = context;
+            this.type = type;
         }
 
         @Override

@@ -60,6 +60,7 @@ public class CelebsFragment extends Fragment {
     public ImageView profile;
     public String id, type;
     private Button button;
+
     private Boolean favorite = false;
 
     public CelebsFragment() {
@@ -110,7 +111,6 @@ public class CelebsFragment extends Fragment {
 
 
     public  class FetchTask extends AsyncTask<String, Void, ArrayList<String>> {
-
         @Override
         protected ArrayList<String> doInBackground(String... params) {
             HttpURLConnection urlConnection = null;
@@ -245,7 +245,7 @@ public class CelebsFragment extends Fragment {
 
             try {
                 celebMovieCreditArray = detailCelebsJsonParser.jsonCelebMovieCreditParser(jsonArray.get(2));
-                celebsMovieCreditAdapter = new CelebAdapters.CelebsMovieCreditAdapter(getContext(), celebMovieCreditArray);
+                celebsMovieCreditAdapter = new CelebAdapters.CelebsMovieCreditAdapter(getContext(), celebMovieCreditArray, type);
                 recyclerViewCelebMovieCredit.setAdapter(celebsMovieCreditAdapter);
             } catch (JSONException e) {
                 e.printStackTrace();

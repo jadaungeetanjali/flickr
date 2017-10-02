@@ -13,6 +13,8 @@ import com.example.pc.flickr.fragments.MoviesFragment;
 
 import java.util.ArrayList;
 
+import static android.content.Context.CONNECTIVITY_SERVICE;
+
 /**
  * Created by PC on 9/30/2017.
  */
@@ -27,30 +29,35 @@ public class Connectivity {
         this.mContext = context;
     }
 
-    public void celebConnectivity(){
-        ConnectivityManager connectivityManager = (ConnectivityManager)  mActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
+    public boolean celebConnectivity(){
+        ConnectivityManager connectivityManager = (ConnectivityManager)  mActivity.getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         if ((networkInfo != null) && networkInfo.isConnected()) {
-            CelebsFragment.FetchTask fetchCelebsData = new CelebsFragment().new FetchTask();
+            CelebsFragment.FetchTask fetchCelebsData = new CelebsFragment(). new FetchTask();
             fetchCelebsData.execute(urlList.get(0), urlList.get(1), urlList.get(2));
+            return true;
         }
         else{
             Toast.makeText(mContext, "Please Connect to internet...", Toast.LENGTH_SHORT).show();
+            return true;
         }
     }
 
-    public void detailConnectivity(){
-        ConnectivityManager connectivityManager = (ConnectivityManager)  mActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
+    public boolean detailConnectivity(){
+        ConnectivityManager connectivityManager = (ConnectivityManager)  mActivity.getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         if ((networkInfo != null) && networkInfo.isConnected()) {
-            /*internet_connectivity.setVisibility(View.GONE);
+           /* internet_connectivity.setVisibility(View.GONE);
             ScrollView scrollView = (ScrollView) rootView.findViewById(R.id.detail_movie_scrollView);
-            scrollView.setVisibility(View.VISIBLE); */
+            scrollView.setVisibility(View.VISIBLE);  */
             MoviesFragment.FetchTask callMovieData = new MoviesFragment().new FetchTask();
             callMovieData.execute(urlList.get(0), urlList.get(1), urlList.get(2), urlList.get(3),urlList.get(4));
+            return true;
         }
         else{
             Toast.makeText(mContext, "Please Connect to internet...", Toast.LENGTH_SHORT).show();
+            return true;
         }
     }
+
 }
