@@ -147,11 +147,20 @@ public class MoviesFragment extends Fragment {
             default:
         }
 
-        Connectivity connectivity = new Connectivity(urlList, getActivity(), getContext());
-        connectivity.detailConnectivity();
+        Connectivity connectivity = new Connectivity(getActivity());
+
+        if (connectivity.internetConnectivity()) {
+            internet_connectivity.setVisibility(View.GONE);
+            ScrollView scrollView = (ScrollView) rootView.findViewById(R.id.detail_movie_scrollView);
+            scrollView.setVisibility(View.VISIBLE);
+            FetchTask callMovieData = new FetchTask();
+            callMovieData.execute(urlList.get(0), urlList.get(1), urlList.get(2), urlList.get(3),urlList.get(4));
+        }
+        else{
+            Toast.makeText(getContext(), "Please Connect to internet...", Toast.LENGTH_SHORT).show();
+        }
         return rootView;
     }
-
 
 
     private class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.videoViewHolder> {
@@ -300,12 +309,12 @@ public class MoviesFragment extends Fragment {
                 Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w500"+DetailItemModel.getImg_url()).into(poster);
 
                 castArray = detailJsonParser.jsonCastParser(jsonArray.get(1));
-                castAdapter = new DetailAdapter.CastAdapter(getContext(), castArray);
+                castAdapter = new DetailAdapter.CastAdapter(getContext(),castArray);
                 recyclerViewCast.setAdapter(castAdapter);
 
 
 
-                similarMoviesAdapter = new DetailAdapter.SimilarMoviesAdapter(getContext(), similarMoviesArray, type);
+                similarMoviesAdapter = new DetailAdapter.SimilarMoviesAdapter(getContext(),similarMoviesArray,type);
                 recyclerViewSimilar.setAdapter(similarMoviesAdapter);
 
                 videosArray = detailJsonParser.jsonVideoParser(jsonArray.get(4));
@@ -372,7 +381,7 @@ public class MoviesFragment extends Fragment {
                         FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
                         if (!watchList) {
                             WishListModel wishListModel = new WishListModel(
-                                    id, type, DetailItemModel.getTitle(), DetailItemModel.getImg_url(), DetailItemModel.getVote_avg());
+                                    "tyagideepu133", id, type, DetailItemModel.getTitle(), DetailItemModel.getImg_url(), DetailItemModel.getVote_avg());
 
                             firebaseCurd.addWatchListModel(wishListModel);
                             button.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorDanger));
@@ -394,7 +403,8 @@ public class MoviesFragment extends Fragment {
 
                         if (!wishList) {
                             Log.v("movie", DetailItemModel.getTitle());
-                            WishListModel wishListModel = new WishListModel(id, type, DetailItemModel.getTitle(), DetailItemModel.getImg_url(), DetailItemModel.getVote_avg());
+                            WishListModel wishListModel = new WishListModel(
+                                    "tyagideepu133", id, type, DetailItemModel.getTitle(), DetailItemModel.getImg_url(), DetailItemModel.getVote_avg());
                             FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
                             firebaseCurd.addWishListModel(wishListModel);
                             Toast.makeText(getContext(), "Added to WishList", Toast.LENGTH_SHORT).show();
@@ -416,7 +426,7 @@ public class MoviesFragment extends Fragment {
                         if (!wishList) {
                             Log.v("movie", DetailItemModel.getTitle());
                             WishListModel wishListModel = new WishListModel(
-                                   id, type, DetailItemModel.getTitle(), DetailItemModel.getImg_url(), DetailItemModel.getVote_avg());
+                                    "tyagideepu133", id, type, DetailItemModel.getTitle(), DetailItemModel.getImg_url(), DetailItemModel.getVote_avg());
                             FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
                             firebaseCurd.addWishListModel(wishListModel);
                             Toast.makeText(getContext(), "Added to WishList", Toast.LENGTH_SHORT).show();
@@ -438,4 +448,5 @@ public class MoviesFragment extends Fragment {
             }
         }
     }
+
 }

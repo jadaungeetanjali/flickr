@@ -17,14 +17,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.pc.flickr.MoviesDetails;
+import com.example.pc.flickr.Adapters.CelebAdapters;
+import com.example.pc.flickr.Connectivity;
 import com.example.pc.flickr.R;
-import com.example.pc.flickr.models.CastModel;
+import com.example.pc.flickr.json_parsers.DetailCelebsJsonParser;
+import com.example.pc.flickr.models.CelebImageModel;
+import com.example.pc.flickr.models.CelebsModel;
 import com.example.pc.flickr.models.FavoriteModel;
 import com.example.pc.flickr.models.SimilarItemModel;
 import com.example.pc.flickr.services.FirebaseCurd;
@@ -85,9 +86,13 @@ public class CelebsFragment extends Fragment {
         LinearLayoutManager layoutManagerCelebImages= new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewCelebImages.setLayoutManager(layoutManagerCelebImages);
         recyclerViewCelebImages.setItemAnimator(new DefaultItemAnimator());
+
+        recyclerViewCelebMovieCredit = (RecyclerView) rootView.findViewById(R.id.detail_celebs_movieCreditsRecyclerView);
+        LinearLayoutManager layoutManagerCelebsMovieCredit= new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewCelebMovieCredit.setLayoutManager(layoutManagerCelebsMovieCredit);
+        recyclerViewCelebMovieCredit.setItemAnimator(new DefaultItemAnimator());
+
         button = (Button) rootView.findViewById(R.id.detail_celebs_favorite_button);
-        progressBar = (ProgressBar) rootView.findViewById(R.id.detail_celebs_mainContainer_progressBar);
-        mainContainer = (LinearLayout) rootView.findViewById(R.id.detail_celebs_mainContainer);
 
         Bundle bundle = getArguments();
         type = bundle.getString("type");
@@ -97,8 +102,14 @@ public class CelebsFragment extends Fragment {
         urlList.add("https://api.themoviedb.org/3/person/" +id+ "/images?api_key=fe56cdee4dfea0c18403e0965acfa23b");
         urlList.add("https://api.themoviedb.org/3/person/" +id+ "/movie_credits?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
 
-        Connectivity connectivity = new Connectivity(urlList, getActivity(), getContext());
-        connectivity.celebConnectivity();
+        Connectivity connectivity = new Connectivity(getActivity());
+        if (connectivity.internetConnectivity()) {
+            FetchTask fetchTask = new FetchTask();
+            fetchTask.execute(urlList.get(0), urlList.get(1), urlList.get(2));
+        }
+        else{
+            Toast.makeText(getContext(), "Please Connect to internet...", Toast.LENGTH_SHORT).show();
+        }
         return rootView;
     }
 
@@ -181,14 +192,14 @@ public class CelebsFragment extends Fragment {
                         if (favoriteModel != null){
                             button.setBackgroundColor(ContextCompat.getColor(getContext(),R.color.colorDanger));
                             button.setText("Remove form WatchList");
-                            progressBar.setVisibility(View.GONE);
-                            mainContainer.setVisibility(View.VISIBLE);
+                            //progressBar.setVisibility(View.GONE);
+                            //mainContainer.setVisibility(View.VISIBLE);
                             favorite = true;
                         }
                         else {
                             favorite = false;
-                            progressBar.setVisibility(View.GONE);
-                            mainContainer.setVisibility(View.VISIBLE);
+                            //progressBar.setVisibility(View.GONE);
+                            //mainContainer.setVisibility(View.VISIBLE);
                         }
 
                     }

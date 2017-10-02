@@ -138,7 +138,7 @@ public class FetchApiService extends IntentService {
     private void DatabaseInsert(ArrayList<ListDataModel> listDataModel) {
         MovieDbHelper movieDbHelper = new MovieDbHelper(this);
         SQLiteDatabase db = movieDbHelper.getWritableDatabase();
-        //db.delete(MovieDbApiContract.ApiData.TABLE_NAME, null, null);
+        db.delete(MovieDbApiContract.ApiData.TABLE_NAME, null, null);
         ContentValues values = new ContentValues();
         for (ListDataModel dataModel : listDataModel) {
             values.put(MovieDbApiContract.ApiData.COLUMN_ID, dataModel.getId());
