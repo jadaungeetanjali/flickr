@@ -20,6 +20,7 @@ import com.example.pc.flickr.FriendListActivity;
 import com.example.pc.flickr.R;
 import com.example.pc.flickr.models.FriendModel;
 import com.example.pc.flickr.models.UserModel;
+import com.example.pc.flickr.services.Connectivity;
 import com.example.pc.flickr.services.FirebaseCurd;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,9 +39,10 @@ public class FindFragment extends Fragment {
     private RecyclerView recyclerView;
     private ArrayList<UserModel> findArrayList;
     private FindAdapter findAdapter;
-    private DatabaseReference friendsReference,usersReference;
-    private ValueEventListener valueEventListener,userValueListner;
+    private DatabaseReference friendsReference, usersReference;
+    private ValueEventListener valueEventListener, userValueListner;
     private ArrayList<FriendModel> friendArrayList;
+    private boolean internet;
 
     public FindFragment() {
         // Required empty public constructor
@@ -63,38 +65,46 @@ public class FindFragment extends Fragment {
         FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
         usersReference = firebaseCurd.getmUsersReference();
         friendsReference = firebaseCurd.getmFriendsReference();
-        valueEventListener = friendsReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    friendArrayList.add(postSnapshot.getValue(FriendModel.class));
+        Connectivity connectivity = new Connectivity(getActivity());
+        if (connectivity.internetConnectivity()) {
+            internet = true;
+            valueEventListener = friendsReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                        friendArrayList.add(postSnapshot.getValue(FriendModel.class));
+                    }
+                    userValueListner = usersReference.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            findArrayList = getData(dataSnapshot);
+                            findAdapter = new FindAdapter(findArrayList);
+                            recyclerView.setAdapter(findAdapter);
+                            findAdapter.notifyDataSetChanged();
+                            progressBar.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError error) {
+                            // Failed to read value
+                            Log.w(TAG, "Failed to read value.", error.toException());
+                        }
+                    });
+
                 }
-                userValueListner=usersReference.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        findArrayList = getData(dataSnapshot);
-                        findAdapter = new FindAdapter(findArrayList);
-                        recyclerView.setAdapter(findAdapter);
-                        findAdapter.notifyDataSetChanged();
-                        progressBar.setVisibility(View.GONE);
-                        recyclerView.setVisibility(View.VISIBLE);
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError error) {
-                        // Failed to read value
-                        Log.w(TAG, "Failed to read value.", error.toException());
-                    }
-                });
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    // Failed to read value
+                    Log.w(TAG, "Failed to read value.", error.toException());
+                }
+            });
+        } else {
+            internet = false;
+            connectivity.checkNetworkConnection();
+        }
 
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
-            }
-        });
         return rootView;
     }
 
@@ -102,7 +112,7 @@ public class FindFragment extends Fragment {
         private ArrayList<UserModel> arrayList;
 
         class findViewHolder extends RecyclerView.ViewHolder {
-            ImageView friendImageView,addFriendImageView;
+            ImageView friendImageView, addFriendImageView;
             TextView friendNameTextView, friendEmailTextView;
 
             //ProgressBar userListImageViewProgressBar;
@@ -126,7 +136,7 @@ public class FindFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(final findViewHolder holder,final int position) {
+        public void onBindViewHolder(final findViewHolder holder, final int position) {
             final UserModel userModel = arrayList.get(position);
             holder.friendNameTextView.setText(userModel.getUserName());
             holder.friendEmailTextView.setText(userModel.getUserEmail());
@@ -164,27 +174,26 @@ public class FindFragment extends Fragment {
         }
     }
 
-    private ArrayList<UserModel> getData(DataSnapshot dataSnapshot){
+    private ArrayList<UserModel> getData(DataSnapshot dataSnapshot) {
         ArrayList<UserModel> arrayList = new ArrayList<>();
         for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
             UserModel userModel = postSnapshot.getValue(UserModel.class);
             SharedPreferences sharedPref = getContext().getSharedPreferences("MyPref", 0);
-            String user_id = sharedPref.getString("user_id",null);
+            String user_id = sharedPref.getString("user_id", null);
             if (friendArrayList.size() > 0) {
-                for (int i = 0; i <friendArrayList.size(); i++) {
+                for (int i = 0; i < friendArrayList.size(); i++) {
                     if (friendArrayList.get(i).getFriendId().equals(userModel.getUserId()) ||
 
-                            user_id.equals(userModel.getUserId())     ) {
+                            user_id.equals(userModel.getUserId())) {
 
                     } else {
                         arrayList.add(userModel);
                     }
                 }
-            }else {
-                if (userModel.getUserId().equals(user_id)){
+            } else {
+                if (userModel.getUserId().equals(user_id)) {
 
-                }
-                else {
+                } else {
                     arrayList.add(userModel);
                 }
             }
@@ -195,7 +204,9 @@ public class FindFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        friendsReference.removeEventListener(valueEventListener);
-        usersReference.removeEventListener(userValueListner);
+        if (internet) {
+            friendsReference.removeEventListener(valueEventListener);
+            usersReference.removeEventListener(userValueListner);
+        }
     }
 }

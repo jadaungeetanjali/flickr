@@ -1,9 +1,6 @@
 package com.example.pc.flickr.fragments;
 
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,11 +14,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pc.flickr.Adapters.CelebAdapters;
-import com.example.pc.flickr.Connectivity;
+import com.example.pc.flickr.services.Connectivity;
 import com.example.pc.flickr.R;
 import com.example.pc.flickr.json_parsers.DetailCelebsJsonParser;
 import com.example.pc.flickr.models.CelebImageModel;
@@ -56,13 +55,14 @@ public class CelebsFragment extends Fragment {
     private CelebAdapters.CelebsMovieCreditAdapter celebsMovieCreditAdapter;
     RecyclerView recyclerViewCelebMovieCredit;
     RecyclerView recyclerViewCelebImages;
-    public TextView title, biography, dateOfBirth, placeOfBirth, alsoKnownAs, detailDOB, detailPlaceOfBirth ;
+    public TextView title, biography, dateOfBirth, placeOfBirth, alsoKnownAs, detailDOB, detailPlaceOfBirth;
     public ImageView profile;
     public String id, type;
     private Button button;
     private FetchTask fetchTask;
-
-    private Boolean favorite = false;
+    private ProgressBar progressBar;
+    private LinearLayout mainContainer;
+    private Boolean favorite = false, internet;
 
     public CelebsFragment() {
         // Required empty public constructor
@@ -84,47 +84,49 @@ public class CelebsFragment extends Fragment {
         profile = (ImageView) rootView.findViewById(R.id.detail_celebs_profile);
 
         recyclerViewCelebImages = (RecyclerView) rootView.findViewById(R.id.detail_celebs_imagesRecyclerView);
-        LinearLayoutManager layoutManagerCelebImages= new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager layoutManagerCelebImages = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewCelebImages.setLayoutManager(layoutManagerCelebImages);
         recyclerViewCelebImages.setItemAnimator(new DefaultItemAnimator());
 
         recyclerViewCelebMovieCredit = (RecyclerView) rootView.findViewById(R.id.detail_celebs_movieCreditsRecyclerView);
-        LinearLayoutManager layoutManagerCelebsMovieCredit= new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager layoutManagerCelebsMovieCredit = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewCelebMovieCredit.setLayoutManager(layoutManagerCelebsMovieCredit);
         recyclerViewCelebMovieCredit.setItemAnimator(new DefaultItemAnimator());
 
+        progressBar = (ProgressBar) rootView.findViewById(R.id.detail_celebs_mainContainer_progressBar);
+        mainContainer = (LinearLayout) rootView.findViewById(R.id.detail_celebs_mainContainer);
         button = (Button) rootView.findViewById(R.id.detail_celebs_favorite_button);
 
         Bundle bundle = getArguments();
         type = bundle.getString("type");
         id = bundle.getString("id");
         ArrayList<String> urlList = new ArrayList<>();
-        urlList.add("https://api.themoviedb.org/3/person/" +id+ "?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
-        urlList.add("https://api.themoviedb.org/3/person/" +id+ "/images?api_key=fe56cdee4dfea0c18403e0965acfa23b");
-        urlList.add("https://api.themoviedb.org/3/person/" +id+ "/movie_credits?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
+        urlList.add("https://api.themoviedb.org/3/person/" + id + "?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
+        urlList.add("https://api.themoviedb.org/3/person/" + id + "/images?api_key=fe56cdee4dfea0c18403e0965acfa23b");
+        urlList.add("https://api.themoviedb.org/3/person/" + id + "/movie_credits?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
 
         Connectivity connectivity = new Connectivity(getActivity());
         if (connectivity.internetConnectivity()) {
             fetchTask = new FetchTask();
+            internet = true;
             fetchTask.execute(urlList.get(0), urlList.get(1), urlList.get(2));
-        }
-        else{
+        } else {
+            internet = false;
+            connectivity.checkNetworkConnection();
             Toast.makeText(getContext(), "Please Connect to internet...", Toast.LENGTH_SHORT).show();
         }
         return rootView;
     }
 
 
-
-
-    public  class FetchTask extends AsyncTask<String, Void, ArrayList<String>> {
+    public class FetchTask extends AsyncTask<String, Void, ArrayList<String>> {
         @Override
         protected ArrayList<String> doInBackground(String... params) {
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
             String jsonData = null;
             ArrayList<String> jsonArray = new ArrayList<String>();
-            for (String param : params){
+            for (String param : params) {
                 try {
                     //setting the urlConnection
                     URL url = new URL(param);
@@ -133,16 +135,16 @@ public class CelebsFragment extends Fragment {
                     urlConnection.connect();
 
                     InputStream stream = urlConnection.getInputStream();
-                    if (stream == null){
+                    if (stream == null) {
                         jsonData = null;
                     }
                     StringBuffer stringBuffer = new StringBuffer();
                     reader = new BufferedReader(new InputStreamReader(stream));
                     String inputLine;
-                    while ((inputLine = reader.readLine()) != null){
+                    while ((inputLine = reader.readLine()) != null) {
                         stringBuffer.append(inputLine + "\n");
                     }
-                    if (stringBuffer.length() == 0){
+                    if (stringBuffer.length() == 0) {
                         jsonData = null;
                     }
                     jsonData = stringBuffer.toString();
@@ -150,12 +152,11 @@ public class CelebsFragment extends Fragment {
                     e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
-                }
-                finally {
-                    if (urlConnection != null){
+                } finally {
+                    if (urlConnection != null) {
                         urlConnection.disconnect();
                     }
-                    if (reader != null){
+                    if (reader != null) {
                         try {
                             reader.close();
                         } catch (IOException e) {
@@ -167,6 +168,7 @@ public class CelebsFragment extends Fragment {
             }
             return jsonArray;
         }
+
         protected void onPostExecute(ArrayList<String> jsonArray) {
             super.onPostExecute(jsonArray);
             ArrayList<CelebImageModel> celebImageModelArray = new ArrayList<>();
@@ -181,7 +183,7 @@ public class CelebsFragment extends Fragment {
                 detailDOB.setText(celebsModel.getDateOfBirth());
                 detailPlaceOfBirth.setText(celebsModel.getPlaceOfBirth());
                 alsoKnownAs.setText(celebsModel.getAlsoKnownAs());
-                Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w500"+celebsModel.getProfile_url()).into(profile);
+                Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w500" + celebsModel.getProfile_url()).into(profile);
 
 
                 FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
@@ -190,17 +192,16 @@ public class CelebsFragment extends Fragment {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         FavoriteModel favoriteModel = dataSnapshot.getValue(FavoriteModel.class);
-                        if (favoriteModel != null){
-                            button.setBackgroundColor(ContextCompat.getColor(getContext(),R.color.colorDanger));
+                        if (favoriteModel != null) {
+                            button.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorDanger));
                             button.setText("Remove form WatchList");
-                            //progressBar.setVisibility(View.GONE);
-                            //mainContainer.setVisibility(View.VISIBLE);
+                            progressBar.setVisibility(View.GONE);
+                            mainContainer.setVisibility(View.VISIBLE);
                             favorite = true;
-                        }
-                        else {
+                        } else {
                             favorite = false;
-                            //progressBar.setVisibility(View.GONE);
-                            //mainContainer.setVisibility(View.VISIBLE);
+                            progressBar.setVisibility(View.GONE);
+                            mainContainer.setVisibility(View.VISIBLE);
                         }
 
                     }
@@ -211,7 +212,6 @@ public class CelebsFragment extends Fragment {
                         Log.w(TAG, "Failed to read value.", error.toException());
                     }
                 });
-
 
 
                 button.setOnClickListener(new View.OnClickListener() {
@@ -226,8 +226,7 @@ public class CelebsFragment extends Fragment {
                             button.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorDanger));
                             Toast.makeText(getContext(), "Added to Favorite", Toast.LENGTH_SHORT).show();
                             button.setText("Remove form Favorite");
-                        }
-                        else {
+                        } else {
                             DatabaseReference favoriteReference = firebaseCurd.getmFavoriteReference();
                             favoriteReference.child(id).removeValue();
                             button.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorSuccess));
@@ -245,7 +244,7 @@ public class CelebsFragment extends Fragment {
                 celebImageModelArray = detailCelebsJsonParser.jsonCelebImageParser(jsonArray.get(1));
                 //Log.v("output", celebImageModelArray.get(0).toString());
                 celebsImagesAdapter = new CelebAdapters.CelebsImagesAdapter(getContext(), celebImageModelArray);
-                recyclerViewCelebImages.setAdapter(celebsImagesAdapter );
+                recyclerViewCelebImages.setAdapter(celebsImagesAdapter);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -269,8 +268,9 @@ public class CelebsFragment extends Fragment {
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         super.onPause();
-        fetchTask.cancel(true);
+        if (internet)
+            fetchTask.cancel(true);
     }
 }

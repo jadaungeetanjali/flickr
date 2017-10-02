@@ -1,8 +1,5 @@
 package com.example.pc.flickr;
 
-import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,20 +7,14 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pc.flickr.Adapters.MoreListAdapter;
 import com.example.pc.flickr.json_parsers.MoreListJsonParser;
-import com.example.pc.flickr.models.ListDataModel;
 import com.example.pc.flickr.models.MoreListModel;
-import com.squareup.picasso.Picasso;
+import com.example.pc.flickr.services.Connectivity;
 
 import org.json.JSONException;
 
@@ -42,6 +33,7 @@ public class MoreList extends AppCompatActivity {
     public String type,subType;
     private ProgressBar progressBar;
     private FetchTask callMovieData;
+    private boolean internet;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,14 +54,16 @@ public class MoreList extends AppCompatActivity {
         getSupportActionBar().setTitle(subType);
         String url="https://api.themoviedb.org/3/" + type + "/" + subType + "?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US&page=";
 
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        if ((networkInfo != null) && networkInfo.isConnected()) {
+        Connectivity connectivity = new Connectivity(this);
+        if (connectivity.internetConnectivity()) {
             callMovieData = new FetchTask();
             callMovieData.execute(url);
+            internet = true;
         }
         else{
+            connectivity.checkNetworkConnection();
             Toast.makeText(this, "Please Connect to internet...", Toast.LENGTH_SHORT).show();
+            internet = false;
         }
     }
 
@@ -192,6 +186,7 @@ public class MoreList extends AppCompatActivity {
     @Override
     public void onPause(){
         super.onPause();
-        callMovieData.cancel(true);
+        if (internet)
+            callMovieData.cancel(true);
     }
 }

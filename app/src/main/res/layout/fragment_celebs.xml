@@ -2,8 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.pc.flickr.fragments.CelebsFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="com.example.pc.flickr.fragments.CelebsFragment">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -13,12 +14,24 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
+            <ProgressBar
+                android:id="@+id/detail_celebs_mainContainer_progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="200dp"
+                android:visibility="visible" />
+
             <LinearLayout
                 android:id="@+id/detail_celebs_mainContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:visibility="gone"
                 android:weightSum="1">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -32,75 +45,85 @@
                         android:paddingBottom="5dp"
                         android:paddingLeft="10dp"
                         android:paddingTop="5dp"
+                        android:textAppearance="@color/colorDanger"
                         android:textSize="22sp"
-                        android:textStyle="bold"
-                        android:textAppearance="@color/colorDanger"/>
+                        android:textStyle="bold" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
-                    android:paddingTop="10dp"
                     android:background="#fff"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:paddingTop="10dp">
+
                     <TextView
                         android:id="@+id/detail_celebs_biography"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:textSize="14sp"
                         android:paddingLeft="10dp"
-                        android:textAppearance="@color/colorDangerLight"/>
+                        android:textAppearance="@color/colorDangerLight"
+                        android:textSize="14sp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:paddingTop="10dp"
                     android:background="#fff"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:paddingTop="10dp">
+
                     <ImageView
                         android:id="@+id/detail_celebs_profile"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1" />
+
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
-                        android:orientation="vertical"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:orientation="vertical">
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:paddingLeft="10dp"
-                            android:textSize="18sp"
                             android:text="Born:"
-                            android:textStyle="bold"
-                            android:textAppearance="@color/colorDanger"/>
+                            android:textAppearance="@color/colorDanger"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
                         <TextView
                             android:id="@+id/detail_celebs_born"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:paddingLeft="10dp"
-                            android:textSize="16sp"
-                            android:textAppearance="@color/colorDangerLight"/>
+                            android:textAppearance="@color/colorDangerLight"
+                            android:textSize="16sp" />
+
                         <TextView
                             android:id="@+id/detail_celebs_placeOfBirth"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:paddingLeft="10dp"
-                            android:textSize="16sp"
-                            android:textAppearance="@color/colorDangerLight"/>
+                            android:textAppearance="@color/colorDangerLight"
+                            android:textSize="16sp" />
+
                         <Button
                             android:id="@+id/detail_celebs_favorite_button"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="#fff"
-                            android:text="Add to Favorite"
                             android:layout_marginTop="5dp"
+                            android:background="@color/colorSuccess"
                             android:paddingLeft="20dp"
                             android:paddingRight="20dp"
-                            android:background="@color/colorSuccess"/>
+                            android:text="Add to Favorite"
+                            android:textColor="#fff" />
                     </LinearLayout>
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -112,70 +135,76 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
                         android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
                         android:text="Movie Credits"
+                        android:textAppearance="@color/colorDanger"
                         android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:textAppearance="@color/colorDanger"/>
+                        android:textStyle="bold" />
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/detail_celebs_movieCreditsRecyclerView"
                         android:layout_width="match_parent"
                         android:layout_height="220dp"
-                        android:layout_marginBottom="20dp"
-                        >
-                    </android.support.v7.widget.RecyclerView>
+                        android:layout_marginBottom="20dp"></android.support.v7.widget.RecyclerView>
                 </LinearLayout>
+
                 <LinearLayout
-                    android:layout_marginTop="25dp"
-                    android:background="#fff"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:background="#fff"
                     android:elevation="2dp"
                     android:orientation="horizontal">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
+
                         <TextView
                             android:id="@+id/textView"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_marginTop="5dp"
                             android:layout_marginBottom="5dp"
                             android:layout_marginLeft="10dp"
+                            android:layout_marginTop="5dp"
                             android:text="Personal Details"
+                            android:textAppearance="@color/colorDanger"
                             android:textSize="20sp"
-                            android:textStyle="bold"
-                            android:textAppearance="@color/colorDanger"/>
+                            android:textStyle="bold" />
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:padding="10dp">
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
+
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:paddingBottom="3dp"
                                     android:paddingTop="5dp"
                                     android:text="Born"
+                                    android:textAppearance="@color/colorDanger"
                                     android:textSize="18sp"
-                                    android:textStyle="bold"
-                                    android:textAppearance="@color/colorDanger"/>
+                                    android:textStyle="bold" />
+
                                 <TextView
                                     android:id="@+id/detail_celebs_bornDate"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:padding="5dp"
-                                    android:textSize="14sp"
-                                    android:textAppearance="@color/colorDangerLight"/>
+                                    android:textAppearance="@color/colorDangerLight"
+                                    android:textSize="14sp" />
                             </LinearLayout>
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -187,18 +216,19 @@
                                     android:paddingBottom="3dp"
                                     android:paddingTop="5dp"
                                     android:text="Birth Place"
+                                    android:textAppearance="@color/colorDanger"
                                     android:textSize="18sp"
-                                    android:textStyle="bold"
-                                    android:textAppearance="@color/colorDanger"/>
+                                    android:textStyle="bold" />
 
                                 <TextView
                                     android:id="@+id/detail_celebs_birthPlace"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:padding="5dp"
-                                    android:textSize="14sp"
-                                    android:textAppearance="@color/colorDangerLight"/>
+                                    android:textAppearance="@color/colorDangerLight"
+                                    android:textSize="14sp" />
                             </LinearLayout>
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -210,9 +240,9 @@
                                     android:paddingBottom="3dp"
                                     android:paddingTop="5dp"
                                     android:text="Also Known As"
+                                    android:textAppearance="@color/colorDanger"
                                     android:textSize="18sp"
-                                    android:textStyle="bold"
-                                    android:textAppearance="@color/colorDanger"/>
+                                    android:textStyle="bold" />
 
                                 <TextView
                                     android:id="@+id/detail_celebs_alsoKnownAs"
@@ -225,6 +255,7 @@
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -236,21 +267,19 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
                         android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
                         android:text="Images"
+                        android:textAppearance="@color/colorDanger"
                         android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:textAppearance="@color/colorDanger"/>
+                        android:textStyle="bold" />
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/detail_celebs_imagesRecyclerView"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
-                        android:layout_marginBottom="20dp"
-                        >
-                    </android.support.v7.widget.RecyclerView>
+                        android:layout_marginBottom="20dp"></android.support.v7.widget.RecyclerView>
                 </LinearLayout>
 
             </LinearLayout>

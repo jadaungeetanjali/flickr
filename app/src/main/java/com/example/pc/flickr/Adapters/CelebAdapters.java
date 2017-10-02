@@ -35,7 +35,7 @@ public class CelebAdapters {
 
         class celebsMovieCreditViewHolder extends RecyclerView.ViewHolder {
             ImageView celebsMovieCreditImageView;
-            TextView celebsMovieCreditNameTextView ;
+            TextView celebsMovieCreditNameTextView;
             TextView celebsMovieCreditVoteAverageTextView;
             ProgressBar celebsMovieCreditProgressBar;
 
@@ -49,11 +49,11 @@ public class CelebAdapters {
                     @Override
                     public void onClick(View v) {
 
-                        Intent intent = new Intent(movieCreditContext,MoviesDetails.class);
+                        Intent intent = new Intent(movieCreditContext, MoviesDetails.class);
                         Bundle mBundle = new Bundle();
                         SimilarItemModel similarItemModel = celebsMovieCreditArrayList.get(getAdapterPosition());
-                        mBundle.putString("type",type);
-                        mBundle.putString("id",similarItemModel.getSimilarItemId());
+                        mBundle.putString("type", "movies");
+                        mBundle.putString("id", similarItemModel.getSimilarItemId());
                         intent.putExtras(mBundle);
                         movieCreditContext.startActivity(intent);
                     }
@@ -79,8 +79,8 @@ public class CelebAdapters {
             holder.celebsMovieCreditNameTextView.setText(similarItemModel.getSimilarItemName());
             Log.v("output", similarItemModel.getSimilarItemName());
             holder.celebsMovieCreditVoteAverageTextView.setText(similarItemModel.getSimilarItemVoteAverage());
-            Picasso.with(movieCreditContext).load("https://image.tmdb.org/t/p/w500"+similarItemModel.getSimilarItemimage())
-                    .into(holder.celebsMovieCreditImageView, new com.squareup.picasso.Callback(){
+            Picasso.with(movieCreditContext).load("https://image.tmdb.org/t/p/w500" + similarItemModel.getSimilarItemimage())
+                    .into(holder.celebsMovieCreditImageView, new com.squareup.picasso.Callback() {
                         @Override
                         public void onSuccess() {
                             holder.celebsMovieCreditProgressBar.setVisibility(View.GONE);
@@ -107,9 +107,11 @@ public class CelebAdapters {
 
         class celebsImagesViewHolder extends RecyclerView.ViewHolder {
             ImageView celebsImagesImageView;
+            ProgressBar celebsImagesImageViewProgressBar;
 
             public celebsImagesViewHolder(View itemView) {
                 super(itemView);
+                celebsImagesImageViewProgressBar = (ProgressBar) itemView.findViewById(R.id.celeb_images_progressBar);
                 celebsImagesImageView = (ImageView) itemView.findViewById(R.id.celeb_images);
             }
         }
@@ -129,7 +131,19 @@ public class CelebAdapters {
         public void onBindViewHolder(final celebsImagesViewHolder holder, int position) {
             CelebImageModel celebImageModel = celebImageModelArrayList.get(position);
             Picasso.with(imageContext).load("https://image.tmdb.org/t/p/w500" + celebImageModel.getCelebImage())
-                    .into(holder.celebsImagesImageView);
+                    .into(holder.celebsImagesImageView, new com.squareup.picasso.Callback() {
+
+                        @Override
+                        public void onSuccess() {
+                            holder.celebsImagesImageViewProgressBar.setVisibility(View.GONE);
+                            holder.celebsImagesImageView.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onError() {
+
+                        }
+                    });
 
         }
 

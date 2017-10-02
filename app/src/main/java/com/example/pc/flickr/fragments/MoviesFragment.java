@@ -1,10 +1,6 @@
 package com.example.pc.flickr.fragments;
 
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,13 +22,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pc.flickr.Adapters.DetailAdapter;
-import com.example.pc.flickr.Connectivity;
-import com.example.pc.flickr.MoviesDetails;
+import com.example.pc.flickr.services.Connectivity;
 import com.example.pc.flickr.R;
 import com.example.pc.flickr.json_parsers.DetailJsonParser;
 import com.example.pc.flickr.models.CastModel;
 import com.example.pc.flickr.models.DetailItemModel;
-import com.example.pc.flickr.models.ListDataModel;
 import com.example.pc.flickr.models.ReviewModel;
 import com.example.pc.flickr.models.SimilarItemModel;
 import com.example.pc.flickr.models.VideoModel;
@@ -44,9 +38,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -74,7 +66,7 @@ public class MoviesFragment extends Fragment {
     private LinearLayout mainContainer;
     private Button button;
     private String type, id;
-    private Boolean wishList, watchList;
+    private Boolean wishList, watchList, internet;
     private FetchTask callMovieData;
 
     public MoviesFragment() {
@@ -156,8 +148,11 @@ public class MoviesFragment extends Fragment {
             scrollView.setVisibility(View.VISIBLE);
             callMovieData = new FetchTask();
             callMovieData.execute(urlList.get(0), urlList.get(1), urlList.get(2), urlList.get(3),urlList.get(4));
+            internet = true;
         }
         else{
+            internet = false;
+            connectivity.checkNetworkConnection();
             Toast.makeText(getContext(), "Please Connect to internet...", Toast.LENGTH_SHORT).show();
         }
         return rootView;
@@ -461,7 +456,8 @@ public class MoviesFragment extends Fragment {
     @Override
     public void onPause(){
         super.onPause();
-        callMovieData.cancel(true);
+        if (internet)
+            callMovieData.cancel(true);
     }
 
 }

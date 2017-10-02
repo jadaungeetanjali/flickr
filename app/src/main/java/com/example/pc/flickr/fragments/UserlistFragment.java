@@ -21,6 +21,7 @@ import com.example.pc.flickr.MoviesDetails;
 import com.example.pc.flickr.R;
 import com.example.pc.flickr.models.FavoriteModel;
 import com.example.pc.flickr.models.WishListModel;
+import com.example.pc.flickr.services.Connectivity;
 import com.example.pc.flickr.services.FirebaseCurd;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -43,7 +44,9 @@ public class UserlistFragment extends Fragment {
     public ArrayList<WishListModel> arrayList;
     public ArrayList<FavoriteModel> favoriteList;
     public DatabaseReference databaseReference;
+    private ValueEventListener wishValueEventListener,favoriteValueEventListener;
     private ProgressBar progressBar;
+    private boolean internet;
 
     public UserlistFragment() {
         // Required empty public constructor
@@ -79,55 +82,64 @@ public class UserlistFragment extends Fragment {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.user_listview);
         //RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         //recyclerView.setLayoutManager(mLayoutManager);
-        GridLayoutManager mLayoutManager = new GridLayoutManager(getContext(),2);
+        GridLayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         progressBar = (ProgressBar) rootView.findViewById(R.id.user_listview_progressBar);
-        if (type.equals("WatchList")||type.equals("WishList")) {
-            databaseReference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                        WishListModel wishListModel = postSnapshot.getValue(WishListModel.class);
-                        arrayList.add(wishListModel);
-                    }
-                    wishListAdapter = new WishListAdapter(arrayList);
-                    recyclerView.setAdapter(wishListAdapter);
-                    progressBar.setVisibility(View.GONE);
-                    recyclerView.setVisibility(View.VISIBLE);
-                }
 
-                @Override
-                public void onCancelled(DatabaseError error) {
-                    // Failed to read value
-                    Log.w(TAG, "Failed to read value.", error.toException());
-                }
-            });
-        }
-        else if (type.equals("Favorite")){
-            databaseReference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Log.v("output",dataSnapshot.toString());
-                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                        Log.v("output2",postSnapshot.toString());
-                        FavoriteModel favoriteModel = postSnapshot.getValue(FavoriteModel.class);
-                        if (favoriteModel !=null)
-                            favoriteList.add(favoriteModel);
+        Connectivity connectivity = new Connectivity(getActivity());
+        if (connectivity.internetConnectivity()) {
+            internet = true;
+            if (type.equals("WatchList") || type.equals("WishList")) {
+                wishValueEventListener = databaseReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                            WishListModel wishListModel = postSnapshot.getValue(WishListModel.class);
+                            arrayList.add(wishListModel);
+                        }
+                        wishListAdapter = new WishListAdapter(arrayList);
+                        recyclerView.setAdapter(wishListAdapter);
+                        progressBar.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
                     }
-                    favoriteListAdapter = new FavoriteListAdapter(favoriteList);
-                    recyclerView.setAdapter(favoriteListAdapter);
-                    progressBar.setVisibility(View.GONE);
-                    recyclerView.setVisibility(View.VISIBLE);
-                }
 
-                @Override
-                public void onCancelled(DatabaseError error) {
-                    // Failed to read value
-                    Log.w(TAG, "Failed to read value.", error.toException());
-                }
-            });
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        Log.w(TAG, "Failed to read value.", error.toException());
+                    }
+                });
+            } else if (type.equals("Favorite")) {
+                favoriteValueEventListener = databaseReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Log.v("output", dataSnapshot.toString());
+                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                            Log.v("output2", postSnapshot.toString());
+                            FavoriteModel favoriteModel = postSnapshot.getValue(FavoriteModel.class);
+                            if (favoriteModel != null)
+                                favoriteList.add(favoriteModel);
+                        }
+                        favoriteListAdapter = new FavoriteListAdapter(favoriteList);
+                        recyclerView.setAdapter(favoriteListAdapter);
+                        progressBar.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        Log.w(TAG, "Failed to read value.", error.toException());
+                    }
+                });
+            }
+
+        } else {
+            internet = false;
+            connectivity.checkNetworkConnection();
         }
+
         return rootView;
     }
 
@@ -255,6 +267,20 @@ public class UserlistFragment extends Fragment {
         @Override
         public int getItemCount() {
             return userListArrayList.size();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (internet) {
+            if (type.equals("WatchList") || type.equals("WishList")){
+                databaseReference.removeEventListener(wishValueEventListener);
+            }
+            else {
+                databaseReference.removeEventListener(favoriteValueEventListener);
+            }
+
         }
     }
 

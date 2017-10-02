@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.example.pc.flickr.R;
 import com.example.pc.flickr.models.FriendModel;
 import com.example.pc.flickr.models.UserModel;
+import com.example.pc.flickr.services.Connectivity;
 import com.example.pc.flickr.services.FirebaseCurd;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -37,6 +38,8 @@ public class RequestFragment extends Fragment {
     private ArrayList<FriendModel> requestArrayList;
     private RequestAdapter requestAdapter;
     private ProgressBar progressBar;
+    private boolean internet;
+
     public RequestFragment() {
         // Required empty public constructor
     }
@@ -56,26 +59,34 @@ public class RequestFragment extends Fragment {
 
         FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
         requestsReference = firebaseCurd.getmRequestsReference();
-        valueEventListener = requestsReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    FriendModel friendModel = postSnapshot.getValue(FriendModel.class);
-                    requestArrayList.add(friendModel);
+        Connectivity connectivity = new Connectivity(getActivity());
+        if (connectivity.internetConnectivity()) {
+            internet = true;
+            valueEventListener = requestsReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                        FriendModel friendModel = postSnapshot.getValue(FriendModel.class);
+                        requestArrayList.add(friendModel);
+                    }
+                    requestAdapter = new RequestAdapter(requestArrayList);
+                    recyclerView.setAdapter(requestAdapter);
+                    requestAdapter.notifyDataSetChanged();
+                    progressBar.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
                 }
-                requestAdapter = new RequestAdapter(requestArrayList);
-                recyclerView.setAdapter(requestAdapter);
-                requestAdapter.notifyDataSetChanged();
-                progressBar.setVisibility(View.GONE);
-                recyclerView.setVisibility(View.VISIBLE);
-            }
 
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
-            }
-        });
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    // Failed to read value
+                    Log.w(TAG, "Failed to read value.", error.toException());
+                }
+            });
+        } else {
+            internet = false;
+            connectivity.checkNetworkConnection();
+        }
+
         return rootView;
     }
 
@@ -148,6 +159,7 @@ public class RequestFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        requestsReference.removeEventListener(valueEventListener);
+        if (internet)
+            requestsReference.removeEventListener(valueEventListener);
     }
 }
