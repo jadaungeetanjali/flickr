@@ -37,9 +37,6 @@ import java.util.Arrays;
 
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class HorizontalListFragment extends Fragment {
     public MainParentAdapter mAdapter;
     String type;
@@ -106,8 +103,6 @@ public class HorizontalListFragment extends Fragment {
 
                 @Override
                 protected Cursor doInBackground(String... params) {
-                    MovieDbHelper movieDbHelper = new MovieDbHelper(getContext());
-                    SQLiteDatabase db = movieDbHelper.getReadableDatabase();
                     String WHERE = "type=? AND type_sub=?";
                     String args[] = {type,params[0]};
                     return getContext().getContentResolver().query(MovieDbApiContract.ApiData.CONTENT_URI,
@@ -261,19 +256,4 @@ public class HorizontalListFragment extends Fragment {
     }
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
 
-
-    private Cursor getData(String type, String sub_type){
-        MovieDbHelper movieDbHelper = new MovieDbHelper(getContext());
-        SQLiteDatabase db = movieDbHelper.getReadableDatabase();
-        String WHERE = "type=? AND type_sub=?";
-        String args[] = {type,sub_type};
-        return db.query(MovieDbApiContract.ApiData.TABLE_NAME,
-                null,
-                WHERE,
-                args,
-                null,
-                null,
-                MovieDbApiContract.ApiData._ID
-        );
-    }
 }

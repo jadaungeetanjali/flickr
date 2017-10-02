@@ -35,6 +35,9 @@ public class FindFragment extends Fragment {
     private RecyclerView recyclerView;
     private ArrayList<UserModel> findArrayList;
     private FindAdapter findAdapter;
+    private DatabaseReference friendsReference,usersReference;
+    private ValueEventListener valueEventListener,userValueListner;
+    private ArrayList<FriendModel> friendArrayList;
 
     public FindFragment() {
         // Required empty public constructor
@@ -52,45 +55,24 @@ public class FindFragment extends Fragment {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         findArrayList = new ArrayList<>();
-        final ArrayList<FriendModel> friendArrayList = new ArrayList<>();
+        friendArrayList = new ArrayList<>();
 
         FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
-        final DatabaseReference usersReference = firebaseCurd.getmUsersReference();
-        DatabaseReference friendsReference = firebaseCurd.getmFriendsReference();
-        friendsReference.addValueEventListener(new ValueEventListener() {
+        usersReference = firebaseCurd.getmUsersReference();
+        friendsReference = firebaseCurd.getmFriendsReference();
+        valueEventListener = friendsReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     friendArrayList.add(postSnapshot.getValue(FriendModel.class));
                 }
-                usersReference.addValueEventListener(new ValueEventListener() {
+                userValueListner=usersReference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                            UserModel userModel = postSnapshot.getValue(UserModel.class);
-                            SharedPreferences sharedPref = getContext().getSharedPreferences("MyPref", 0);
-                            String user_id = sharedPref.getString("user_id",null);
-                            if (friendArrayList.size() > 0) {
-                                for (int i = 0; i <friendArrayList.size(); i++) {
-                                    if (friendArrayList.get(i).getFriendId().equals(userModel.getUserId()) ||
-
-                                            user_id.equals(userModel.getUserId())     ) {
-
-                                    } else {
-                                        findArrayList.add(userModel);
-                                    }
-                                }
-                            }else {
-                                if (userModel.getUserId().equals(user_id)){
-
-                                }
-                                else {
-                                    findArrayList.add(userModel);
-                                }
-                            }
-                        }
+                        findArrayList = getData(dataSnapshot);
                         findAdapter = new FindAdapter(findArrayList);
                         recyclerView.setAdapter(findAdapter);
+                        findAdapter.notifyDataSetChanged();
                         //progressBar.setVisibility(View.GONE);
                         //recyclerView.setVisibility(View.VISIBLE);
                     }
@@ -174,5 +156,40 @@ public class FindFragment extends Fragment {
         public int getItemCount() {
             return arrayList.size();
         }
+    }
+
+    private ArrayList<UserModel> getData(DataSnapshot dataSnapshot){
+        ArrayList<UserModel> arrayList = new ArrayList<>();
+        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+            UserModel userModel = postSnapshot.getValue(UserModel.class);
+            SharedPreferences sharedPref = getContext().getSharedPreferences("MyPref", 0);
+            String user_id = sharedPref.getString("user_id",null);
+            if (friendArrayList.size() > 0) {
+                for (int i = 0; i <friendArrayList.size(); i++) {
+                    if (friendArrayList.get(i).getFriendId().equals(userModel.getUserId()) ||
+
+                            user_id.equals(userModel.getUserId())     ) {
+
+                    } else {
+                        arrayList.add(userModel);
+                    }
+                }
+            }else {
+                if (userModel.getUserId().equals(user_id)){
+
+                }
+                else {
+                    arrayList.add(userModel);
+                }
+            }
+        }
+        return arrayList;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        friendsReference.removeEventListener(valueEventListener);
+        usersReference.removeEventListener(userValueListner);
     }
 }

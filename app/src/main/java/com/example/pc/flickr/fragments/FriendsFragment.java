@@ -38,6 +38,8 @@ public class FriendsFragment extends Fragment {
     private RecyclerView recyclerView;
     private ArrayList<FriendModel> friendsArrayList;
     private FriendsAdapter friendsAdapter;
+    private DatabaseReference friendsReference;
+    private ValueEventListener valueEventListener;
     public FriendsFragment() {
         // Required empty public constructor
     }
@@ -54,9 +56,10 @@ public class FriendsFragment extends Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
         friendsArrayList = new ArrayList<>();
 
+
         FirebaseCurd firebaseCurd =new  FirebaseCurd(getActivity());
-        DatabaseReference friendsReference = firebaseCurd.getmFriendsReference();
-        friendsReference.addValueEventListener(new ValueEventListener() {
+        friendsReference = firebaseCurd.getmFriendsReference();
+        valueEventListener = friendsReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
@@ -65,6 +68,7 @@ public class FriendsFragment extends Fragment {
                 }
                 friendsAdapter = new FriendsAdapter(friendsArrayList);
                 recyclerView.setAdapter(friendsAdapter);
+                friendsAdapter.notifyDataSetChanged();
                 //progressBar.setVisibility(View.GONE);
                 //recyclerView.setVisibility(View.VISIBLE);
             }
@@ -153,5 +157,11 @@ public class FriendsFragment extends Fragment {
         public int getItemCount() {
             return arrayList.size();
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        friendsReference.removeEventListener(valueEventListener);
     }
 }

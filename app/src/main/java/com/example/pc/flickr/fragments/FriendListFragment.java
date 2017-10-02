@@ -94,6 +94,7 @@ public class FriendListFragment extends Fragment {
                     recyclerView.setAdapter(wishListAdapter);
                     progressBar.setVisibility(View.GONE);
                     recyclerView.setVisibility(View.VISIBLE);
+                    wishListAdapter.notifyDataSetChanged();
                 }
 
                 @Override
@@ -116,6 +117,7 @@ public class FriendListFragment extends Fragment {
                     }
                     favoriteListAdapter = new FavoriteListAdapter(favoriteList);
                     recyclerView.setAdapter(favoriteListAdapter);
+                    favoriteListAdapter.notifyDataSetChanged();
                     progressBar.setVisibility(View.GONE);
                     recyclerView.setVisibility(View.VISIBLE);
                 }

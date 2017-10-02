@@ -29,7 +29,8 @@ import static android.content.ContentValues.TAG;
  * A simple {@link Fragment} subclass.
  */
 public class RequestFragment extends Fragment {
-
+    private DatabaseReference requestsReference;
+    private ValueEventListener valueEventListener;
     private RecyclerView recyclerView;
     private ArrayList<FriendModel> requestArrayList;
     private RequestAdapter requestAdapter;
@@ -50,8 +51,8 @@ public class RequestFragment extends Fragment {
         requestArrayList = new ArrayList<>();
 
         FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
-        DatabaseReference requestsReference = firebaseCurd.getmRequestsReference();
-        requestsReference.addValueEventListener(new ValueEventListener() {
+        requestsReference = firebaseCurd.getmRequestsReference();
+        valueEventListener = requestsReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
@@ -59,8 +60,8 @@ public class RequestFragment extends Fragment {
                     requestArrayList.add(friendModel);
                 }
                 requestAdapter = new RequestAdapter(requestArrayList);
-                recyclerView.invalidate();
                 recyclerView.setAdapter(requestAdapter);
+                requestAdapter.notifyDataSetChanged();
                 //progressBar.setVisibility(View.GONE);
                 //recyclerView.setVisibility(View.VISIBLE);
             }
@@ -136,5 +137,10 @@ public class RequestFragment extends Fragment {
         public int getItemCount() {
             return arrayList.size();
         }
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        requestsReference.removeEventListener(valueEventListener);
     }
 }

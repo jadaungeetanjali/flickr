@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView navHeaderImg;
     private int navItemIndex;
     private Toolbar toolbar;
+    private HorizontalListFragment moviesFragment,tvFragment,celebsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,21 +80,21 @@ public class MainActivity extends AppCompatActivity {
         String[] movieHeading = {"Now Playing", "Popular", "Top Rated", "Upcoming"};
         moviesBundle.putString("type", "movies");
         moviesBundle.putStringArray("urlHeading", movieHeading);
-        final HorizontalListFragment moviesFragment = new HorizontalListFragment();
+        moviesFragment = new HorizontalListFragment();
         moviesFragment.setArguments(moviesBundle);
 
         Bundle tvBundle = new Bundle();
         String[] tvHeading = {"Airing Today", "Popular", "Top Rated", "On The Air"};
         tvBundle.putString("type", "tv");
         tvBundle.putStringArray("urlHeading", tvHeading);
-        final HorizontalListFragment tvFragment = new HorizontalListFragment();
+        tvFragment = new HorizontalListFragment();
         tvFragment.setArguments(tvBundle);
 
         Bundle celebsBundle = new Bundle();
         String[] celebsHeading = {"Popular"};
         celebsBundle.putString("type", "celebs");
         celebsBundle.putStringArray("urlHeading", celebsHeading);
-        final HorizontalListFragment celebsFragment = new HorizontalListFragment();
+        celebsFragment = new HorizontalListFragment();
         celebsFragment.setArguments(celebsBundle);
 
 
@@ -170,14 +171,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        //Handle Drawer Selection
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
+
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.user_sign_out:
                 AuthUI.getInstance().signOut(this);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -188,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == RESULT_OK) {
+                fragmentTranstion(moviesFragment);
                 Toast.makeText(this, "User Signed in!!", Toast.LENGTH_SHORT).show();
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "Sign in canceled!!", Toast.LENGTH_SHORT).show();
