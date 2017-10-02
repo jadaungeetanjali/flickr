@@ -12,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.pc.flickr.FriendListActivity;
 import com.example.pc.flickr.R;
@@ -32,6 +34,7 @@ import static android.content.ContentValues.TAG;
  * A simple {@link Fragment} subclass.
  */
 public class FindFragment extends Fragment {
+    private ProgressBar progressBar;
     private RecyclerView recyclerView;
     private ArrayList<UserModel> findArrayList;
     private FindAdapter findAdapter;
@@ -50,7 +53,7 @@ public class FindFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_find, container, false);
 
-
+        progressBar = (ProgressBar) rootView.findViewById(R.id.find_fragment_progressBar);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.find_fragment_recyclerView);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -73,8 +76,8 @@ public class FindFragment extends Fragment {
                         findAdapter = new FindAdapter(findArrayList);
                         recyclerView.setAdapter(findAdapter);
                         findAdapter.notifyDataSetChanged();
-                        //progressBar.setVisibility(View.GONE);
-                        //recyclerView.setVisibility(View.VISIBLE);
+                        progressBar.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
                     }
 
                     @Override
@@ -123,7 +126,7 @@ public class FindFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(final findViewHolder holder, int position) {
+        public void onBindViewHolder(final findViewHolder holder,final int position) {
             final UserModel userModel = arrayList.get(position);
             holder.friendNameTextView.setText(userModel.getUserName());
             holder.friendEmailTextView.setText(userModel.getUserEmail());
@@ -148,6 +151,9 @@ public class FindFragment extends Fragment {
                     FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
                     DatabaseReference friendsReference = firebaseCurd.getmRequestsReference();
                     firebaseCurd.addRequestModel(userModel);
+                    Toast.makeText(getContext(), "Friend Request sent!!!", Toast.LENGTH_SHORT).show();
+                    arrayList.remove(position);
+                    findAdapter.notifyDataSetChanged();
                 }
             });
         }

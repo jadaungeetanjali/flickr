@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.pc.flickr.FriendListActivity;
 import com.example.pc.flickr.R;
@@ -40,6 +41,7 @@ public class FriendsFragment extends Fragment {
     private FriendsAdapter friendsAdapter;
     private DatabaseReference friendsReference;
     private ValueEventListener valueEventListener;
+    private ProgressBar progressBar;
     public FriendsFragment() {
         // Required empty public constructor
     }
@@ -50,7 +52,7 @@ public class FriendsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView= inflater.inflate(R.layout.fragment_friends, container, false);
-
+        progressBar = (ProgressBar) rootView.findViewById(R.id.friends_fragment_progressBar);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.friends_fragment_recyclerView);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -69,8 +71,8 @@ public class FriendsFragment extends Fragment {
                 friendsAdapter = new FriendsAdapter(friendsArrayList);
                 recyclerView.setAdapter(friendsAdapter);
                 friendsAdapter.notifyDataSetChanged();
-                //progressBar.setVisibility(View.GONE);
-                //recyclerView.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -111,7 +113,7 @@ public class FriendsFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(final friendsViewHolder holder, int position) {
+        public void onBindViewHolder(final friendsViewHolder holder,final int position) {
             final FriendModel friendModel = arrayList.get(position);
             holder.friendNameTextView.setText(friendModel.getFriendName());
             holder.friendEmailTextView.setText(friendModel.getFriendEmail());
@@ -149,6 +151,9 @@ public class FriendsFragment extends Fragment {
                     SharedPreferences sharedPref = getActivity().getSharedPreferences("MyPref", 0);
                     String user_id = sharedPref.getString("user_id",null);
                     firebaseCurd.getmFriendReference().child(friendModel.getFriendId()).child(user_id).removeValue();
+                    Toast.makeText(getContext(), "Removed from friends", Toast.LENGTH_SHORT).show();
+                    arrayList.remove(position);
+                    friendsAdapter.notifyDataSetChanged();
                 }
             });
         }

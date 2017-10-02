@@ -4,8 +4,16 @@
     android:layout_height="match_parent"
     tools:context="com.example.pc.flickr.fragments.FindFragment">
 
+    <ProgressBar
+        android:id="@+id/find_fragment_progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:visibility="visible"
+        android:layout_marginTop="250dp"
+        android:layout_height="wrap_content" />
     <!-- TODO: Update blank fragment layout -->
     <android.support.v7.widget.RecyclerView
+        android:visibility="gone"
         android:id="@+id/find_fragment_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">

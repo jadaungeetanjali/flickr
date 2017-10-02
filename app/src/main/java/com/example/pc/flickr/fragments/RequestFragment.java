@@ -10,7 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.pc.flickr.R;
 import com.example.pc.flickr.models.FriendModel;
@@ -34,6 +36,7 @@ public class RequestFragment extends Fragment {
     private RecyclerView recyclerView;
     private ArrayList<FriendModel> requestArrayList;
     private RequestAdapter requestAdapter;
+    private ProgressBar progressBar;
     public RequestFragment() {
         // Required empty public constructor
     }
@@ -45,6 +48,7 @@ public class RequestFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_request, container, false);
 
+        progressBar = (ProgressBar) rootView.findViewById(R.id.request_fragment_progressBar);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.request_fragment_recyclerView);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -62,8 +66,8 @@ public class RequestFragment extends Fragment {
                 requestAdapter = new RequestAdapter(requestArrayList);
                 recyclerView.setAdapter(requestAdapter);
                 requestAdapter.notifyDataSetChanged();
-                //progressBar.setVisibility(View.GONE);
-                //recyclerView.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -103,7 +107,7 @@ public class RequestFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(final requestViewHolder holder, int position) {
+        public void onBindViewHolder(final requestViewHolder holder, final int position) {
             final FriendModel friendModel = arrayList.get(position);
             holder.friendNameTextView.setText(friendModel.getFriendName());
             holder.friendEmailTextView.setText(friendModel.getFriendEmail());
@@ -129,6 +133,9 @@ public class RequestFragment extends Fragment {
                     firebaseCurd.addFriendModel(friendModel);
                     firebaseCurd.addFriendRequestModel(friendModel);
                     firebaseCurd.getmRequestsReference().child(friendModel.getFriendId()).removeValue();
+                    Toast.makeText(getContext(), "Added to friend", Toast.LENGTH_SHORT).show();
+                    arrayList.remove(position);
+                    requestAdapter.notifyDataSetChanged();
                 }
             });
         }

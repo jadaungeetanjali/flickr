@@ -2,9 +2,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.example.pc.flickr.fragments.FriendsFragment">
     <!-- TODO: Update blank fragment layout -->
+    <ProgressBar
+        android:id="@+id/friends_fragment_progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:visibility="visible"
+        android:layout_marginTop="300dp"
+        android:layout_height="wrap_content" />
     <android.support.v7.widget.RecyclerView
+        android:visibility="gone"
         android:id="@+id/friends_fragment_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
