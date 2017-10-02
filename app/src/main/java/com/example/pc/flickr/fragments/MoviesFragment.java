@@ -75,6 +75,7 @@ public class MoviesFragment extends Fragment {
     private Button button;
     private String type, id;
     private Boolean wishList, watchList;
+    private FetchTask callMovieData;
 
     public MoviesFragment() {
         // Required empty public constructor
@@ -153,7 +154,7 @@ public class MoviesFragment extends Fragment {
             internet_connectivity.setVisibility(View.GONE);
             ScrollView scrollView = (ScrollView) rootView.findViewById(R.id.detail_movie_scrollView);
             scrollView.setVisibility(View.VISIBLE);
-            FetchTask callMovieData = new FetchTask();
+            callMovieData = new FetchTask();
             callMovieData.execute(urlList.get(0), urlList.get(1), urlList.get(2), urlList.get(3),urlList.get(4));
         }
         else{
@@ -268,6 +269,7 @@ public class MoviesFragment extends Fragment {
             return jsonArray;
         }
         // onPostExecute data to populate data after fetching data
+        @Override
         protected void onPostExecute(ArrayList<String> jsonArray) {
             super.onPostExecute(jsonArray);
             //for (String name:jsonArray){
@@ -447,6 +449,19 @@ public class MoviesFragment extends Fragment {
                 e.printStackTrace();
             }
         }
+
+        //On cancel handles async task cacelation
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+        }
+
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        callMovieData.cancel(true);
     }
 
 }

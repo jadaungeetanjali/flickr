@@ -60,6 +60,7 @@ public class CelebsFragment extends Fragment {
     public ImageView profile;
     public String id, type;
     private Button button;
+    private FetchTask fetchTask;
 
     private Boolean favorite = false;
 
@@ -104,7 +105,7 @@ public class CelebsFragment extends Fragment {
 
         Connectivity connectivity = new Connectivity(getActivity());
         if (connectivity.internetConnectivity()) {
-            FetchTask fetchTask = new FetchTask();
+            fetchTask = new FetchTask();
             fetchTask.execute(urlList.get(0), urlList.get(1), urlList.get(2));
         }
         else{
@@ -258,5 +259,18 @@ public class CelebsFragment extends Fragment {
             }
 
         }
+
+        //On cancel handles async task cacelation
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+        }
+
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        fetchTask.cancel(true);
     }
 }

@@ -41,6 +41,7 @@ public class MoreList extends AppCompatActivity {
     private MoreListAdapter moreListAdapter;
     public String type,subType;
     private ProgressBar progressBar;
+    private FetchTask callMovieData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +65,7 @@ public class MoreList extends AppCompatActivity {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         if ((networkInfo != null) && networkInfo.isConnected()) {
-            FetchTask callMovieData = new FetchTask();
+            callMovieData = new FetchTask();
             callMovieData.execute(url);
         }
         else{
@@ -179,5 +180,18 @@ public class MoreList extends AppCompatActivity {
                     }
                 }
         }
+
+        //On cancel handles async task cacelation
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+        }
+
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        callMovieData.cancel(true);
     }
 }

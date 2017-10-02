@@ -170,7 +170,6 @@ public class HorizontalListFragment extends Fragment {
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
 
 
-
     //----------------------------------------------------------------------------------------------------//
     private class MainChildAdapter extends RecyclerView.Adapter<MainChildAdapter.MyViewHolder> {
 
