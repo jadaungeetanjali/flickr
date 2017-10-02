@@ -59,7 +59,6 @@ public class FriendsFragment extends Fragment {
         friendsReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                recyclerView.invalidate();
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     FriendModel friendModel = postSnapshot.getValue(FriendModel.class);
                     friendsArrayList.add(friendModel);
@@ -143,7 +142,7 @@ public class FriendsFragment extends Fragment {
                 public void onClick(View view) {
                     FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
                     firebaseCurd.getmFriendsReference().child(friendModel.getFriendId()).removeValue();
-                    SharedPreferences sharedPref = getContext().getSharedPreferences("MyPref", 0);
+                    SharedPreferences sharedPref = getActivity().getSharedPreferences("MyPref", 0);
                     String user_id = sharedPref.getString("user_id",null);
                     firebaseCurd.getmFriendReference().child(friendModel.getFriendId()).child(user_id).removeValue();
                 }

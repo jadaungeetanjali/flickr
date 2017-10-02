@@ -120,7 +120,7 @@ public class FirebaseCurd {
         result.put("itemName", wishListModel.getItemName());
         result.put("imgUrl", wishListModel.getImgUrl());
         result.put("itemRating", wishListModel.getItemRating());
-        Log.v("result",result.toString());
+       // Log.v("result",result.toString());
         mWishListReference.child(wishListModel.getItemId()).updateChildren(result);
     }
 

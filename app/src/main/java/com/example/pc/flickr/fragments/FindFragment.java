@@ -81,7 +81,7 @@ public class FindFragment extends Fragment {
                                     }
                                 }
                             }else {
-                                if (userModel.equals(user_id)){
+                                if (userModel.getUserId().equals(user_id)){
 
                                 }
                                 else {
@@ -91,7 +91,6 @@ public class FindFragment extends Fragment {
                         }
                         findAdapter = new FindAdapter(findArrayList);
                         recyclerView.setAdapter(findAdapter);
-                        recyclerView.invalidate();
                         //progressBar.setVisibility(View.GONE);
                         //recyclerView.setVisibility(View.VISIBLE);
                     }
