@@ -2,7 +2,6 @@ package com.example.pc.flickr.fragments;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -35,9 +34,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -47,7 +44,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static android.content.ContentValues.TAG;
 
@@ -55,15 +51,15 @@ import static android.content.ContentValues.TAG;
  * A simple {@link Fragment} subclass.
  */
 public class CelebsFragment extends Fragment {
-    private CelebsImagesAdapter celebsImagesAdapter;
-    RecyclerView recyclerViewCelebKnownFor;
+    private CelebAdapters.CelebsImagesAdapter celebsImagesAdapter;
+    private CelebAdapters.CelebsMovieCreditAdapter celebsMovieCreditAdapter;
+    RecyclerView recyclerViewCelebMovieCredit;
     RecyclerView recyclerViewCelebImages;
     public TextView title, biography, dateOfBirth, placeOfBirth, alsoKnownAs, detailDOB, detailPlaceOfBirth ;
     public ImageView profile;
     public String id, type;
     private Button button;
-    private ProgressBar progressBar;
-    private LinearLayout mainContainer;
+
     private Boolean favorite = false;
 
     public CelebsFragment() {
@@ -84,6 +80,7 @@ public class CelebsFragment extends Fragment {
         detailDOB = (TextView) rootView.findViewById(R.id.detail_celebs_bornDate);
         detailPlaceOfBirth = (TextView) rootView.findViewById(R.id.detail_celebs_birthPlace);
         profile = (ImageView) rootView.findViewById(R.id.detail_celebs_profile);
+
         recyclerViewCelebImages = (RecyclerView) rootView.findViewById(R.id.detail_celebs_imagesRecyclerView);
         LinearLayoutManager layoutManagerCelebImages= new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewCelebImages.setLayoutManager(layoutManagerCelebImages);
@@ -98,158 +95,23 @@ public class CelebsFragment extends Fragment {
         ArrayList<String> urlList = new ArrayList<>();
         urlList.add("https://api.themoviedb.org/3/person/" +id+ "?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
         urlList.add("https://api.themoviedb.org/3/person/" +id+ "/images?api_key=fe56cdee4dfea0c18403e0965acfa23b");
+        urlList.add("https://api.themoviedb.org/3/person/" +id+ "/movie_credits?api_key=fe56cdee4dfea0c18403e0965acfa23b&language=en-US");
 
-        ConnectivityManager connectivityManager = (ConnectivityManager)  getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        if ((networkInfo != null) && networkInfo.isConnected()) {
-            FetchTask fetchCelebsData = new FetchTask();
-            fetchCelebsData.execute(urlList.get(0), urlList.get(1));
-        }
-        else{
-            Toast.makeText(getContext(), "Please Connect to internet...", Toast.LENGTH_SHORT).show();
-        }
+        Connectivity connectivity = new Connectivity(urlList, getActivity(), getContext());
+        connectivity.celebConnectivity();
         return rootView;
     }
 
-    private class CelebsImagesAdapter extends RecyclerView.Adapter<CelebsImagesAdapter.celebsImagesViewHolder> {
-        private ArrayList<CelebImageModel> celebImageModelArrayList;
 
-        class celebsImagesViewHolder extends RecyclerView.ViewHolder {
-            ImageView celebsImagesImageView;
-            ProgressBar celebsImagesImageViewProgressBar;
 
-            public celebsImagesViewHolder(View itemView) {
-                super(itemView);
-                celebsImagesImageView = (ImageView) itemView.findViewById(R.id.celeb_images);
-                celebsImagesImageViewProgressBar = (ProgressBar) itemView.findViewById(R.id.celeb_images_progressBar);
-            }
-        }
 
-        public CelebsImagesAdapter(ArrayList<CelebImageModel> arrayList) {
-            this.celebImageModelArrayList = arrayList;
-        }
-
-        @Override
-        public celebsImagesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.celeb_images_textview, parent, false); //change layout id
-            return new celebsImagesViewHolder(itemView);
-        }
-
-        @Override
-        public void onBindViewHolder(final celebsImagesViewHolder holder, int position) {
-            CelebImageModel celebImageModel = celebImageModelArrayList.get(position);
-            Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w500" + celebImageModel.getCelebImage())
-                    .into(holder.celebsImagesImageView,new com.squareup.picasso.Callback() {
-
-                        @Override
-                        public void onSuccess() {
-                            holder.celebsImagesImageViewProgressBar.setVisibility(View.GONE);
-                            holder.celebsImagesImageView.setVisibility(View.VISIBLE);
-                        }
-
-                        @Override
-                        public void onError() {
-
-                        }
-                    });
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return celebImageModelArrayList.size();
-        }
-    }
-    private class CelebsModel{
-        public String title;
-        public String biography;
-        public String dateOfBirth;
-        public String placeOfBirth;
-        public String profile_url;
-        public String alsoKnownAs;
-        public CelebsModel(String title, String biography, String dateOfBirth, String placeOfBirth, String profile_url, String alsoKnownAs){
-            this.title = title;
-            this.biography = biography;
-            this.dateOfBirth = dateOfBirth;
-            this.placeOfBirth = placeOfBirth;
-            this.profile_url = profile_url;
-            this.alsoKnownAs = alsoKnownAs;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public String getBiography() {
-            return biography;
-        }
-
-        public String getDateOfBirth() {
-            return dateOfBirth;
-        }
-
-        public String getPlaceOfBirth() {
-            return placeOfBirth;
-        }
-
-        public String getProfile_url() {
-            return profile_url;
-        }
-
-        public String getAlsoKnownAs() {
-            return alsoKnownAs;
-        }
-    }
-     private class CelebImageModel{
-         public String celebImage;
-         public CelebImageModel(String celebImage){
-             this.celebImage = celebImage;
-         }
-
-         public String getCelebImage() {
-             return celebImage;
-         }
-     }
-
-    public class FetchTask extends AsyncTask<String, Void, ArrayList<String>> {
-
-        private CelebsModel jsonCelebsParser(String jsonCeleb)throws JSONException {
-            JSONObject celebObject = new JSONObject(jsonCeleb);
-            String title = celebObject.get("name").toString();
-            String biography = celebObject.get("biography").toString();
-            String dateOfBirth = celebObject.get("birthday").toString();
-            String placeOfBirth = celebObject.get("place_of_birth").toString();
-            String profile = celebObject.get("profile_path").toString();
-           /* JSONArray alsoKnownAsArray = celebObject.getJSONArray("also_known_as");
-            String alsoKnownAs = alsoKnownAsArray.get(0).toString(); */
-
-            CelebsModel celebsModel=new CelebsModel(title, biography, dateOfBirth, placeOfBirth, profile, "");
-            return celebsModel;
-        }
-
-        public ArrayList<CelebImageModel> jsonCelebImageParser(String jsonCelebImage) throws JSONException {
-            ArrayList<CelebImageModel> celebImageArray = new ArrayList<>();
-            JSONObject celebImageObject = new JSONObject(jsonCelebImage);
-            JSONArray celebImageList = celebImageObject.getJSONArray("profiles");
-            for (int i = 0; i < celebImageList.length(); i++) {
-                JSONObject celebImage = celebImageList.getJSONObject(i);
-                String image = celebImage.get("file_path").toString();
-                CelebImageModel celebImageModel= new CelebImageModel(image);
-                celebImageArray.add(celebImageModel);
-            }
-            return celebImageArray;
-        }
-        @Override
-        protected void onCancelled(){
-            super.onCancelled();
-        }
-
+    public  class FetchTask extends AsyncTask<String, Void, ArrayList<String>> {
         @Override
         protected ArrayList<String> doInBackground(String... params) {
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
             String jsonData = null;
-            ArrayList<String> jsonArray = new ArrayList<>();
+            ArrayList<String> jsonArray = new ArrayList<String>();
             for (String param : params){
                 try {
                     //setting the urlConnection
@@ -296,8 +158,10 @@ public class CelebsFragment extends Fragment {
         protected void onPostExecute(ArrayList<String> jsonArray) {
             super.onPostExecute(jsonArray);
             ArrayList<CelebImageModel> celebImageModelArray = new ArrayList<>();
+            ArrayList<SimilarItemModel> celebMovieCreditArray = new ArrayList<>();
+            DetailCelebsJsonParser detailCelebsJsonParser = new DetailCelebsJsonParser();
             try {
-                final CelebsModel celebsModel = jsonCelebsParser(jsonArray.get(0));
+                final CelebsModel celebsModel = detailCelebsJsonParser.jsonCelebsParser(jsonArray.get(0));
                 title.setText(celebsModel.getTitle());
                 biography.setText(celebsModel.getBiography());
                 dateOfBirth.setText(celebsModel.getDateOfBirth());
@@ -366,10 +230,18 @@ public class CelebsFragment extends Fragment {
                 e.printStackTrace();
             }
             try {
-                celebImageModelArray = jsonCelebImageParser(jsonArray.get(1));
-                Log.v("output", celebImageModelArray.get(0).toString());
-                celebsImagesAdapter = new CelebsImagesAdapter(celebImageModelArray);
+                celebImageModelArray = detailCelebsJsonParser.jsonCelebImageParser(jsonArray.get(1));
+                //Log.v("output", celebImageModelArray.get(0).toString());
+                celebsImagesAdapter = new CelebAdapters.CelebsImagesAdapter(getContext(), celebImageModelArray);
                 recyclerViewCelebImages.setAdapter(celebsImagesAdapter );
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                celebMovieCreditArray = detailCelebsJsonParser.jsonCelebMovieCreditParser(jsonArray.get(2));
+                celebsMovieCreditAdapter = new CelebAdapters.CelebsMovieCreditAdapter(getContext(), celebMovieCreditArray, type);
+                recyclerViewCelebMovieCredit.setAdapter(celebsMovieCreditAdapter);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
