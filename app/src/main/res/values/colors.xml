@@ -20,4 +20,5 @@
     <color name="colorSecondaryLight">#E0E0E0</color>
     <color name="colorSecondaryExtraLight">#F5F5F5</color>
     <color name="colorSecondaryDark">#424242</color>
+    <color name="colorWhite">#FFF</color>
 </resources>
