@@ -83,6 +83,7 @@ public class MoviesFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_movies, container, false);
 
         //Initalizing detail layout members view
+        /*
         title = (TextView) rootView.findViewById(R.id.detail_movie_maintitle);
         overview = (TextView) rootView.findViewById(R.id.detail_movie_overview);
         vote_average = (TextView) rootView.findViewById(R.id.detail_movie_vote_average_textView);
@@ -157,6 +158,7 @@ public class MoviesFragment extends Fragment {
             connectivity.checkNetworkConnection();
             Toast.makeText(getContext(), "Please Connect to internet...", Toast.LENGTH_SHORT).show();
         }
+        */
         return rootView;
     }
 

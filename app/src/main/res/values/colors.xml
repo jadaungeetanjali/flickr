@@ -21,4 +21,5 @@
     <color name="colorSecondaryExtraLight">#F5F5F5</color>
     <color name="colorSecondaryDark">#424242</color>
     <color name="colorWhite">#FFF</color>
+    <color name="text_color_light">#fff</color>
 </resources>
