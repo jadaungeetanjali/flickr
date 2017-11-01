@@ -309,8 +309,8 @@ public class MoviesFragment extends Fragment {
                     default:
                         DetailItemModel = detailJsonParser.jsonMovieDetailParser(jsonArray.get(0));
                 }
-                Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.detail_toolbar);
-                toolbar.setTitle(DetailItemModel.getTitle());
+                //Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.detail_toolbar);
+                //toolbar.setTitle(DetailItemModel.getTitle());
                 title.setText(DetailItemModel.getTitle());
                 overview.setText(DetailItemModel.getOverview());
                 vote_average.setText(DetailItemModel.getVote_avg());

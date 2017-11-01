@@ -17,9 +17,9 @@ public class MoviesDetails extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_movie_layout);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
+        //setSupportActionBar(toolbar);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Bundle bundle = this.getIntent().getExtras();
         type = bundle.getString("type");
         if ((type.equals("movies")) || (type.equals("tv"))  ) {

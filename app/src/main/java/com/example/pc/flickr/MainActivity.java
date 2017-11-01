@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         Intent intent = new Intent(this, FetchApiService.class);
         startService(intent);
-        mFirebaseAuth = FirebaseAuth.getInstance();
+        //mFirebaseAuth = FirebaseAuth.getInstance();
 
         // Navigation Drawer .............................
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
+        /*
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -156,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
+        */
     }
 
 
@@ -209,13 +210,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
-        mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+        /*
+        mFirebaseAuth.removeAuthStateListener(mAuthStateListener);*/
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+        /*
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);*/
     }
 
     public void onSignedInInitialize(String user_name, String user_id, String user_email) {
