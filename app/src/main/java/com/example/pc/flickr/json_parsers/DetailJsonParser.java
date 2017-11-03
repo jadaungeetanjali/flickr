@@ -17,6 +17,7 @@ import java.util.ArrayList;
  */
 
 public class DetailJsonParser {
+
     public DetailItemModel jsonMovieDetailParser(String jsonMovie)throws JSONException {
         // fetching data in json
         JSONObject movieObject = new JSONObject(jsonMovie);
@@ -90,6 +91,7 @@ public class DetailJsonParser {
             String similarItemVoteAverage = similarMovies.get("vote_average").toString();
             String similarItemPoster = similarMovies.get("poster_path").toString();
             String similarItemId = similarMovies.get("id").toString();
+
             SimilarItemModel SimilarItemModel = new SimilarItemModel(similarItemId, similarItemName, similarItemVoteAverage, similarItemPoster);
             similarMoviesArray.add(SimilarItemModel);
         }
@@ -106,16 +108,14 @@ public class DetailJsonParser {
             String similarItemVoteAverage = similarMovies.get("vote_average").toString();
             String similarItemPoster = similarMovies.get("poster_path").toString();
             String similarItemId = similarMovies.get("id").toString();
+
             SimilarItemModel SimilarItemModel = new SimilarItemModel(similarItemId, similarItemName, similarItemVoteAverage, similarItemPoster);
             similarMoviesArray.add(SimilarItemModel);
         }
         return similarMoviesArray;
     }
 
-
-
     //Tv Parsers
-
     public DetailItemModel jsonTvDetailParser(String jsonMovie)throws JSONException {
         // fetching data in json
         JSONObject movieObject = new JSONObject(jsonMovie);
@@ -130,5 +130,4 @@ public class DetailJsonParser {
         DetailItemModel DetailItemModel=new DetailItemModel(title, overview, vote_average, tagline, release_date, language, poster);
         return DetailItemModel;
     }
-
 }
