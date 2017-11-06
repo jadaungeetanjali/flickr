@@ -9,6 +9,7 @@ import com.example.pc.flickr.models.DetailMovieModel;
 import com.example.pc.flickr.models.ReviewModel;
 import com.example.pc.flickr.models.SimilarItemModel;
 import com.example.pc.flickr.models.VideoModel;
+import com.example.pc.flickr.utilities.movies.MovieCastJsonConfig;
 import com.example.pc.flickr.utilities.movies.MovieDetailJsonConfig;
 
 import org.json.JSONArray;
@@ -20,7 +21,6 @@ import java.util.ArrayList;
 public class DetailMovieJsonParser {
 
     public DetailMovieModel jsonMovieDetailParser(String jsonMovie)throws JSONException {
-
         //Importing jsonConfig from utilities
         MovieDetailJsonConfig jsonConfig = new MovieDetailJsonConfig();
         // fetching data in json
@@ -51,22 +51,25 @@ public class DetailMovieJsonParser {
         return detailMovieModel;
     }
 
-    public ArrayList<CastModel> jsonCastParser(String jsonCast) throws JSONException {
+    public ArrayList<CastModel> jsonMovieCastParser(String jsonCast) throws JSONException {
         ArrayList<CastModel> castArray = new ArrayList<>();
+        MovieCastJsonConfig jsonConfig = new MovieCastJsonConfig();
+
         JSONObject castObject = new JSONObject(jsonCast);
-        JSONArray castList = castObject.getJSONArray("cast");
+        //Iterating through cast
+        JSONArray castList = castObject.getJSONArray(jsonConfig.CAST);
         for (int i = 0; i < castList.length(); i++) {
             JSONObject cast = castList.getJSONObject(i);
-            String itemId = cast.get("id").toString();
-            String name = cast.get("name").toString();
-            String character = cast.get("character").toString();
-            String image = cast.get("profile_path").toString();
-
-            CastModel castModel = new CastModel(itemId,name,character,image);
+            CastModel castModel = new CastModel();
+            castModel.setCharacter(cast.get(jsonConfig.CHARACTER).toString());
+            castModel.setId(cast.get(jsonConfig.CAST_ID).toString());
+            castModel.setName(cast.get(jsonConfig.CAST_NAME).toString());
+            castModel.setImage(cast.get(jsonConfig.CAST_IMAGE_URL).toString());
             castArray.add(castModel);
         }
         return castArray;
     }
+
     public ArrayList<VideoModel> jsonVideoParser(String jsonVideos) throws JSONException {
         ArrayList<VideoModel> videoArray = new ArrayList<>();
         JSONObject videoObject = new JSONObject(jsonVideos);

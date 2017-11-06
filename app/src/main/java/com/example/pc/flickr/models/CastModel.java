@@ -10,11 +10,20 @@ public class CastModel{
     public String image;
     public String id;
 
-    public CastModel(String id,String name,String character,String image){
-        this.name = name;
+    public void setCharacter(String character) {
         this.character = character;
-        this.image = image;
+    }
+
+    public void setId(String id) {
         this.id = id;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getCharacter() {
