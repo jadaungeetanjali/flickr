@@ -6,6 +6,7 @@ package com.example.pc.flickr.json_parsers;
 
 import com.example.pc.flickr.models.CastModel;
 import com.example.pc.flickr.models.DetailItemModel;
+import com.example.pc.flickr.models.DetailMovieModel;
 import com.example.pc.flickr.models.ReviewModel;
 import com.example.pc.flickr.models.SimilarItemModel;
 import com.example.pc.flickr.models.VideoModel;
@@ -18,19 +19,37 @@ import java.util.ArrayList;
 
 public class DetailMovieJsonParser {
 
-    public DetailItemModel jsonMovieDetailParser(String jsonMovie)throws JSONException {
+    public DetailMovieModel jsonMovieDetailParser(String jsonMovie)throws JSONException {
         // fetching data in json
         JSONObject movieObject = new JSONObject(jsonMovie);
+        String adult = movieObject.get("adult").toString();
+        JSONArray genresMovies = movieObject.getJSONArray("genres");
+        String genres = genresMovies.getJSONObject(0).get("name").toString();
+        String language = movieObject.get("original_language").toString();
         String title = movieObject.get("title").toString();
         String overview = movieObject.get("overview").toString();
-        String vote_average = movieObject.get("vote_average").toString();
-        String tagline = movieObject.get("tagline").toString();
-        String release_date = movieObject.get("release_date").toString();
-        String language = movieObject.get("original_language").toString();
-        String poster = movieObject.get("poster_path").toString();
-        //creating object of DetailItemModel class to initialise constructor with movieDetails
-        DetailItemModel DetailItemModel=new DetailItemModel(title, overview, vote_average, tagline, release_date, language, poster);
-        return DetailItemModel;
+        String voteAverage = movieObject.get("vote_average").toString();
+        String releaseDate = movieObject.get("release_date").toString();
+        String runtime = movieObject.get("runtime").toString();
+        String releasedStatus = movieObject.get("status").toString();
+        //Converting runtime from 139 to 2:19
+        if (runtime != null){
+            int hours = Integer.parseInt(runtime)/60;
+            int minutes = Integer.parseInt(runtime) - hours * 60;
+            runtime = hours + ":" + minutes;
+        }
+        //Setting values in detailMovieModel
+        DetailMovieModel detailMovieModel = new DetailMovieModel();
+        detailMovieModel.setAdult(adult);
+        detailMovieModel.setGeneres(genres);
+        detailMovieModel.setLanguage(language);
+        detailMovieModel.setTitle(title);
+        detailMovieModel.setOverview(overview);
+        detailMovieModel.setVoteAvg(voteAverage);
+        detailMovieModel.setReleaseDate(releaseDate);
+        detailMovieModel.setRuntime(runtime);
+        detailMovieModel.setReleasedStatus(releasedStatus);
+        return detailMovieModel;
     }
 
     public ArrayList<CastModel> jsonCastParser(String jsonCast) throws JSONException {

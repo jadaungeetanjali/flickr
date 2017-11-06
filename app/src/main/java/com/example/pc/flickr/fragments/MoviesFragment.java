@@ -24,6 +24,8 @@ import android.widget.Toast;
 
 import com.example.pc.flickr.Adapters.DetailAdapter;
 import com.example.pc.flickr.YoutubeActivity;
+import com.example.pc.flickr.json_parsers.DetailMovieJsonParser;
+import com.example.pc.flickr.models.DetailMovieModel;
 import com.example.pc.flickr.services.Connectivity;
 import com.example.pc.flickr.R;
 import com.example.pc.flickr.json_parsers.DetailJsonParser;
@@ -289,28 +291,31 @@ public class MoviesFragment extends Fragment {
             ArrayList<VideoModel> videosArray = new ArrayList<>();
             try {
 
-                DetailJsonParser detailJsonParser = new DetailJsonParser();
-                final DetailItemModel DetailItemModel;
+                //DetailJsonParser detailJsonParser = new DetailJsonParser();
+                DetailMovieJsonParser detailMovieJsonParser = new DetailMovieJsonParser();
+                //final DetailItemModel DetailItemModel;
+                DetailMovieModel detailMovieModel;
                 switch (type){
                     case "movies":
-                        DetailItemModel = detailJsonParser.jsonMovieDetailParser(jsonArray.get(0));
+
+                        detailMovieModel = detailMovieJsonParser.jsonMovieDetailParser(jsonArray.get(0));
                         //reviewArray = detailJsonParser.jsonMovieReviewsParser(jsonArray.get(2));
                         //reviewAdapter = new DetailAdapter.ReviewAdapter(reviewArray);
                         //recyclerViewReviews.setAdapter(reviewAdapter);
                         //similarMoviesArray = detailJsonParser.jsonSimilarParser(jsonArray.get(3));
 
                         break;
-                    case "tv":
-                        DetailItemModel = detailJsonParser.jsonTvDetailParser(jsonArray.get(0));
-                        similarMoviesArray = detailJsonParser.jsonTvSimilarParser(jsonArray.get(3));
-                        break;
+                    //case "tv":
+                        //DetailItemModel = detailJsonParser.jsonTvDetailParser(jsonArray.get(0));
+                        //similarMoviesArray = detailJsonParser.jsonTvSimilarParser(jsonArray.get(3));
+                    //    break;
                     default:
-                        DetailItemModel = detailJsonParser.jsonMovieDetailParser(jsonArray.get(0));
+                        detailMovieModel = detailMovieJsonParser.jsonMovieDetailParser(jsonArray.get(0));
                 }
                 //Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.detail_toolbar);
                 //toolbar.setTitle(DetailItemModel.getTitle());
                 //title.setText(DetailItemModel.getTitle());
-                overview.setText(DetailItemModel.getOverview());
+                overview.setText(detailMovieModel.getOverview());
                 //vote_average.setText(DetailItemModel.getVote_avg());
                 //tagline.setText(DetailItemModel.getTagline());
                 //release_date.setText(DetailItemModel.getRelease_date());
