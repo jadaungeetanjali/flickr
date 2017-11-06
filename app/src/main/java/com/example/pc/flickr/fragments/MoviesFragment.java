@@ -193,7 +193,7 @@ public class MoviesFragment extends Fragment {
         public void onBindViewHolder(final videoViewHolder holder, int position) {
             final VideoModel videoModel = videoArrayList.get(position);
             holder.videoNameTextView.setText(videoModel.getName());
-            Picasso.with(getContext()).load("https://img.youtube.com/vi/"+videoModel.getImage()+"/0.jpg")
+            /*Picasso.with(getContext()).load("https://img.youtube.com/vi/"+videoModel.getImage()+"/0.jpg")
                     .into(holder.videoImageView,new com.squareup.picasso.Callback() {
 
                         @Override
@@ -206,12 +206,12 @@ public class MoviesFragment extends Fragment {
                         public void onError() {
 
                         }
-                    });
+                    });*/
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Bundle bundle = new Bundle();
-                    bundle.putString("url",videoModel.getImage());
+                    //bundle.putString("url",videoModel.getImage());
                     Intent intent = new Intent(getActivity().getApplication(), YoutubeActivity.class);
                     intent.putExtras(bundle);
                     startActivity(intent);
