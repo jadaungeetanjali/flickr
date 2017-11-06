@@ -5,6 +5,7 @@ package com.example.pc.flickr.utilities.movies;
  */
 
 public class MovieReviewJsonConfig {
+    public static final String REVIEWS_ARRAY = "results";
     public static final String AUTHOR_NAME = "author";
     public static final String AUTHOR_CONTENT = "content";
 }

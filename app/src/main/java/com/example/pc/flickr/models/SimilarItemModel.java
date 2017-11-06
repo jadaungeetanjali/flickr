@@ -5,16 +5,16 @@ package com.example.pc.flickr.models;
  */
 
 public class SimilarItemModel{
-    public String similarItemName;
-    public String similarItemVoteAverage;
     public String similarItemimage;
     public String similarItemId;
 
-    public SimilarItemModel(String id,String name,String voteAverage,String image){
-        this.similarItemName = name;
-        this.similarItemVoteAverage = voteAverage;
-        this.similarItemimage = image;
-        this.similarItemId = id;
+
+    public void setSimilarItemId(String similarItemId) {
+        this.similarItemId = similarItemId;
+    }
+
+    public void setSimilarItemimage(String similarItemimage) {
+        this.similarItemimage = similarItemimage;
     }
 
     public String getSimilarItemId() {
@@ -25,11 +25,4 @@ public class SimilarItemModel{
         return similarItemimage;
     }
 
-    public String getSimilarItemName() {
-        return similarItemName;
-    }
-
-    public String getSimilarItemVoteAverage() {
-        return similarItemVoteAverage;
-    }
 }

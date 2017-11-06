@@ -11,6 +11,9 @@ import com.example.pc.flickr.models.SimilarItemModel;
 import com.example.pc.flickr.models.VideoModel;
 import com.example.pc.flickr.utilities.movies.MovieCastJsonConfig;
 import com.example.pc.flickr.utilities.movies.MovieDetailJsonConfig;
+import com.example.pc.flickr.utilities.movies.MovieReviewJsonConfig;
+import com.example.pc.flickr.utilities.movies.MovieVideosJsonConfig;
+import com.example.pc.flickr.utilities.movies.MoviesSimilarJsonConfig;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -72,16 +75,17 @@ public class DetailMovieJsonParser {
 
     public ArrayList<VideoModel> jsonVideoParser(String jsonVideos) throws JSONException {
         ArrayList<VideoModel> videoArray = new ArrayList<>();
+        MovieVideosJsonConfig jsonConfig = new MovieVideosJsonConfig();
+
         JSONObject videoObject = new JSONObject(jsonVideos);
-        JSONArray videoList = videoObject.getJSONArray("results");
+        //Iterating through videos
+        JSONArray videoList = videoObject.getJSONArray(jsonConfig.VIDEO_ARRAY);
         for (int i = 0; i < videoList.length(); i++) {
             JSONObject video = videoList.getJSONObject(i);
-            String itemId = video.get("id").toString();
-            String name = video.get("name").toString();
-            String type = video.get("type").toString();
-            String image = video.get("key").toString();
-
-            VideoModel videoModel = new VideoModel(itemId,name,type,image);
+            VideoModel videoModel = new VideoModel();
+            videoModel.setName(video.get(jsonConfig.VIDEO_NAME).toString());
+            videoModel.setImageUrl(video.get(jsonConfig.VIDEO_URL).toString());
+            videoModel.setVideoUrl(video.get(jsonConfig.VIDEO_URL).toString());
             videoArray.add(videoModel);
         }
         return videoArray;
@@ -89,14 +93,15 @@ public class DetailMovieJsonParser {
 
     public ArrayList<ReviewModel> jsonMovieReviewsParser(String jsonReviews) throws JSONException {
         ArrayList<ReviewModel> reviewsArray = new ArrayList<>();
+        MovieReviewJsonConfig jsonConfig = new MovieReviewJsonConfig();
+
         JSONObject reviewsObject = new JSONObject(jsonReviews);
-        JSONArray reviewsList = reviewsObject.getJSONArray("results");
+        JSONArray reviewsList = reviewsObject.getJSONArray(jsonConfig.REVIEWS_ARRAY);
         for (int i = 0; i < reviewsList.length(); i++) {
             JSONObject review = reviewsList.getJSONObject(i);
-            String author = review.get("author").toString();
-            String content = review.get("content").toString();
-
-            ReviewModel reviewModel = new ReviewModel(author, content);
+            ReviewModel reviewModel = new ReviewModel();
+            reviewModel.setAuthor(review.get(jsonConfig.AUTHOR_NAME).toString());
+            reviewModel.setContent(review.get(jsonConfig.AUTHOR_CONTENT).toString());
             reviewsArray.add(reviewModel);
         }
         return reviewsArray;
@@ -104,17 +109,16 @@ public class DetailMovieJsonParser {
 
     public ArrayList<SimilarItemModel> jsonSimilarParser(String jsonSimilarMovies) throws JSONException {
         ArrayList<SimilarItemModel> similarMoviesArray = new ArrayList<>();
+        MoviesSimilarJsonConfig jsonConfig = new MoviesSimilarJsonConfig();
+
         JSONObject similarMoviesObject = new JSONObject(jsonSimilarMovies);
-        JSONArray similarMoviesList = similarMoviesObject.getJSONArray("results");
+        JSONArray similarMoviesList = similarMoviesObject.getJSONArray(jsonConfig.MOVIE_ARRAY);
         for (int i = 0; i < similarMoviesList.length(); i++) {
             JSONObject similarMovies = similarMoviesList.getJSONObject(i);
-            String similarItemName = similarMovies.get("title").toString();
-            String similarItemVoteAverage = similarMovies.get("vote_average").toString();
-            String similarItemPoster = similarMovies.get("poster_path").toString();
-            String similarItemId = similarMovies.get("id").toString();
-
-            SimilarItemModel SimilarItemModel = new SimilarItemModel(similarItemId, similarItemName, similarItemVoteAverage, similarItemPoster);
-            similarMoviesArray.add(SimilarItemModel);
+            SimilarItemModel similarItemModel = new SimilarItemModel();
+            similarItemModel.setSimilarItemId(similarMovies.get(jsonConfig.MOVIE_ID).toString());
+            similarItemModel.setSimilarItemimage(similarMovies.get(jsonConfig.MOVIE_IMAGE_URL).toString());
+            similarMoviesArray.add(similarItemModel);
         }
         return similarMoviesArray;
     }

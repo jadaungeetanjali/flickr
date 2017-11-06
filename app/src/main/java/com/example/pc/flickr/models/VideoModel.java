@@ -6,30 +6,30 @@ package com.example.pc.flickr.models;
 
 public class VideoModel {
     public String name;
-    public String type;
-    public String image;
-    public String id;
+    public String imageUrl;
+    public String videoUrl;
 
-    public VideoModel(String id,String name,String type,String image){
+    public void setName(String name) {
         this.name = name;
-        this.type = type;
-        this.image = image;
-        this.id = id;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getType() {
-        return type;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public String getImage() {
-        return image;
-    }
-
-    public String getId() {
-        return id;
+    public String getVideoUrl() {
+        return videoUrl;
     }
 }

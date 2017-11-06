@@ -5,6 +5,7 @@ package com.example.pc.flickr.utilities.movies;
  */
 
 public class MoviesSimilarJsonConfig {
+    public static final String MOVIE_ARRAY = "results";
     public static final String MOVIE_ID = "id";
     public static final String MOVIE_IMAGE_URL = "poster_path";
 }

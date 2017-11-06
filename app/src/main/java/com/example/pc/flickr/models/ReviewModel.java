@@ -7,8 +7,12 @@ package com.example.pc.flickr.models;
 public class ReviewModel{
     public String author;
     public String content;
-    public ReviewModel(String author, String content){
+
+    public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public void setContent(String content) {
         this.content = content;
     }
 
