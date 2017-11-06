@@ -5,11 +5,11 @@ package com.example.pc.flickr.json_parsers;
  */
 
 import com.example.pc.flickr.models.CastModel;
-import com.example.pc.flickr.models.DetailItemModel;
 import com.example.pc.flickr.models.DetailMovieModel;
 import com.example.pc.flickr.models.ReviewModel;
 import com.example.pc.flickr.models.SimilarItemModel;
 import com.example.pc.flickr.models.VideoModel;
+import com.example.pc.flickr.utilities.movies.MovieDetailJsonConfig;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,35 +20,34 @@ import java.util.ArrayList;
 public class DetailMovieJsonParser {
 
     public DetailMovieModel jsonMovieDetailParser(String jsonMovie)throws JSONException {
+
+        //Importing jsonConfig from utilities
+        MovieDetailJsonConfig jsonConfig = new MovieDetailJsonConfig();
         // fetching data in json
         JSONObject movieObject = new JSONObject(jsonMovie);
-        String adult = movieObject.get("adult").toString();
-        JSONArray genresMovies = movieObject.getJSONArray("genres");
-        String genres = genresMovies.getJSONObject(0).get("name").toString();
-        String language = movieObject.get("original_language").toString();
-        String title = movieObject.get("title").toString();
-        String overview = movieObject.get("overview").toString();
-        String voteAverage = movieObject.get("vote_average").toString();
-        String releaseDate = movieObject.get("release_date").toString();
-        String runtime = movieObject.get("runtime").toString();
-        String releasedStatus = movieObject.get("status").toString();
-        //Converting runtime from 139 to 2:19
+
+        //Getting genres index 0 from movieObject
+        JSONArray genresMovies = movieObject.getJSONArray(jsonConfig.GENRES);
+
+        //Converting runtime from 139 to 2:19 and storing it into genres
+        String runtime =  movieObject.get(jsonConfig.RUNTIME).toString();
         if (runtime != null){
             int hours = Integer.parseInt(runtime)/60;
             int minutes = Integer.parseInt(runtime) - hours * 60;
             runtime = hours + ":" + minutes;
         }
+
         //Setting values in detailMovieModel
         DetailMovieModel detailMovieModel = new DetailMovieModel();
-        detailMovieModel.setAdult(adult);
-        detailMovieModel.setGeneres(genres);
-        detailMovieModel.setLanguage(language);
-        detailMovieModel.setTitle(title);
-        detailMovieModel.setOverview(overview);
-        detailMovieModel.setVoteAvg(voteAverage);
-        detailMovieModel.setReleaseDate(releaseDate);
+        detailMovieModel.setAdult(movieObject.get(jsonConfig.ADULT).toString());
+        detailMovieModel.setGeneres(genresMovies.getJSONObject(0).get(jsonConfig.GENRES_NAME).toString());
+        detailMovieModel.setLanguage(movieObject.get(jsonConfig.LANGUAGE).toString());
+        detailMovieModel.setTitle(movieObject.get(jsonConfig.TITLE).toString());
+        detailMovieModel.setOverview(movieObject.get(jsonConfig.OVERVIEW).toString());
+        detailMovieModel.setVoteAvg(movieObject.get(jsonConfig.VOTE_AVERAGE).toString());
+        detailMovieModel.setReleaseDate(movieObject.get(jsonConfig.RELEASE_DATE).toString());
         detailMovieModel.setRuntime(runtime);
-        detailMovieModel.setReleasedStatus(releasedStatus);
+        detailMovieModel.setReleasedStatus(movieObject.get(jsonConfig.RELEASE_STATUS).toString());
         return detailMovieModel;
     }
 

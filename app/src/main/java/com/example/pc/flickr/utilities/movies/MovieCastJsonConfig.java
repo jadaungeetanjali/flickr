@@ -1,4 +1,4 @@
-package com.example.pc.flickr.utilities;
+package com.example.pc.flickr.utilities.movies;
 
 /**
  * Created by Deepanshu on 11/6/2017.
@@ -9,3 +9,4 @@ public class MovieCastJsonConfig {
     public static final String CAST_NAME = "name";
     public static final String CAST_IMAGE_URL = "profile_path";
 }
+
