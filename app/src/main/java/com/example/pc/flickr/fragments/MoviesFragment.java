@@ -62,7 +62,7 @@ public class MoviesFragment extends Fragment {
     private DetailAdapter.SimilarMoviesAdapter similarMoviesAdapter;
     private VideoAdapter videoAdapter;
     RecyclerView recyclerViewCast, recyclerViewReviews, recyclerViewSimilar,recyclerViewVideo;
-    private TextView title, overview, vote_average, tagline, release_date, language, internet_connectivity;
+    private TextView title, overview, status, tagline, release_date, category, internet_connectivity;
     private ProgressBar progressBar;
     private ImageView poster,wishListButton,wishListButton2;
     private LinearLayout mainContainer;
@@ -83,43 +83,41 @@ public class MoviesFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_movies, container, false);
 
         //Initalizing detail layout members view
-        /*
-        title = (TextView) rootView.findViewById(R.id.detail_movie_maintitle);
-        overview = (TextView) rootView.findViewById(R.id.detail_movie_overview);
-        vote_average = (TextView) rootView.findViewById(R.id.detail_movie_vote_average_textView);
-        tagline = (TextView) rootView.findViewById(R.id.detail_movie_tagline);
-        release_date = (TextView) rootView.findViewById(R.id.detail_movie_releaseTitle);
-        language = (TextView) rootView.findViewById(R.id.detail_movie_language);
-        poster = (ImageView) rootView.findViewById(R.id.detail_movie_poster);
-        internet_connectivity = (TextView) rootView.findViewById(R.id.detail_movie_internet_connectivity);
-        button = (Button) rootView.findViewById(R.id.detail_movie_watchlist);
-        wishListButton = (ImageView) rootView.findViewById(R.id.detail_movie_wishlist_button);
-        wishListButton2 = (ImageView) rootView.findViewById(R.id.detail_movie_wishlist_button_2);
-        progressBar = (ProgressBar) rootView.findViewById(R.id.detail_movie_progressBar);
-        mainContainer = (LinearLayout) rootView.findViewById(R.id.detail_movie_mainContainer);
+        overview = (TextView) rootView.findViewById(R.id.detail_movie_details);
+        //vote_average = (TextView) rootView.findViewById(R.id.detail_movie_vote_average_textView);
+        //tagline = (TextView) rootView.findViewById(R.id.detail_movie_tagline);
+        release_date = (TextView) rootView.findViewById(R.id.detail_movie_release_date);
+        category = (TextView) rootView.findViewById(R.id.detail_movie_category);
+        status = (TextView) rootView.findViewById(R.id.detail_movie_status);
+        //internet_connectivity = (TextView) rootView.findViewById(R.id.detail_movie_internet_connectivity);
+        //button = (Button) rootView.findViewById(R.id.detail_movie_watchlist);
+        //wishListButton = (ImageView) rootView.findViewById(R.id.detail_movie_wishlist_button);
+        //wishListButton2 = (ImageView) rootView.findViewById(R.id.detail_movie_wishlist_button_2);
+        //progressBar = (ProgressBar) rootView.findViewById(R.id.detail_movie_progressBar);
+        //mainContainer = (LinearLayout) rootView.findViewById(R.id.detail_movie_mainContainer);
 
         //Initializing Cast Recycler view
-        recyclerViewCast = (RecyclerView) rootView.findViewById(R.id.detail_movie_castRecyclerView);
-        LinearLayoutManager layoutManagerCast = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerViewCast.setLayoutManager(layoutManagerCast);
-        recyclerViewCast.setItemAnimator(new DefaultItemAnimator());
+        //recyclerViewCast = (RecyclerView) rootView.findViewById(R.id.detail_movie_castRecyclerView);
+        //LinearLayoutManager layoutManagerCast = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        //recyclerViewCast.setLayoutManager(layoutManagerCast);
+        //recyclerViewCast.setItemAnimator(new DefaultItemAnimator());
 
         //Initializing Review Recycler View
-        recyclerViewReviews = (RecyclerView) rootView.findViewById(R.id.detail_movie_reviewsRecyclerView);
-        LinearLayoutManager layoutManagerReviews = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        recyclerViewReviews.setLayoutManager(layoutManagerReviews);
-        recyclerViewReviews.setItemAnimator(new DefaultItemAnimator());
+        //recyclerViewReviews = (RecyclerView) rootView.findViewById(R.id.detail_movie_reviewsRecyclerView);
+        //LinearLayoutManager layoutManagerReviews = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        //recyclerViewReviews.setLayoutManager(layoutManagerReviews);
+        //recyclerViewReviews.setItemAnimator(new DefaultItemAnimator());
 
         //Initializing Similar Recycler View
-        recyclerViewSimilar = (RecyclerView) rootView.findViewById(R.id.detail_movie_similarMoviesRecyclerView);
-        LinearLayoutManager layoutManagerSimilar = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerViewSimilar.setLayoutManager(layoutManagerSimilar);
-        recyclerViewSimilar.setItemAnimator(new DefaultItemAnimator());
+        //recyclerViewSimilar = (RecyclerView) rootView.findViewById(R.id.detail_movie_similarMoviesRecyclerView);
+        //LinearLayoutManager layoutManagerSimilar = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        //recyclerViewSimilar.setLayoutManager(layoutManagerSimilar);
+        //recyclerViewSimilar.setItemAnimator(new DefaultItemAnimator());
 
-        recyclerViewVideo = (RecyclerView) rootView.findViewById(R.id.detail_movie_videosRecyclerView);
-        LinearLayoutManager layoutManagerVideo = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerViewVideo.setLayoutManager(layoutManagerVideo);
-        recyclerViewVideo.setItemAnimator(new DefaultItemAnimator());
+        //recyclerViewVideo = (RecyclerView) rootView.findViewById(R.id.detail_movie_videosRecyclerView);
+        //LinearLayoutManager layoutManagerVideo = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        //recyclerViewVideo.setLayoutManager(layoutManagerVideo);
+        //recyclerViewVideo.setItemAnimator(new DefaultItemAnimator());
 
         Bundle bundle = getArguments();
         id = bundle.getString("id");
@@ -146,19 +144,19 @@ public class MoviesFragment extends Fragment {
         Connectivity connectivity = new Connectivity(getActivity());
 
         if (connectivity.internetConnectivity()) {
-            internet_connectivity.setVisibility(View.GONE);
-            ScrollView scrollView = (ScrollView) rootView.findViewById(R.id.detail_movie_scrollView);
-            scrollView.setVisibility(View.VISIBLE);
+            //internet_connectivity.setVisibility(View.GONE);
+            //ScrollView scrollView = (ScrollView) rootView.findViewById(R.id.detail_movie_scrollView);
+            //scrollView.setVisibility(View.VISIBLE);
             callMovieData = new FetchTask();
             callMovieData.execute(urlList.get(0), urlList.get(1), urlList.get(2), urlList.get(3),urlList.get(4));
             internet = true;
         }
         else{
-            internet = false;
+            //internet = false;
             connectivity.checkNetworkConnection();
             Toast.makeText(getContext(), "Please Connect to internet...", Toast.LENGTH_SHORT).show();
         }
-        */
+
         return rootView;
     }
 
@@ -296,10 +294,10 @@ public class MoviesFragment extends Fragment {
                 switch (type){
                     case "movies":
                         DetailItemModel = detailJsonParser.jsonMovieDetailParser(jsonArray.get(0));
-                        reviewArray = detailJsonParser.jsonMovieReviewsParser(jsonArray.get(2));
-                        reviewAdapter = new DetailAdapter.ReviewAdapter(reviewArray);
-                        recyclerViewReviews.setAdapter(reviewAdapter);
-                        similarMoviesArray = detailJsonParser.jsonSimilarParser(jsonArray.get(3));
+                        //reviewArray = detailJsonParser.jsonMovieReviewsParser(jsonArray.get(2));
+                        //reviewAdapter = new DetailAdapter.ReviewAdapter(reviewArray);
+                        //recyclerViewReviews.setAdapter(reviewAdapter);
+                        //similarMoviesArray = detailJsonParser.jsonSimilarParser(jsonArray.get(3));
 
                         break;
                     case "tv":
@@ -311,55 +309,55 @@ public class MoviesFragment extends Fragment {
                 }
                 //Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.detail_toolbar);
                 //toolbar.setTitle(DetailItemModel.getTitle());
-                title.setText(DetailItemModel.getTitle());
+                //title.setText(DetailItemModel.getTitle());
                 overview.setText(DetailItemModel.getOverview());
-                vote_average.setText(DetailItemModel.getVote_avg());
-                tagline.setText(DetailItemModel.getTagline());
-                release_date.setText(DetailItemModel.getRelease_date());
-                language.setText(DetailItemModel.getLanguage());
-                Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w500"+DetailItemModel.getImg_url()).into(poster);
+                //vote_average.setText(DetailItemModel.getVote_avg());
+                //tagline.setText(DetailItemModel.getTagline());
+                //release_date.setText(DetailItemModel.getRelease_date());
+                //language.setText(DetailItemModel.getLanguage());
+                //Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w500"+DetailItemModel.getImg_url()).into(poster);
 
-                castArray = detailJsonParser.jsonCastParser(jsonArray.get(1));
-                castAdapter = new DetailAdapter.CastAdapter(getContext(),castArray);
-                recyclerViewCast.setAdapter(castAdapter);
+                //castArray = detailJsonParser.jsonCastParser(jsonArray.get(1));
+                //castAdapter = new DetailAdapter.CastAdapter(getContext(),castArray);
+                //recyclerViewCast.setAdapter(castAdapter);
 
 
 
-                similarMoviesAdapter = new DetailAdapter.SimilarMoviesAdapter(getContext(),similarMoviesArray,type);
-                recyclerViewSimilar.setAdapter(similarMoviesAdapter);
+                //similarMoviesAdapter = new DetailAdapter.SimilarMoviesAdapter(getContext(),similarMoviesArray,type);
+                //recyclerViewSimilar.setAdapter(similarMoviesAdapter);
 
-                videosArray = detailJsonParser.jsonVideoParser(jsonArray.get(4));
-                videoAdapter = new VideoAdapter(videosArray);
-                recyclerViewVideo.setAdapter(videoAdapter);
-                FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
-                DatabaseReference mWatchListReference = firebaseCurd.getmWatchListReference();
-                DatabaseReference mWishListReference = firebaseCurd.getmWishListReference();
-                mWishListReference.child(id).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        WishListModel wishListModel = dataSnapshot.getValue(WishListModel.class);
-                        if (wishListModel != null){
-                            wishListButton.setVisibility(View.GONE);
-                            wishListButton2.setVisibility(View.VISIBLE);
-                            wishList = true;
-                        }
-                        else {
-                            wishList = false;
-                        }
+                //videosArray = detailJsonParser.jsonVideoParser(jsonArray.get(4));
+                //videoAdapter = new VideoAdapter(videosArray);
+                //recyclerViewVideo.setAdapter(videoAdapter);
+                //FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
+                //DatabaseReference mWatchListReference = firebaseCurd.getmWatchListReference();
+                //DatabaseReference mWishListReference = firebaseCurd.getmWishListReference();
+                //mWishListReference.child(id).addValueEventListener(new ValueEventListener() {
+                //    @Override
+                //    public void onDataChange(DataSnapshot dataSnapshot) {
+                //        WishListModel wishListModel = dataSnapshot.getValue(WishListModel.class);
+                //        if (wishListModel != null){
+                //            wishListButton.setVisibility(View.GONE);
+                //            wishListButton2.setVisibility(View.VISIBLE);
+                //            wishList = true;
+                //        }
+                //        else {
+                //            wishList = false;
+                //        }
 
-                    }
+                //    }
 
-                    @Override
-                    public void onCancelled(DatabaseError error) {
+                //    @Override
+                //    public void onCancelled(DatabaseError error) {
                         // Failed to read value
-                        Log.w(TAG, "Failed to read value.", error.toException());
-                    }
-                });
+                //        Log.w(TAG, "Failed to read value.", error.toException());
+                //    }
+                //});
 
 
 
 
-                mWatchListReference.child(id).addValueEventListener(new ValueEventListener() {
+                /*mWatchListReference.child(id).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         WishListModel wishListModel = dataSnapshot.getValue(WishListModel.class);
@@ -383,10 +381,10 @@ public class MoviesFragment extends Fragment {
                         // Failed to read value
                         Log.w(TAG, "Failed to read value.", error.toException());
                     }
-                });
+                });*/
 
 
-                button.setOnClickListener(new View.OnClickListener() {
+                /*button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
@@ -407,8 +405,8 @@ public class MoviesFragment extends Fragment {
                             button.setText("ADD TO WatchLIST");
                         }
                     }
-                });
-                wishListButton.setOnClickListener(new View.OnClickListener() {
+                });*/
+                /*wishListButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
@@ -429,8 +427,8 @@ public class MoviesFragment extends Fragment {
                             Toast.makeText(getContext(), "Removed from WishList", Toast.LENGTH_SHORT).show();
                         }
                     }
-                });
-                wishListButton2.setOnClickListener(new View.OnClickListener() {
+                });*/
+                /*wishListButton2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
@@ -451,7 +449,7 @@ public class MoviesFragment extends Fragment {
                             Toast.makeText(getContext(), "Removed from WishList", Toast.LENGTH_SHORT).show();
                         }
                     }
-                });
+                });*/
 
 
             } catch (JSONException e) {
@@ -459,7 +457,7 @@ public class MoviesFragment extends Fragment {
             }
         }
 
-        //On cancel handles async task cacelation
+        //On cancel handles async task cancellation
         @Override
         protected void onCancelled() {
             super.onCancelled();
