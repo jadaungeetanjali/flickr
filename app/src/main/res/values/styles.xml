@@ -1,11 +1,10 @@
 <resources>
-
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorDanger</item>
-        <item name="colorPrimaryDark">@color/colorDangerDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">#00a99d</item>
+        <item name="colorPrimaryDark">#17968a</item>
+        <item name="colorAccent">#f7931e</item>
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:textColorPrimary">@color/colorPrimary</item>
@@ -22,7 +21,7 @@
     <style name="customTabText" parent="TextAppearance.AppCompat.Button">
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/colorDangerLight</item>
+        <item name="android:textColor">@color/colorPrimaryLight</item>
     </style>
 
     <style name="RedTheme" parent="FirebaseUI">

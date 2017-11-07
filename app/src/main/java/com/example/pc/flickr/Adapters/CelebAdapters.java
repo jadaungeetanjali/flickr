@@ -27,7 +27,7 @@ import java.util.ArrayList;
  */
 
 public class CelebAdapters {
-
+/*
     public static class CelebsMovieCreditAdapter extends RecyclerView.Adapter<CelebsMovieCreditAdapter.celebsMovieCreditViewHolder> {
         public ArrayList<SimilarItemModel> celebsMovieCreditArrayList;
         public Context movieCreditContext;
@@ -152,5 +152,5 @@ public class CelebAdapters {
             return celebImageModelArrayList.size();
         }
     }
-
+*/
 }

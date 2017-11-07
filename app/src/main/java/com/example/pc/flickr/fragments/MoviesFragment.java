@@ -26,6 +26,8 @@ import com.example.pc.flickr.Adapters.DetailAdapter;
 import com.example.pc.flickr.YoutubeActivity;
 import com.example.pc.flickr.json_parsers.DetailMovieJsonParser;
 import com.example.pc.flickr.models.DetailMovieModel;
+import com.example.pc.flickr.services.AsyncTaskCompleteListener;
+import com.example.pc.flickr.services.CommonFetchTask;
 import com.example.pc.flickr.services.Connectivity;
 import com.example.pc.flickr.R;
 import com.example.pc.flickr.json_parsers.DetailJsonParser;
@@ -52,6 +54,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static android.content.ContentValues.TAG;
 
@@ -59,9 +62,9 @@ import static android.content.ContentValues.TAG;
  * A simple {@link Fragment} subclass.
  */
 public class MoviesFragment extends Fragment {
-    private DetailAdapter.CastAdapter castAdapter;
-    private DetailAdapter.ReviewAdapter reviewAdapter;
-    private DetailAdapter.SimilarMoviesAdapter similarMoviesAdapter;
+    //private DetailAdapter.CastAdapter castAdapter;
+    //private DetailAdapter.ReviewAdapter reviewAdapter;
+    //private DetailAdapter.SimilarMoviesAdapter similarMoviesAdapter;
     private VideoAdapter videoAdapter;
     RecyclerView recyclerViewCast, recyclerViewReviews, recyclerViewSimilar,recyclerViewVideo;
     private TextView title, overview, status, tagline, release_date, category, internet_connectivity;
@@ -71,7 +74,7 @@ public class MoviesFragment extends Fragment {
     private Button button;
     private String type, id;
     private Boolean wishList, watchList, internet;
-    private FetchTask callMovieData;
+    private CommonFetchTask callMovieData;
 
     public MoviesFragment() {
         // Required empty public constructor
@@ -89,7 +92,7 @@ public class MoviesFragment extends Fragment {
         //vote_average = (TextView) rootView.findViewById(R.id.detail_movie_vote_average_textView);
         //tagline = (TextView) rootView.findViewById(R.id.detail_movie_tagline);
         release_date = (TextView) rootView.findViewById(R.id.detail_movie_release_date);
-        category = (TextView) rootView.findViewById(R.id.detail_movie_category);
+        category = (TextView) rootView.findViewById(R.id.detail_movie_genre);
         status = (TextView) rootView.findViewById(R.id.detail_movie_status);
         //internet_connectivity = (TextView) rootView.findViewById(R.id.detail_movie_internet_connectivity);
         //button = (Button) rootView.findViewById(R.id.detail_movie_watchlist);
@@ -149,7 +152,7 @@ public class MoviesFragment extends Fragment {
             //internet_connectivity.setVisibility(View.GONE);
             //ScrollView scrollView = (ScrollView) rootView.findViewById(R.id.detail_movie_scrollView);
             //scrollView.setVisibility(View.VISIBLE);
-            callMovieData = new FetchTask();
+            callMovieData = new CommonFetchTask(getContext(), new FetchTask());
             callMovieData.execute(urlList.get(0), urlList.get(1), urlList.get(2), urlList.get(3),urlList.get(4));
             internet = true;
         }
@@ -173,7 +176,7 @@ public class MoviesFragment extends Fragment {
 
             public videoViewHolder(View itemView) {
                 super(itemView);
-                videoProgressBar = (ProgressBar) itemView.findViewById(R.id.video_progressBar);
+                //videoProgressBar = (ProgressBar) itemView.findViewById(R.id.video_progressBar);
                 videoNameTextView = (TextView) itemView.findViewById(R.id.video_textView);
                 videoImageView = (ImageView) itemView.findViewById(R.id.video_imageView);
             }
@@ -226,65 +229,14 @@ public class MoviesFragment extends Fragment {
     }
 
 
-    public class FetchTask extends AsyncTask<String, Void, ArrayList<String>> {
-        //doInBackground method to set up url connection and return jsonData
-        @Override
-        protected ArrayList<String> doInBackground(String... params) {
-            HttpURLConnection urlConnection = null;
-            BufferedReader reader = null;
-            String jsonData = null;
-            ArrayList<String> jsonArray = new ArrayList<>();
-            for (String param : params){
-                try {
-                    //setting the urlConnection
-                    URL url = new URL(param);
-                    urlConnection = (HttpURLConnection) url.openConnection();
-                    urlConnection.setRequestMethod("GET");
-                    urlConnection.connect();
+    public class FetchTask implements AsyncTaskCompleteListener<ArrayList<String>>{
 
-                    InputStream stream = urlConnection.getInputStream();
-                    if (stream == null){
-                        jsonData = null;
-                    }
-                    StringBuffer stringBuffer = new StringBuffer();
-                    reader = new BufferedReader(new InputStreamReader(stream));
-                    String inputLine;
-                    while ((inputLine = reader.readLine()) != null){
-                        stringBuffer.append(inputLine + "\n");
-                    }
-                    if (stringBuffer.length() == 0){
-                        jsonData = null;
-                    }
-                    jsonData = stringBuffer.toString();
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                finally {
-                    if (urlConnection != null){
-                        urlConnection.disconnect();
-                    }
-                    if (reader != null){
-                        try {
-                            reader.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-                jsonArray.add(jsonData);
-            }
-            return jsonArray;
-        }
-        // onPostExecute data to populate data after fetching data
         @Override
-        protected void onPostExecute(ArrayList<String> jsonArray) {
-            super.onPostExecute(jsonArray);
+        public void onTaskComplete(ArrayList<String> jsonArray) {
+
             //for (String name:jsonArray){
-            //Log.v("output",name);
+            //Log.v("output",object.toString());
             //}
-
             ArrayList<CastModel> castArray = new ArrayList<>();
             ArrayList<ReviewModel> reviewArray = new ArrayList<>();
             ArrayList<SimilarItemModel> similarMoviesArray = new ArrayList<>();
@@ -306,8 +258,8 @@ public class MoviesFragment extends Fragment {
 
                         break;
                     //case "tv":
-                        //DetailItemModel = detailJsonParser.jsonTvDetailParser(jsonArray.get(0));
-                        //similarMoviesArray = detailJsonParser.jsonTvSimilarParser(jsonArray.get(3));
+                    //DetailItemModel = detailJsonParser.jsonTvDetailParser(jsonArray.get(0));
+                    //similarMoviesArray = detailJsonParser.jsonTvSimilarParser(jsonArray.get(3));
                     //    break;
                     default:
                         detailMovieModel = detailMovieJsonParser.jsonMovieDetailParser(jsonArray.get(0));
@@ -354,7 +306,7 @@ public class MoviesFragment extends Fragment {
 
                 //    @Override
                 //    public void onCancelled(DatabaseError error) {
-                        // Failed to read value
+                // Failed to read value
                 //        Log.w(TAG, "Failed to read value.", error.toException());
                 //    }
                 //});
@@ -461,20 +413,14 @@ public class MoviesFragment extends Fragment {
                 e.printStackTrace();
             }
         }
+    }
 
         //On cancel handles async task cancellation
-        @Override
-        protected void onCancelled() {
-            super.onCancelled();
-        }
 
-    }
 
     @Override
     public void onPause(){
         super.onPause();
-        if (internet)
-            callMovieData.cancel(true);
     }
 
 }

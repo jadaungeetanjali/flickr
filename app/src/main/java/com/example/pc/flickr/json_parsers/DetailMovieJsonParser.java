@@ -9,11 +9,11 @@ import com.example.pc.flickr.models.DetailMovieModel;
 import com.example.pc.flickr.models.ReviewModel;
 import com.example.pc.flickr.models.SimilarItemModel;
 import com.example.pc.flickr.models.VideoModel;
-import com.example.pc.flickr.utilities.movies.MovieCastJsonConfig;
-import com.example.pc.flickr.utilities.movies.MovieDetailJsonConfig;
-import com.example.pc.flickr.utilities.movies.MovieReviewJsonConfig;
-import com.example.pc.flickr.utilities.movies.MovieVideosJsonConfig;
-import com.example.pc.flickr.utilities.movies.MoviesSimilarJsonConfig;
+import com.example.pc.flickr.util.movies.MovieCastJsonConfig;
+import com.example.pc.flickr.util.movies.MovieDetailJsonConfig;
+import com.example.pc.flickr.util.movies.MovieReviewJsonConfig;
+import com.example.pc.flickr.util.movies.MovieVideosJsonConfig;
+import com.example.pc.flickr.util.movies.MoviesSimilarJsonConfig;
 
 import org.json.JSONArray;
 import org.json.JSONException;

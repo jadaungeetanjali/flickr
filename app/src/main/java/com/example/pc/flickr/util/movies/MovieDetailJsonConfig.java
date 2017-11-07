@@ -1,4 +1,4 @@
-package com.example.pc.flickr.utilities.movies;
+package com.example.pc.flickr.util.movies;
 
 /**
  * Created by Deepanshu on 11/6/2017.

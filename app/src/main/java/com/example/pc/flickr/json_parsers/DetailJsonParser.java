@@ -17,7 +17,7 @@ import java.util.ArrayList;
  */
 
 public class DetailJsonParser {
-
+    /*
     public DetailItemModel jsonMovieDetailParser(String jsonMovie)throws JSONException {
         // fetching data in json
         JSONObject movieObject = new JSONObject(jsonMovie);
@@ -129,5 +129,5 @@ public class DetailJsonParser {
         //creating object of DetailItemModel class to initialise constructor with movieDetails
         DetailItemModel DetailItemModel=new DetailItemModel(title, overview, vote_average, tagline, release_date, language, poster);
         return DetailItemModel;
-    }
+    }*/
 }

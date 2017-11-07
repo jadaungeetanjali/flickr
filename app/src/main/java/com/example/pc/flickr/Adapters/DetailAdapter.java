@@ -27,7 +27,7 @@ import static java.security.AccessController.getContext;
  */
 
 public class DetailAdapter {
-
+    /*
     // CastAdapter class to populate data in castRecyclerView
     public static class CastAdapter extends RecyclerView.Adapter<CastAdapter.castViewHolder> {
         public ArrayList<CastModel> castArrayList;
@@ -205,4 +205,5 @@ public class DetailAdapter {
             return similarMoviesArrayList.size();
         }
     }
+    */
 }

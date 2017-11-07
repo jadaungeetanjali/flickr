@@ -1,5 +1,6 @@
 package com.example.pc.flickr.services;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -17,6 +18,15 @@ import java.util.ArrayList;
  */
 
 public class CommonFetchTask extends AsyncTask<String, Void, ArrayList<String>> {
+
+    private Context context;
+    private AsyncTaskCompleteListener<ArrayList<String>> asyncTaskCompleteListener;
+
+    public CommonFetchTask(Context ctx, AsyncTaskCompleteListener asyncTaskCompleteListener){
+        context = ctx;
+        this.asyncTaskCompleteListener = asyncTaskCompleteListener;
+    }
+
     @Override
     protected ArrayList<String> doInBackground(String... params) {
         HttpURLConnection urlConnection = null;
@@ -75,6 +85,7 @@ public class CommonFetchTask extends AsyncTask<String, Void, ArrayList<String>> 
     @Override
     protected void onPostExecute(ArrayList<String> arrayList) {
         super.onPostExecute(arrayList);
+        asyncTaskCompleteListener.onTaskComplete(arrayList);
     }
 
     @Override

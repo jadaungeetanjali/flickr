@@ -51,6 +51,7 @@ import static android.content.ContentValues.TAG;
  * A simple {@link Fragment} subclass.
  */
 public class CelebsFragment extends Fragment {
+    /*
     private CelebAdapters.CelebsImagesAdapter celebsImagesAdapter;
     private CelebAdapters.CelebsMovieCreditAdapter celebsMovieCreditAdapter;
     RecyclerView recyclerViewCelebMovieCredit;
@@ -272,5 +273,5 @@ public class CelebsFragment extends Fragment {
         super.onPause();
         if (internet)
             fetchTask.cancel(true);
-    }
+    }*/
 }

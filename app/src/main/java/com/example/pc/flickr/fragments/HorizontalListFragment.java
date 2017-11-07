@@ -71,14 +71,14 @@ public class HorizontalListFragment extends Fragment {
         private ArrayList<String> arrayList;
 
         class MyViewHolder extends RecyclerView.ViewHolder{
-            LinearLayout parentButton;
+            TextView parentButton;
             TextView parentCardViewHeading;
             RecyclerView childRecyclerView;
             public MyViewHolder(View itemview){
                 super(itemview);
                 parentCardViewHeading = (TextView) itemview.findViewById(R.id.main_horizontal_card_heading);
                 childRecyclerView = (RecyclerView) itemview.findViewById(R.id.main_child_recyclerView);
-                parentButton = (LinearLayout) itemview.findViewById(R.id.main_horizontal_card_Button);
+                parentButton = (TextView) itemview.findViewById(R.id.main_horizontal_card_Button);
             }
         }
 
@@ -180,11 +180,11 @@ public class HorizontalListFragment extends Fragment {
             ProgressBar progressBar;
             public MyViewHolder(View itemview){
                 super(itemview);
-                childViewTitle = (TextView) itemview.findViewById(R.id.main_child_title_textView);
-                childViewVote = (TextView) itemview.findViewById(R.id.main_child_vote_textView);
-                childViewPopularity = (TextView) itemview.findViewById(R.id.main_child_popularity_textView);
+                //childViewTitle = (TextView) itemview.findViewById(R.id.main_child_title_textView);
+                //childViewVote = (TextView) itemview.findViewById(R.id.main_child_vote_textView);
+                //childViewPopularity = (TextView) itemview.findViewById(R.id.main_child_popularity_textView);
                 childImageView = (ImageView) itemview.findViewById(R.id.main_child_imageView);
-                progressBar = (ProgressBar) itemview.findViewById(R.id.main_image_progressBar);
+                //progressBar = (ProgressBar) itemview.findViewById(R.id.main_image_progressBar);
                 itemview.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -225,9 +225,9 @@ public class HorizontalListFragment extends Fragment {
         @Override
         public void onBindViewHolder(final MyViewHolder holder, int position) {
             ListDataModel dataModel = dataList.get(position);
-            holder.childViewTitle.setText(dataModel.getName());
-            holder.childViewVote.setText(dataModel.getVote_avg());
-            holder.childViewPopularity.setText(dataModel.getPopularity());
+            //holder.childViewTitle.setText(dataModel.getName());
+            //holder.childViewVote.setText(dataModel.getVote_avg());
+            //holder.childViewPopularity.setText(dataModel.getPopularity());
             //final ProgressBar progressBar = holder.progressBar;
             final int radius = 10;
             final int margin = 5;
@@ -237,8 +237,8 @@ public class HorizontalListFragment extends Fragment {
 
                         @Override
                         public void onSuccess() {
-                            holder.progressBar.setVisibility(View.GONE);
-                            holder.childImageView.setVisibility(View.VISIBLE);
+                            //holder.progressBar.setVisibility(View.GONE);
+                            //holder.childImageView.setVisibility(View.VISIBLE);
                         }
 
                         @Override

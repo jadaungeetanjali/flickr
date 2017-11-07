@@ -1,86 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="160dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:layout_width="120dp"
-    android:layout_margin="5dp"
+    android:layout_marginRight="4dp"
+    android:layout_marginEnd="4dp"
     android:layout_height="match_parent">
-    <ProgressBar
-        android:id="@+id/main_image_progressBar"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:visibility="visible"
-        style="?android:attr/progressBarStyle"
-        android:layout_gravity="center"
-        android:paddingTop="50dp"
-        android:layout_weight="11"
-        />
     <ImageView
         android:id="@+id/main_child_imageView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="11"
-        android:visibility="invisible"
-        android:elevation="1dp">
-
-    </ImageView>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
-        android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="horizontal"
-            android:layout_weight="2">
-            <TextView
-                android:id="@+id/main_child_title_textView"
-                android:layout_width="0dp"
-                android:layout_weight="5"
-                android:textStyle="bold"
-                android:layout_height="match_parent" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent">
-
-                <RatingBar
-                    style="@android:style/Widget.DeviceDefault.Light.RatingBar.Small"
-                    android:layout_width="15dp"
-                    android:layout_height="22dp"
-                    android:numStars="0"
-                    android:progressTint="#ffbe00"
-                    android:rating="10" />
-                <TextView
-                    android:id="@+id/main_child_vote_textView"
-                    android:layout_width="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_height="match_parent" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:gravity="end">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="22dp"
-                    android:tint="#34a853"
-                    app:srcCompat="@android:drawable/ic_menu_sort_by_size" />
-                <TextView
-                    android:id="@+id/main_child_popularity_textView"
-                    android:layout_width="wrap_content"
-                    android:paddingTop="1.5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_height="match_parent" />
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
-</LinearLayout>
+        android:layout_height="match_parent"
+        app:layout_constraintRight_toRightOf="parent" />
+    <ImageView
+        android:id="@+id/main_child_ratingStar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:padding="5dp"
+        android:src="@drawable/ic_star_border_white_36dp"
+        android:background="#2c2c2c"
+        app:layout_constraintRight_toRightOf="@+id/main_child_imageView"/>
+    <ImageView
+        android:id="@+id/main_child_ratingFlag"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="#2c2c2c"
+        app:layout_constraintTop_toBottomOf="@+id/main_child_ratingStar"
+        app:layout_constraintRight_toRightOf="@+id/main_child_imageView"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1"
+        android:textStyle="bold"
+        android:textColor="#fff"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="@+id/main_child_ratingFlag"
+        app:layout_constraintTop_toBottomOf="@+id/main_child_ratingStar"/>
+</android.support.constraint.ConstraintLayout>
