@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -62,9 +64,9 @@ import static android.content.ContentValues.TAG;
  * A simple {@link Fragment} subclass.
  */
 public class MoviesFragment extends Fragment {
-    //private DetailAdapter.CastAdapter castAdapter;
-    //private DetailAdapter.ReviewAdapter reviewAdapter;
-    //private DetailAdapter.SimilarMoviesAdapter similarMoviesAdapter;
+    private DetailAdapter.CastAdapter castAdapter;
+    private DetailAdapter.ReviewAdapter reviewAdapter;
+    private DetailAdapter.SimilarMoviesAdapter similarMoviesAdapter;
     private VideoAdapter videoAdapter;
     RecyclerView recyclerViewCast, recyclerViewReviews, recyclerViewSimilar,recyclerViewVideo;
     private TextView title, overview, status, tagline, release_date, category, internet_connectivity;
@@ -73,9 +75,10 @@ public class MoviesFragment extends Fragment {
     private LinearLayout mainContainer;
     private Button button;
     private String type, id;
+    private Toolbar toolbar;
     private Boolean wishList, watchList, internet;
     private CommonFetchTask callMovieData;
-
+    private ActionBar actionBar;
     public MoviesFragment() {
         // Required empty public constructor
     }
@@ -89,7 +92,11 @@ public class MoviesFragment extends Fragment {
 
         //Initalizing detail layout members view
         overview = (TextView) rootView.findViewById(R.id.detail_movie_details);
-        //vote_average = (TextView) rootView.findViewById(R.id.detail_movie_vote_average_textView);
+        toolbar = (Toolbar) rootView.findViewById(R.id.detail_movie_toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        actionBar = (ActionBar) ((AppCompatActivity)getActivity()).getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        //vote_average = (TextView) rootView.findViewById(R.id.detail_movie_rating);
         //tagline = (TextView) rootView.findViewById(R.id.detail_movie_tagline);
         release_date = (TextView) rootView.findViewById(R.id.detail_movie_release_date);
         category = (TextView) rootView.findViewById(R.id.detail_movie_genre);
@@ -102,10 +109,10 @@ public class MoviesFragment extends Fragment {
         //mainContainer = (LinearLayout) rootView.findViewById(R.id.detail_movie_mainContainer);
 
         //Initializing Cast Recycler view
-        //recyclerViewCast = (RecyclerView) rootView.findViewById(R.id.detail_movie_castRecyclerView);
-        //LinearLayoutManager layoutManagerCast = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        //recyclerViewCast.setLayoutManager(layoutManagerCast);
-        //recyclerViewCast.setItemAnimator(new DefaultItemAnimator());
+        recyclerViewCast = (RecyclerView) rootView.findViewById(R.id.detail_movie_cast_recyclerView);
+        LinearLayoutManager layoutManagerCast = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewCast.setLayoutManager(layoutManagerCast);
+        recyclerViewCast.setItemAnimator(new DefaultItemAnimator());
 
         //Initializing Review Recycler View
         //recyclerViewReviews = (RecyclerView) rootView.findViewById(R.id.detail_movie_reviewsRecyclerView);
@@ -114,15 +121,15 @@ public class MoviesFragment extends Fragment {
         //recyclerViewReviews.setItemAnimator(new DefaultItemAnimator());
 
         //Initializing Similar Recycler View
-        //recyclerViewSimilar = (RecyclerView) rootView.findViewById(R.id.detail_movie_similarMoviesRecyclerView);
-        //LinearLayoutManager layoutManagerSimilar = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        //recyclerViewSimilar.setLayoutManager(layoutManagerSimilar);
-        //recyclerViewSimilar.setItemAnimator(new DefaultItemAnimator());
+        recyclerViewSimilar = (RecyclerView) rootView.findViewById(R.id.detail_movie_similar_recyclerView);
+        LinearLayoutManager layoutManagerSimilar = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewSimilar.setLayoutManager(layoutManagerSimilar);
+        recyclerViewSimilar.setItemAnimator(new DefaultItemAnimator());
 
-        //recyclerViewVideo = (RecyclerView) rootView.findViewById(R.id.detail_movie_videosRecyclerView);
-        //LinearLayoutManager layoutManagerVideo = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        //recyclerViewVideo.setLayoutManager(layoutManagerVideo);
-        //recyclerViewVideo.setItemAnimator(new DefaultItemAnimator());
+        recyclerViewVideo = (RecyclerView) rootView.findViewById(R.id.detail_movie_videos_recyclerView);
+        LinearLayoutManager layoutManagerVideo = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewVideo.setLayoutManager(layoutManagerVideo);
+        recyclerViewVideo.setItemAnimator(new DefaultItemAnimator());
 
         Bundle bundle = getArguments();
         id = bundle.getString("id");
@@ -177,7 +184,7 @@ public class MoviesFragment extends Fragment {
             public videoViewHolder(View itemView) {
                 super(itemView);
                 //videoProgressBar = (ProgressBar) itemView.findViewById(R.id.video_progressBar);
-                videoNameTextView = (TextView) itemView.findViewById(R.id.video_textView);
+                //videoNameTextView = (TextView) itemView.findViewById(R.id.video_textView);
                 videoImageView = (ImageView) itemView.findViewById(R.id.video_imageView);
             }
         }
@@ -195,21 +202,21 @@ public class MoviesFragment extends Fragment {
         @Override
         public void onBindViewHolder(final videoViewHolder holder, int position) {
             final VideoModel videoModel = videoArrayList.get(position);
-            holder.videoNameTextView.setText(videoModel.getName());
-            /*Picasso.with(getContext()).load("https://img.youtube.com/vi/"+videoModel.getImage()+"/0.jpg")
+            //holder.videoNameTextView.setText(videoModel.getName());
+            Picasso.with(getContext()).load("https://img.youtube.com/vi/"+videoModel.getImageUrl()+"/sddefault.jpg")
                     .into(holder.videoImageView,new com.squareup.picasso.Callback() {
 
                         @Override
                         public void onSuccess() {
-                            holder.videoProgressBar.setVisibility(View.GONE);
-                            holder.videoImageView.setVisibility(View.VISIBLE);
+                            //holder.videoProgressBar.setVisibility(View.GONE);
+                            //holder.videoImageView.setVisibility(View.VISIBLE);
                         }
 
                         @Override
                         public void onError() {
 
                         }
-                    });*/
+                    });
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -254,7 +261,6 @@ public class MoviesFragment extends Fragment {
                         //reviewArray = detailJsonParser.jsonMovieReviewsParser(jsonArray.get(2));
                         //reviewAdapter = new DetailAdapter.ReviewAdapter(reviewArray);
                         //recyclerViewReviews.setAdapter(reviewAdapter);
-                        //similarMoviesArray = detailJsonParser.jsonSimilarParser(jsonArray.get(3));
 
                         break;
                     //case "tv":
@@ -268,24 +274,23 @@ public class MoviesFragment extends Fragment {
                 //toolbar.setTitle(DetailItemModel.getTitle());
                 //title.setText(DetailItemModel.getTitle());
                 overview.setText(detailMovieModel.getOverview());
+                actionBar.setTitle(detailMovieModel.getTitle());
                 //vote_average.setText(DetailItemModel.getVote_avg());
                 //tagline.setText(DetailItemModel.getTagline());
                 //release_date.setText(DetailItemModel.getRelease_date());
                 //language.setText(DetailItemModel.getLanguage());
                 //Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w500"+DetailItemModel.getImg_url()).into(poster);
 
-                //castArray = detailJsonParser.jsonCastParser(jsonArray.get(1));
-                //castAdapter = new DetailAdapter.CastAdapter(getContext(),castArray);
-                //recyclerViewCast.setAdapter(castAdapter);
+                castArray = detailMovieJsonParser.jsonMovieCastParser(jsonArray.get(1));
+                castAdapter = new DetailAdapter.CastAdapter(getContext(),castArray);
+                recyclerViewCast.setAdapter(castAdapter);
+                similarMoviesArray = detailMovieJsonParser.jsonSimilarParser(jsonArray.get(3));
+                similarMoviesAdapter = new DetailAdapter.SimilarMoviesAdapter(getContext(),similarMoviesArray,type);
+                recyclerViewSimilar.setAdapter(similarMoviesAdapter);
 
-
-
-                //similarMoviesAdapter = new DetailAdapter.SimilarMoviesAdapter(getContext(),similarMoviesArray,type);
-                //recyclerViewSimilar.setAdapter(similarMoviesAdapter);
-
-                //videosArray = detailJsonParser.jsonVideoParser(jsonArray.get(4));
-                //videoAdapter = new VideoAdapter(videosArray);
-                //recyclerViewVideo.setAdapter(videoAdapter);
+                videosArray = detailMovieJsonParser.jsonVideoParser(jsonArray.get(4));
+                videoAdapter = new VideoAdapter(videosArray);
+                recyclerViewVideo.setAdapter(videoAdapter);
                 //FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
                 //DatabaseReference mWatchListReference = firebaseCurd.getmWatchListReference();
                 //DatabaseReference mWishListReference = firebaseCurd.getmWishListReference();
