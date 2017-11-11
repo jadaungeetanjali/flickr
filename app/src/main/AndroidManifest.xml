@@ -22,11 +22,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MoviesDetails"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+            android:name=".MoviesDetails">
         </activity>
 
         <provider
@@ -40,30 +36,15 @@
 
         <activity
             android:name=".UserActivity"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+           >
         </activity>
         <activity android:name=".MoreList">
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
         </activity>
         <activity
-            android:name=".FriendsActivity"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+            android:name=".FriendsActivity">
         </activity>
         <activity
-            android:name=".FriendListActivity"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+            android:name=".FriendListActivity">
         </activity>
         <activity android:name=".YoutubeActivity"></activity>
     </application>

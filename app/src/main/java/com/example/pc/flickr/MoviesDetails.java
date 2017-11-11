@@ -7,7 +7,7 @@ import com.example.pc.flickr.fragments.CelebsFragment;
 import com.example.pc.flickr.fragments.MoviesFragment;
 import com.example.pc.flickr.util.activities.ActivityConfig;
 
-
+//Comment it its final
 // MoviesDetails activity to display the detail of particular movie
 public class MoviesDetails extends AppCompatActivity {
     private String type, id;

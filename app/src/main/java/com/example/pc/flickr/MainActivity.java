@@ -24,6 +24,7 @@ import com.example.pc.flickr.fragments.HorizontalListFragment;
 import com.example.pc.flickr.models.UserModel;
 import com.example.pc.flickr.services.FetchApiService;
 import com.example.pc.flickr.services.FirebaseCurd;
+import com.example.pc.flickr.util.activities.ActivityConfig;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         Intent intent = new Intent(this, FetchApiService.class);
         startService(intent);
-        //mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseAuth = FirebaseAuth.getInstance();
 
         // Navigation Drawer .............................
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -76,31 +77,31 @@ public class MainActivity extends AppCompatActivity {
         // Navigation Drawer till here......................
 
         Bundle moviesBundle = new Bundle();
-        String[] movieHeading = {"Now Playing", "Popular", "Top Rated", "Upcoming"};
-        moviesBundle.putString("type", "movies");
-        moviesBundle.putStringArray("urlHeading", movieHeading);
+        String[] movieHeading = {ActivityConfig.NOW_PLAYING, ActivityConfig.POPULAR, ActivityConfig.TOP_RATED, ActivityConfig.UPCOMING};
+        moviesBundle.putString(ActivityConfig.TYPE, ActivityConfig.MOVIES);
+        moviesBundle.putStringArray(ActivityConfig.URL_HEADING, movieHeading);
         final HorizontalListFragment moviesFragment = new HorizontalListFragment();
         moviesFragment.setArguments(moviesBundle);
 
         Bundle tvBundle = new Bundle();
-        String[] tvHeading = {"Airing Today", "Popular", "Top Rated", "On The Air"};
-        tvBundle.putString("type", "tv");
-        tvBundle.putStringArray("urlHeading", tvHeading);
+        String[] tvHeading = {ActivityConfig.TOP_RATED, ActivityConfig.POPULAR, ActivityConfig.TOP_RATED, ActivityConfig.ON_THE_AIR};
+        tvBundle.putString(ActivityConfig.TYPE, ActivityConfig.TV_SHOWS);
+        tvBundle.putStringArray(ActivityConfig.URL_HEADING, tvHeading);
         final HorizontalListFragment tvFragment = new HorizontalListFragment();
         tvFragment.setArguments(tvBundle);
 
         Bundle celebsBundle = new Bundle();
-        String[] celebsHeading = {"Popular"};
-        celebsBundle.putString("type", "celebs");
-        celebsBundle.putStringArray("urlHeading", celebsHeading);
+        String[] celebsHeading = {ActivityConfig.POPULAR};
+        celebsBundle.putString(ActivityConfig.TYPE, ActivityConfig.CELEBRITY);
+        celebsBundle.putStringArray(ActivityConfig.URL_HEADING, celebsHeading);
         final HorizontalListFragment celebsFragment = new HorizontalListFragment();
         celebsFragment.setArguments(celebsBundle);
 
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.main_tablayout);
-        tabLayout.addTab(tabLayout.newTab().setText("MOVIES"));
-        tabLayout.addTab(tabLayout.newTab().setText("TV"));
-        tabLayout.addTab(tabLayout.newTab().setText("CELEBS"));
+        tabLayout.addTab(tabLayout.newTab().setText(ActivityConfig.MOVIES.toUpperCase()));
+        tabLayout.addTab(tabLayout.newTab().setText(ActivityConfig.TV_SHOWS.toUpperCase()));
+        tabLayout.addTab(tabLayout.newTab().setText(ActivityConfig.CELEBRITY.toUpperCase()));
 
         fragmentTranstion(moviesFragment);
         currentFragment = moviesFragment;
@@ -132,7 +133,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        /*
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-        */
+
     }
 
 
@@ -210,15 +210,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
-        /*
-        mFirebaseAuth.removeAuthStateListener(mAuthStateListener);*/
+        mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        /*
-        mFirebaseAuth.addAuthStateListener(mAuthStateListener);*/
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
     }
 
     public void onSignedInInitialize(String user_name, String user_id, String user_email) {

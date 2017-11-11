@@ -1,11 +1,10 @@
 package com.example.pc.flickr;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.example.pc.flickr.services.YoutubeConfig;
+import com.example.pc.flickr.util.activities.YoutubeConfig;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -22,7 +21,7 @@ public class YoutubeActivity extends YouTubeBaseActivity implements YouTubePlaye
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_youtube);
         Bundle bundle = this.getIntent().getExtras();
-        url = bundle.getString("url");
+        url = bundle.getString(YoutubeConfig.URL);
         youTubeView = (YouTubePlayerView) findViewById(R.id.youtube_view);
         youTubeView.initialize(YoutubeConfig.YOUTUBE_API_KEY, this);
     }
@@ -50,7 +49,6 @@ public class YoutubeActivity extends YouTubeBaseActivity implements YouTubePlaye
             getYouTubePlayerProvider().initialize(YoutubeConfig.YOUTUBE_API_KEY, this);
         }
     }
-
 
     protected YouTubePlayer.Provider getYouTubePlayerProvider() {
         return youTubeView;
