@@ -4,6 +4,8 @@ package com.example.pc.flickr.json_parsers;
  * Created by Deepanshu on 11/6/2017.
  */
 
+import android.util.Log;
+
 import com.example.pc.flickr.models.CastModel;
 import com.example.pc.flickr.models.DetailMovieModel;
 import com.example.pc.flickr.models.ReviewModel;
@@ -37,7 +39,7 @@ public class DetailMovieJsonParser {
         if (runtime != null){
             int hours = Integer.parseInt(runtime)/60;
             int minutes = Integer.parseInt(runtime) - hours * 60;
-            runtime = hours + ":" + minutes;
+            runtime = hours + "hrs " + minutes+"mins";
         }
 
         //Setting values in detailMovieModel
@@ -110,7 +112,6 @@ public class DetailMovieJsonParser {
     public ArrayList<SimilarItemModel> jsonSimilarParser(String jsonSimilarMovies) throws JSONException {
         ArrayList<SimilarItemModel> similarMoviesArray = new ArrayList<>();
         MoviesSimilarJsonConfig jsonConfig = new MoviesSimilarJsonConfig();
-
         JSONObject similarMoviesObject = new JSONObject(jsonSimilarMovies);
         JSONArray similarMoviesList = similarMoviesObject.getJSONArray(jsonConfig.MOVIE_ARRAY);
         for (int i = 0; i < similarMoviesList.length(); i++) {
@@ -122,5 +123,4 @@ public class DetailMovieJsonParser {
         }
         return similarMoviesArray;
     }
-
 }

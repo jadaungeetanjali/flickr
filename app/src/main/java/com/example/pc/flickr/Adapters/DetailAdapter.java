@@ -27,7 +27,7 @@ import static java.security.AccessController.getContext;
  */
 
 public class DetailAdapter {
-    /*
+
     // CastAdapter class to populate data in castRecyclerView
     public static class CastAdapter extends RecyclerView.Adapter<CastAdapter.castViewHolder> {
         public ArrayList<CastModel> castArrayList;
@@ -41,7 +41,6 @@ public class DetailAdapter {
 
             public castViewHolder(View itemView) {
                 super(itemView);
-                castProgressBar = (ProgressBar) itemView.findViewById(R.id.cast_image_progressBar);
                 castNameTextView = (TextView) itemView.findViewById(R.id.castName);
                 castImageView = (ImageView) itemView.findViewById(R.id.castImageView);
                 castCharacterTextView = (TextView) itemView.findViewById(R.id.castCharacter);
@@ -81,12 +80,13 @@ public class DetailAdapter {
 
                         @Override
                         public void onSuccess() {
-                            holder.castProgressBar.setVisibility(View.GONE);
+                            //holder.castProgressBar.setVisibility(View.GONE);
                             holder.castImageView.setVisibility(View.VISIBLE);
                         }
 
                         @Override
                         public void onError() {
+
 
                         }
                     });
@@ -148,10 +148,9 @@ public class DetailAdapter {
 
             public similarMoviesViewHolder(View itemView) {
                 super(itemView);
-                similarMovieProgressBar = (ProgressBar) itemView.findViewById(R.id.main_image_progressBar);
-                similarMovieNameTextView = (TextView) itemView.findViewById(R.id.main_child_title_textView); //change id to similarMovieName
+                 //change id to similarMovieName
                 similarMovieImageView = (ImageView) itemView.findViewById(R.id.main_child_imageView); //change id to similarMovieImage
-                similarMovieVoteAverageTextView = (TextView) itemView.findViewById(R.id.main_child_vote_textView);
+                //similarMovieVoteAverageTextView = (TextView) itemView.findViewById(R.id.main_child);
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -182,15 +181,15 @@ public class DetailAdapter {
         @Override
         public void onBindViewHolder(final similarMoviesViewHolder holder, int position) {
             SimilarItemModel SimilarItemModel = similarMoviesArrayList.get(position);
-            holder.similarMovieNameTextView.setText(SimilarItemModel.getSimilarItemName());
-            holder.similarMovieVoteAverageTextView.setText(SimilarItemModel.getSimilarItemVoteAverage());
+            //holder.similarMovieNameTextView.setText(SimilarItemModel.getSimilarItemimage());
+            //holder.similarMovieVoteAverageTextView.setText(SimilarItemModel.getSimilarItemVoteAverage());
             Picasso.with(similarMovieContext).load("https://image.tmdb.org/t/p/w500"+SimilarItemModel.getSimilarItemimage())
                     .into(holder.similarMovieImageView,new com.squareup.picasso.Callback() {
 
                         @Override
                         public void onSuccess() {
-                            holder.similarMovieProgressBar.setVisibility(View.GONE);
-                            holder.similarMovieImageView.setVisibility(View.VISIBLE);
+                            //holder.similarMovieProgressBar.setVisibility(View.GONE);
+                            //holder.similarMovieImageView.setVisibility(View.VISIBLE);
                         }
 
                         @Override
@@ -205,5 +204,4 @@ public class DetailAdapter {
             return similarMoviesArrayList.size();
         }
     }
-    */
 }
