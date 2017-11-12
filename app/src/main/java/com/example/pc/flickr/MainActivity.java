@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,23 +59,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Setting up Toolbar for app
         toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
         Intent intent = new Intent(this, FetchApiService.class);
         startService(intent);
+
+        //Getting firebase auth instance
         mFirebaseAuth = FirebaseAuth.getInstance();
 
         // Navigation Drawer .............................
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
+
         // Navigation view header
         navHeader = navigationView.getHeaderView(0);
         navHeaderName = (TextView) navHeader.findViewById(R.id.main_drawer_name);
         navHeaderEmail = (TextView) navHeader.findViewById(R.id.main_drawer_email);
         navHeaderImg = (ImageView) navHeader.findViewById(R.id.main_drawer_avatar);
-        //activityTitles = getResources().getStringArray(R.array.navigation_drawer_items_array);
         setUpNavigationView();
-
+        //navHeaderName.setText("Deepanshu");
         // Navigation Drawer till here......................
 
         Bundle moviesBundle = new Bundle();
@@ -138,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
                 if (firebaseUser != null) {
-                    onSignedInInitialize(firebaseUser.getDisplayName(), firebaseUser.getUid(), firebaseUser.getEmail());
+                    onSignedInInitialize(firebaseUser.getDisplayName(), firebaseUser.getUid(), firebaseUser.getEmail(), firebaseUser.getPhotoUrl().toString());
                     addUser(firebaseUser.getUid(),firebaseUser.getDisplayName(),firebaseUser.getEmail(),"");
                 } else {
                     //onSignedOutCleanup();
@@ -157,34 +162,17 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+        //loadNavHeader();
+
     }
 
 
     private void fragmentTranstion(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, fragment).commit();
+        FrameLayout frameLayout =  (FrameLayout) findViewById(R.id.main_fragment_container);
+        frameLayout.removeAllViews();
+        frameLayout.removeAllViewsInLayout();
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, fragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE).commit();
 
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        //Handle Drawer Selection
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.user_sign_out:
-                AuthUI.getInstance().signOut(this);
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     @Override
@@ -211,6 +199,7 @@ public class MainActivity extends AppCompatActivity {
     public void onPause() {
         super.onPause();
         mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+        getSupportFragmentManager().popBackStack();
     }
 
     @Override
@@ -219,15 +208,15 @@ public class MainActivity extends AppCompatActivity {
         mFirebaseAuth.addAuthStateListener(mAuthStateListener);
     }
 
-    public void onSignedInInitialize(String user_name, String user_id, String user_email) {
+    public void onSignedInInitialize(String user_name, String user_id, String user_email, String user_image) {
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("MyPref", 0);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("user_id", user_id);
         editor.putString("user_email", user_email);
         editor.putString("user_name", user_name);
+        editor.putString("user_image",user_image);
+        Log.e("user image",user_image);
         editor.apply();
-        //navHeaderName.setText(user_name);
-        //navHeaderEmail.setText(user_email);
     }
     public void addUser(final String uid, final String user_name,final String email,final String imgUrl){
         final FirebaseCurd firebaseCurd = new FirebaseCurd(MainActivity.this);
@@ -239,7 +228,6 @@ public class MainActivity extends AppCompatActivity {
                     if (userModel == null){
                         UserModel addUserModel = new UserModel(uid,user_name,email,imgUrl);
                         firebaseCurd.addUserModel(addUserModel);
-                        Log.v("user",uid+" / " + user_name );
                     }
 
             }
@@ -256,23 +244,24 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPref = this.getSharedPreferences("MyPref", 0);
         String user_name = sharedPref.getString("user_name", null);
         String user_email = sharedPref.getString("user_email", null);
-
+        navHeaderName.setText(user_name);
+        navHeaderEmail.setText(user_email);
     }
 
     private Bundle getBundle() {
         Bundle bundle = new Bundle();
         switch (navItemIndex) {
             case 0:
-                bundle.putString("type", "WishList");
+                bundle.putString(ActivityConfig.TYPE, ActivityConfig.WISHLIST);
                 return bundle;
             case 1:
-                bundle.putString("type", "WatchList");
+                bundle.putString(ActivityConfig.TYPE, ActivityConfig.WATCHLIST);
                 return bundle;
             case 2:
-                bundle.putString("type", "Favorite");
+                bundle.putString(ActivityConfig.TYPE, ActivityConfig.FAVORITE);
                 return bundle;
             case 3:
-                bundle.putString("type", "Rating");
+                bundle.putString(ActivityConfig.TYPE, ActivityConfig.RATING);
                 return bundle;
         }
         return bundle;

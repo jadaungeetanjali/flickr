@@ -16,4 +16,9 @@ public class ActivityConfig {
     public static final String AIRING_TODAY = "Airing Today";
     public static final String ON_THE_AIR = "On The Air";
     public static final String URL_HEADING = "urlHeading";
+    public static final String WISHLIST = "WishList";
+    public static final String WATCHLIST = "WatchList";
+    public static final String FAVORITE = "Favorite";
+    public static final String RATING = "Rating";
+
 }

@@ -14,6 +14,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,6 +70,7 @@ public class HorizontalListFragment extends Fragment {
     private class MainParentAdapter extends RecyclerView.Adapter<MainParentAdapter.MyViewHolder> {
         private MainChildAdapter childAdapter;
         private ArrayList<String> arrayList;
+        private RecyclerView.RecycledViewPool viewPool;
 
         class MyViewHolder extends RecyclerView.ViewHolder{
             TextView parentButton;
@@ -83,7 +85,9 @@ public class HorizontalListFragment extends Fragment {
         }
 
         public MainParentAdapter(ArrayList<String> arrayList){
+
             this.arrayList = arrayList;
+            viewPool = new RecyclerView.RecycledViewPool();
         }
 
         @Override
@@ -97,6 +101,7 @@ public class HorizontalListFragment extends Fragment {
         public void onBindViewHolder(final MyViewHolder holder, final int position) {
             final String str = arrayList.get(position);
             holder.parentCardViewHeading.setText(str);
+            holder.childRecyclerView.setRecycledViewPool(viewPool);
             holder.childRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             class GetFilterData extends AsyncTask<String,Void,Cursor>{
@@ -161,6 +166,12 @@ public class HorizontalListFragment extends Fragment {
             return arrayList.size();
         }
 
+        @Override
+        public void onViewDetachedFromWindow(MyViewHolder holder) {
+            super.onViewDetachedFromWindow(holder);
+            holder.childRecyclerView.removeAllViewsInLayout();
+            holder.childRecyclerView.removeAllViews();
+        }
     }
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
 
@@ -173,18 +184,13 @@ public class HorizontalListFragment extends Fragment {
         private ArrayList<ListDataModel> dataList;
 
         class MyViewHolder extends RecyclerView.ViewHolder{
-            TextView childViewTitle;
             TextView childViewVote;
-            TextView childViewPopularity;
             ImageView childImageView;
             ProgressBar progressBar;
             public MyViewHolder(View itemview){
                 super(itemview);
-                //childViewTitle = (TextView) itemview.findViewById(R.id.main_child_title_textView);
                 //childViewVote = (TextView) itemview.findViewById(R.id.main_child_vote_textView);
-                //childViewPopularity = (TextView) itemview.findViewById(R.id.main_child_popularity_textView);
                 childImageView = (ImageView) itemview.findViewById(R.id.main_child_imageView);
-                //progressBar = (ProgressBar) itemview.findViewById(R.id.main_image_progressBar);
                 itemview.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -194,6 +200,7 @@ public class HorizontalListFragment extends Fragment {
                         mBundle.putString("type",dataModel.getType());
                         mBundle.putString("id",dataModel.getId());
                         intent.putExtras(mBundle);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         startActivity(intent);
                     }
                 });
@@ -251,9 +258,52 @@ public class HorizontalListFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return mCount;
+            return dataList.size();
         }
+
+        @Override
+        public void onViewDetachedFromWindow(MyViewHolder holder) {
+            super.onViewDetachedFromWindow(holder);
+            Picasso.with(getContext()).cancelRequest(holder.childImageView);
+            holder.childImageView.setImageURI(null);
+            holder.itemView.invalidate();
+            holder.childImageView.invalidate();
+        }
+
     }
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.v("lifecycle","onPaused called");
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        Log.v("lifecycle","onStop called");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        recyclerView.setAdapter(null);
+        recyclerView.setLayoutManager(null);
+        recyclerView.removeAllViewsInLayout();
+        recyclerView.getRecycledViewPool().clear();
+        Log.v("lifecycle","onDestroy called");
+    }
+
+    // Called at the end of the full lifetime.
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
 
 }
