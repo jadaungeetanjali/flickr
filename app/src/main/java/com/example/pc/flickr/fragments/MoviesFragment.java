@@ -2,17 +2,14 @@ package com.example.pc.flickr.fragments;
 
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +17,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,33 +28,15 @@ import com.example.pc.flickr.services.AsyncTaskCompleteListener;
 import com.example.pc.flickr.services.CommonFetchTask;
 import com.example.pc.flickr.services.Connectivity;
 import com.example.pc.flickr.R;
-import com.example.pc.flickr.json_parsers.DetailJsonParser;
 import com.example.pc.flickr.models.CastModel;
-import com.example.pc.flickr.models.DetailItemModel;
 import com.example.pc.flickr.models.ReviewModel;
 import com.example.pc.flickr.models.SimilarItemModel;
 import com.example.pc.flickr.models.VideoModel;
-import com.example.pc.flickr.models.WishListModel;
-import com.example.pc.flickr.services.FirebaseCurd;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -250,7 +228,7 @@ public class MoviesFragment extends Fragment {
             ArrayList<VideoModel> videosArray = new ArrayList<>();
             try {
 
-                //DetailJsonParser detailJsonParser = new DetailJsonParser();
+                //DetailTvJsonParser detailJsonParser = new DetailTvJsonParser();
                 DetailMovieJsonParser detailMovieJsonParser = new DetailMovieJsonParser();
                 //final DetailItemModel DetailItemModel;
                 DetailMovieModel detailMovieModel;

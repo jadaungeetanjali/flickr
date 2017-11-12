@@ -1,19 +1,11 @@
 package com.example.pc.flickr.json_parsers;
 
-/**
- * Created by Deepanshu on 11/6/2017.
- */
-
-import android.util.Log;
-
 import com.example.pc.flickr.models.CastModel;
-import com.example.pc.flickr.models.DetailMovieModel;
+import com.example.pc.flickr.models.DetailItemModel;
 import com.example.pc.flickr.models.ReviewModel;
 import com.example.pc.flickr.models.SimilarItemModel;
 import com.example.pc.flickr.models.VideoModel;
 import com.example.pc.flickr.util.movies.MovieCastJsonConfig;
-import com.example.pc.flickr.util.movies.MovieDetailJsonConfig;
-import com.example.pc.flickr.util.movies.MovieReviewJsonConfig;
 import com.example.pc.flickr.util.movies.MovieVideosJsonConfig;
 import com.example.pc.flickr.util.movies.MoviesSimilarJsonConfig;
 
@@ -23,40 +15,14 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class DetailMovieJsonParser {
+/**
+ * Created by deepn on 9/22/2017.
+ */
 
-    public DetailMovieModel jsonMovieDetailParser(String jsonMovie)throws JSONException {
-        //Importing jsonConfig from utilities
-        MovieDetailJsonConfig jsonConfig = new MovieDetailJsonConfig();
-        // fetching data in json
-        JSONObject movieObject = new JSONObject(jsonMovie);
+public class DetailTvJsonParser {
 
-        //Getting genres index 0 from movieObject
-        JSONArray genresMovies = movieObject.getJSONArray(jsonConfig.GENRES);
 
-        //Converting runtime from 139 to 2:19 and storing it into genres
-        String runtime =  movieObject.get(jsonConfig.RUNTIME).toString();
-        if (runtime != null){
-            int hours = Integer.parseInt(runtime)/60;
-            int minutes = Integer.parseInt(runtime) - hours * 60;
-            runtime = hours + "hrs " + minutes+"mins";
-        }
-
-        //Setting values in detailMovieModel
-        DetailMovieModel detailMovieModel = new DetailMovieModel();
-        detailMovieModel.setAdult(movieObject.get(jsonConfig.ADULT).toString());
-        detailMovieModel.setGeneres(genresMovies.getJSONObject(0).get(jsonConfig.GENRES_NAME).toString());
-        detailMovieModel.setLanguage(movieObject.get(jsonConfig.LANGUAGE).toString());
-        detailMovieModel.setTitle(movieObject.get(jsonConfig.TITLE).toString());
-        detailMovieModel.setOverview(movieObject.get(jsonConfig.OVERVIEW).toString());
-        detailMovieModel.setVoteAvg(movieObject.get(jsonConfig.VOTE_AVERAGE).toString());
-        detailMovieModel.setReleaseDate(movieObject.get(jsonConfig.RELEASE_DATE).toString());
-        detailMovieModel.setRuntime(runtime);
-        detailMovieModel.setReleasedStatus(movieObject.get(jsonConfig.RELEASE_STATUS).toString());
-        return detailMovieModel;
-    }
-
-    public ArrayList<CastModel> jsonMovieCastParser(String jsonCast) throws JSONException {
+    public ArrayList<CastModel> jsonTVCastParser(String jsonCast) throws JSONException {
         ArrayList<CastModel> castArray = new ArrayList<>();
         MovieCastJsonConfig jsonConfig = new MovieCastJsonConfig();
 
@@ -74,7 +40,6 @@ public class DetailMovieJsonParser {
         }
         return castArray;
     }
-
     public ArrayList<VideoModel> jsonVideoParser(String jsonVideos) throws JSONException {
         ArrayList<VideoModel> videoArray = new ArrayList<>();
         MovieVideosJsonConfig jsonConfig = new MovieVideosJsonConfig();
@@ -93,23 +58,20 @@ public class DetailMovieJsonParser {
         return videoArray;
     }
 
-
-    public ArrayList<ReviewModel> jsonMovieReviewsParser(String jsonReviews) throws JSONException {
-        ArrayList<ReviewModel> reviewsArray = new ArrayList<>();
-        MovieReviewJsonConfig jsonConfig = new MovieReviewJsonConfig();
-
-        JSONObject reviewsObject = new JSONObject(jsonReviews);
-        JSONArray reviewsList = reviewsObject.getJSONArray(jsonConfig.REVIEWS_ARRAY);
-        for (int i = 0; i < reviewsList.length(); i++) {
-            JSONObject review = reviewsList.getJSONObject(i);
-            ReviewModel reviewModel = new ReviewModel();
-            reviewModel.setAuthor(review.get(jsonConfig.AUTHOR_NAME).toString());
-            reviewModel.setContent(review.get(jsonConfig.AUTHOR_CONTENT).toString());
-            reviewsArray.add(reviewModel);
-        }
-        return reviewsArray;
+    public DetailItemModel jsonTvDetailParser(String jsonMovie)throws JSONException {
+        // fetching data in json
+        JSONObject movieObject = new JSONObject(jsonMovie);
+        String title = movieObject.get("name").toString();
+        String overview = movieObject.get("overview").toString();
+        String vote_average = movieObject.get("vote_average").toString();
+        String tagline = movieObject.get("status").toString();
+        String release_date = movieObject.get("first_air_date").toString();
+        String language = movieObject.get("original_language").toString();
+        String poster = movieObject.get("poster_path").toString();
+        //creating object of DetailItemModel class to initialise constructor with movieDetails
+        DetailItemModel DetailItemModel=new DetailItemModel(title, overview, vote_average, tagline, release_date, language, poster);
+        return DetailItemModel;
     }
-
     public ArrayList<SimilarItemModel> jsonSimilarParser(String jsonSimilarMovies) throws JSONException {
         ArrayList<SimilarItemModel> similarMoviesArray = new ArrayList<>();
         MoviesSimilarJsonConfig jsonConfig = new MoviesSimilarJsonConfig();
@@ -120,7 +82,7 @@ public class DetailMovieJsonParser {
             SimilarItemModel similarItemModel = new SimilarItemModel();
             similarItemModel.setSimilarItemId(similarMovies.get(jsonConfig.MOVIE_ID).toString());
             similarItemModel.setSimilarItemimage(similarMovies.get(jsonConfig.MOVIE_IMAGE_URL).toString());
-            similarItemModel.setSimilarItemimage(similarMovies.get(jsonConfig.MOVIE_VOTE_AVERAGE).toString());
+            similarItemModel.setSimilarItemimage(similarMovies.get("vote_average").toString());
             similarMoviesArray.add(similarItemModel);
         }
         return similarMoviesArray;

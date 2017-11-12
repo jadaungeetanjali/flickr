@@ -7,6 +7,7 @@ package com.example.pc.flickr.models;
 public class SimilarItemModel{
     public String similarItemimage;
     public String similarItemId;
+    public String similarItemvote;
 
 
     public void setSimilarItemId(String similarItemId) {
@@ -17,6 +18,10 @@ public class SimilarItemModel{
         this.similarItemimage = similarItemimage;
     }
 
+    public void setSimilarItemvote(String similarItemvote) {
+        this.similarItemvote = similarItemvote;
+    }
+
     public String getSimilarItemId() {
         return similarItemId;
     }
@@ -25,4 +30,7 @@ public class SimilarItemModel{
         return similarItemimage;
     }
 
+    public String getSimilarItemvote() {
+        return similarItemvote;
+    }
 }

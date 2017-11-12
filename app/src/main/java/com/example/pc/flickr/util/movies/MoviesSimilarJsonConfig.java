@@ -9,4 +9,5 @@ public class MoviesSimilarJsonConfig {
     public static final String MOVIE_ID = "id";
     public static final String MOVIE_RATING = "vote_average";
     public static final String MOVIE_IMAGE_URL = "poster_path";
+    public static final String MOVIE_VOTE_AVERAGE = "vote_average";
 }

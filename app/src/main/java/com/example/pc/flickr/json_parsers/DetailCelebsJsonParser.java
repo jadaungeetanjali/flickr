@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 
 public class DetailCelebsJsonParser {
-    /*
+
     public CelebsModel jsonCelebsParser(String jsonCeleb)throws JSONException {
         JSONObject celebObject = new JSONObject(jsonCeleb);
         String title = celebObject.get("name").toString();
@@ -49,9 +49,9 @@ public class DetailCelebsJsonParser {
             String movieCreditVoteAverage = movieCredit.get("vote_average").toString();
             String movieCreditPoster = movieCredit.get("poster_path").toString();
             String movieCreditId = movieCredit.get("id").toString();
-            SimilarItemModel SimilarItemModel = new SimilarItemModel(movieCreditId, movieCreditName, movieCreditVoteAverage, movieCreditPoster);
+            SimilarItemModel SimilarItemModel = new SimilarItemModel();
             celebMovieCreditArray.add(SimilarItemModel);
         }
         return celebMovieCreditArray;
-    }*/
+    }
 }
