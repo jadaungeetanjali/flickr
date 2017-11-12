@@ -42,7 +42,6 @@ public class MoreList extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
         recyclerViewMoreList = (RecyclerView) findViewById(R.id.recyclerView_moreList);
         progressBar = (ProgressBar) findViewById(R.id.more_progressBar);
         LinearLayoutManager layoutManagerMovieList = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);

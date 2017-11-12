@@ -28,12 +28,11 @@ public class MoreListAdapter extends RecyclerView.Adapter<MoreListAdapter.moreLi
     public Context context;
     public String type;
 
-    class moreListViewHolder extends RecyclerView.ViewHolder {
+    public static class moreListViewHolder extends RecyclerView.ViewHolder {
         ImageView moreListImageView;
         TextView moreListNameTextView;
         TextView moreListReleaseDateTextView;
         TextView moreListRatingTextView;
-        TextView moreListIdTextView;
         ProgressBar moreListProgressBar;
         public moreListViewHolder(View itemView) {
             super(itemView);
@@ -41,7 +40,6 @@ public class MoreListAdapter extends RecyclerView.Adapter<MoreListAdapter.moreLi
             moreListImageView = (ImageView) itemView.findViewById(R.id.more_list_poster);
             moreListReleaseDateTextView = (TextView) itemView.findViewById(R.id.more_list_release_date);
             moreListRatingTextView = (TextView) itemView.findViewById(R.id.more_list_ratings);
-            moreListIdTextView = (TextView) itemView.findViewById(R.id.more_list_id);
             moreListProgressBar = (ProgressBar) itemView.findViewById(R.id.more_list_poster_progressBar);
         }
     }
@@ -64,7 +62,6 @@ public class MoreListAdapter extends RecyclerView.Adapter<MoreListAdapter.moreLi
         holder.moreListNameTextView.setText(moreListModel.getName());
         holder.moreListReleaseDateTextView.setText(moreListModel.getReleaseDate());
         holder.moreListRatingTextView.setText(moreListModel.getRating());
-        holder.moreListIdTextView.setText(moreListModel.getId());
         Picasso.with(context).load("https://image.tmdb.org/t/p/w500" + moreListModel.getImage())
                 .into(holder.moreListImageView,new com.squareup.picasso.Callback() {
 
@@ -95,6 +92,7 @@ public class MoreListAdapter extends RecyclerView.Adapter<MoreListAdapter.moreLi
                 mBundle.putString("id",moreListModel.getId());
                 Log.i("string",type +" / " +moreListModel.getId() );
                 intent.putExtras(mBundle);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
         });

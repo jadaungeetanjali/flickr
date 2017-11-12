@@ -6,12 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#eff0f1">
+    android:background="#000">
     <android.support.v7.widget.Toolbar
         android:id="@+id/more_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorDanger"
+        android:background="#00a99d"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         android:elevation="6dp"/>
@@ -29,7 +29,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/recyclerView_moreList"
-        android:background="#eff0f1"
         android:elevation="2dp">
     </android.support.v7.widget.RecyclerView>
 </LinearLayout>
