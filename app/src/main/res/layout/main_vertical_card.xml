@@ -26,6 +26,7 @@
         app:layout_constraintTop_toBottomOf="@+id/main_child_ratingStar"
         app:layout_constraintRight_toRightOf="@+id/main_child_imageView"/>
     <TextView
+        android:id="@+id/main_child_rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="1"

@@ -15,7 +15,7 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="40dp"
         android:layout_gravity="center_vertical"
         android:visibility="visible"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -23,7 +23,7 @@
 
     <ImageView
         android:id="@+id/more_list_poster"
-        android:layout_width="100dp"
+        android:layout_width="95dp"
         android:layout_height="match_parent"
         android:padding="1dp"
         android:src="@drawable/movie_poster"

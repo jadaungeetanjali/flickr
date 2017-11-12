@@ -161,7 +161,7 @@ public class MainAdapters {
             ProgressBar progressBar;
             public MyViewHolder(View itemview){
                 super(itemview);
-                //childViewVote = (TextView) itemview.findViewById(R.id.main_child_vote_textView);
+                childViewVote = (TextView) itemview.findViewById(R.id.main_child_rating);
                 childImageView = (ImageView) itemview.findViewById(R.id.main_child_imageView);
                 itemview.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -206,7 +206,7 @@ public class MainAdapters {
         public void onBindViewHolder(final MyViewHolder holder, int position) {
             ListDataModel dataModel = dataList.get(position);
             //holder.childViewTitle.setText(dataModel.getName());
-            //holder.childViewVote.setText(dataModel.getVote_avg());
+            holder.childViewVote.setText(dataModel.getVote_avg());
             //holder.childViewPopularity.setText(dataModel.getPopularity());
             //final ProgressBar progressBar = holder.progressBar;
             final int radius = 10;
