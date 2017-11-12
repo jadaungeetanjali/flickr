@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,7 +46,7 @@ public class MoviesFragment extends Fragment {
     private DetailAdapter.CastAdapter castAdapter;
     private DetailAdapter.ReviewAdapter reviewAdapter;
     private DetailAdapter.SimilarMoviesAdapter similarMoviesAdapter;
-    private VideoAdapter videoAdapter;
+    private DetailAdapter.VideoAdapter videoAdapter;
     RecyclerView recyclerViewCast, recyclerViewReviews, recyclerViewSimilar,recyclerViewVideo;
     private TextView title, overview, status, tagline, release_date, category, internet_connectivity;
     private ProgressBar progressBar;
@@ -57,6 +58,7 @@ public class MoviesFragment extends Fragment {
     private Boolean wishList, watchList, internet;
     private CommonFetchTask callMovieData;
     private ActionBar actionBar;
+    private RatingBar vote_average;
     public MoviesFragment() {
         // Required empty public constructor
     }
@@ -74,12 +76,11 @@ public class MoviesFragment extends Fragment {
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         actionBar = (ActionBar) ((AppCompatActivity)getActivity()).getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        //vote_average = (TextView) rootView.findViewById(R.id.detail_movie_rating);
+        vote_average = (RatingBar) rootView.findViewById(R.id.detail_movie_rating);
         //tagline = (TextView) rootView.findViewById(R.id.detail_movie_tagline);
         release_date = (TextView) rootView.findViewById(R.id.detail_movie_release_date);
         category = (TextView) rootView.findViewById(R.id.detail_movie_genre);
         status = (TextView) rootView.findViewById(R.id.detail_movie_status);
-        //internet_connectivity = (TextView) rootView.findViewById(R.id.detail_movie_internet_connectivity);
         //button = (Button) rootView.findViewById(R.id.detail_movie_watchlist);
         //wishListButton = (ImageView) rootView.findViewById(R.id.detail_movie_wishlist_button);
         //wishListButton2 = (ImageView) rootView.findViewById(R.id.detail_movie_wishlist_button_2);
@@ -151,67 +152,7 @@ public class MoviesFragment extends Fragment {
     }
 
 
-    private class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.videoViewHolder> {
-        private ArrayList<VideoModel> videoArrayList;
 
-        class videoViewHolder extends RecyclerView.ViewHolder {
-            ImageView videoImageView;
-            TextView videoNameTextView ;
-            ProgressBar videoProgressBar;
-
-            public videoViewHolder(View itemView) {
-                super(itemView);
-                //videoProgressBar = (ProgressBar) itemView.findViewById(R.id.video_progressBar);
-                //videoNameTextView = (TextView) itemView.findViewById(R.id.video_textView);
-                videoImageView = (ImageView) itemView.findViewById(R.id.video_imageView);
-            }
-        }
-
-        public VideoAdapter(ArrayList<VideoModel> arrayList) {
-            this.videoArrayList = arrayList;
-        }
-
-        @Override
-        public videoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_video_listitem, parent, false); //change layout id
-            return new videoViewHolder(itemView);
-        }
-
-        @Override
-        public void onBindViewHolder(final videoViewHolder holder, int position) {
-            final VideoModel videoModel = videoArrayList.get(position);
-            //holder.videoNameTextView.setText(videoModel.getName());
-            Picasso.with(getContext()).load("https://img.youtube.com/vi/"+videoModel.getImageUrl()+"/sddefault.jpg")
-                    .into(holder.videoImageView,new com.squareup.picasso.Callback() {
-
-                        @Override
-                        public void onSuccess() {
-                            //holder.videoProgressBar.setVisibility(View.GONE);
-                            //holder.videoImageView.setVisibility(View.VISIBLE);
-                        }
-
-                        @Override
-                        public void onError() {
-
-                        }
-                    });
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Bundle bundle = new Bundle();
-                    //bundle.putString("url",videoModel.getImage());
-                    Intent intent = new Intent(getActivity().getApplication(), YoutubeActivity.class);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return videoArrayList.size();
-        }
-    }
 
 
     public class FetchTask implements AsyncTaskCompleteListener<ArrayList<String>>{
@@ -248,9 +189,6 @@ public class MoviesFragment extends Fragment {
                     default:
                         detailMovieModel = detailMovieJsonParser.jsonMovieDetailParser(jsonArray.get(0));
                 }
-                //Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.detail_toolbar);
-                //toolbar.setTitle(DetailItemModel.getTitle());
-                //title.setText(DetailItemModel.getTitle());
                 overview.setText(detailMovieModel.getOverview());
                 actionBar.setTitle(detailMovieModel.getTitle());
                 //vote_average.setText(DetailItemModel.getVote_avg());
@@ -267,7 +205,7 @@ public class MoviesFragment extends Fragment {
                 recyclerViewSimilar.setAdapter(similarMoviesAdapter);
 
                 videosArray = detailMovieJsonParser.jsonVideoParser(jsonArray.get(4));
-                videoAdapter = new VideoAdapter(videosArray);
+                videoAdapter = new DetailAdapter.VideoAdapter(videosArray,getContext());
                 recyclerViewVideo.setAdapter(videoAdapter);
                 //FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
                 //DatabaseReference mWatchListReference = firebaseCurd.getmWatchListReference();

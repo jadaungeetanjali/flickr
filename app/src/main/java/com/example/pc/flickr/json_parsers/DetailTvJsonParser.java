@@ -8,6 +8,7 @@ import com.example.pc.flickr.models.VideoModel;
 import com.example.pc.flickr.util.movies.MovieCastJsonConfig;
 import com.example.pc.flickr.util.movies.MovieVideosJsonConfig;
 import com.example.pc.flickr.util.movies.MoviesSimilarJsonConfig;
+import com.example.pc.flickr.util.tv.TvDetailJsonConfig;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -60,14 +61,15 @@ public class DetailTvJsonParser {
 
     public DetailItemModel jsonTvDetailParser(String jsonMovie)throws JSONException {
         // fetching data in json
+        TvDetailJsonConfig jsonConfig = new TvDetailJsonConfig();
         JSONObject movieObject = new JSONObject(jsonMovie);
-        String title = movieObject.get("name").toString();
-        String overview = movieObject.get("overview").toString();
-        String vote_average = movieObject.get("vote_average").toString();
-        String tagline = movieObject.get("status").toString();
-        String release_date = movieObject.get("first_air_date").toString();
-        String language = movieObject.get("original_language").toString();
-        String poster = movieObject.get("poster_path").toString();
+        String title = movieObject.get(jsonConfig.SHOW_TITLE).toString();
+        String overview = movieObject.get(jsonConfig.SHOW_OVERVIEW).toString();
+        String vote_average = movieObject.get(jsonConfig.VOTE_AVERAGE).toString();
+        String tagline = movieObject.get(jsonConfig.SHOW_STATUS).toString();
+        String release_date = movieObject.get(jsonConfig.FIRST_AIR_DATE).toString();
+        String language = movieObject.get(jsonConfig.LANGUAGE).toString();
+        String poster = movieObject.get(jsonConfig.IMAGE_URL).toString();
         //creating object of DetailItemModel class to initialise constructor with movieDetails
         DetailItemModel DetailItemModel=new DetailItemModel(title, overview, vote_average, tagline, release_date, language, poster);
         return DetailItemModel;

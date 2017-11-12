@@ -1,279 +1,351 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.pc.flickr.fragments.CelebsFragment">
+    tools:context="com.example.pc.flickr.fragments.MoviesFragment">
 
-    <ScrollView
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/detail_movie_appbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorSecondaryLight">
+        android:layout_height="200dp"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <LinearLayout
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/detail_movie_collapsing"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            android:background="#000"
+            app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Headline"
+            app:titleEnabled="false"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <LinearLayout
-                android:id="@+id/detail_celebs_mainContainer"
+            <ImageView
+                android:id="@+id/detail_celeb_videos_recyclerView"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                app:layout_collapseMode="parallax"
+                android:background="#e62c2c2c"
+                app:layout_constraintTop_toBottomOf="@+id/detail_movie_similar_title" />
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/detail_movie_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context="com.byte64.coordinatorlayoutexample.ScollingActivity">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:background="#000"
+            android:layout_height="wrap_content">
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/detail_movie_head"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:paddingBottom="30dp"
+                android:background="#1c1c1c"
+                android:paddingLeft="10dp">
 
-                android:weightSum="1">
+                <TextView
+                    android:id="@+id/detail_movie_genre"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:paddingTop="12dp"
+                    android:text="Darma"
+                    android:textColor="#fff"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="parent" />
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/detail_movie_language"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="6dp"
+                    android:text="English"
+                    android:textColor="#fff"
+                    android:textSize="15sp"
+                    app:layout_constraintTop_toBottomOf="@+id/detail_movie_genre"
+                    app:layout_constraintLeft_toRightOf="parent"/>
+
+                <TextView
+                    android:id="@+id/detail_movie_release_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="6dp"
+                    android:text="1999-10-12"
+                    android:textColor="#fff"
+                    android:textSize="16sp"
+                    app:layout_constraintLeft_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/detail_movie_language"
+                    />
+
+
+
+                <TextView
+                    android:id="@+id/detail_movie_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="2dp"
+                    android:text="Released"
+                    android:textColor="#fff"
+                    android:textSize="16sp"
+                    android:layout_marginTop="7dp"
+                    android:textStyle="bold"
+                    android:paddingRight="20dp"
+                    android:paddingLeft="2dp"
+                    android:background="#00a99d"
+                    app:layout_constraintRight_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="parent" />
+
+
+                <TextView
+                    android:id="@+id/detail_movie_runtime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:text="2hrs 10mins"
+                    android:textColor="#fff"
+                    android:textSize="16sp"
+                    android:layout_marginTop="0dp"
+                    android:textStyle="bold"
+                    android:paddingRight="2dp"
+                    app:layout_constraintRight_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/detail_movie_status" />
+
+                <RatingBar
+                    android:id="@+id/detail_movie_rating"
+                    style="?android:attr/ratingBarStyleIndicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:numStars="3"
+                    android:progressTint="#f7931e"
+                    app:layout_constraintBottom_toBottomOf="@+id/detail_movie_release_date"
+                    app:layout_constraintRight_toLeftOf="parent"
+                    android:rating="2.6" />
+
+                <TextView
+                    android:id="@+id/detail_movie_details"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#fff"
-                    android:orientation="vertical">
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#939393"
+                    android:textSize="15sp"
+                    app:layout_constraintLeft_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/detail_movie_release_date" />
 
-                    <TextView
-                        android:id="@+id/detail_celebs_mainTitle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="5dp"
-                        android:paddingLeft="10dp"
-                        android:paddingTop="5dp"
-                        android:textAppearance="@color/colorDanger"
-                        android:textSize="22sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:background="#fff"
-                    android:orientation="vertical"
-                    android:paddingTop="10dp">
-
-                    <TextView
-                        android:id="@+id/detail_celebs_biography"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:paddingLeft="10dp"
-                        android:textAppearance="@color/colorDangerLight"
-                        android:textSize="14sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:background="#fff"
-                    android:orientation="horizontal"
-                    android:paddingTop="10dp">
-
-                    <ImageView
-                        android:id="@+id/detail_celebs_profile"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="2"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="10dp"
-                            android:text="Born:"
-                            android:textAppearance="@color/colorDanger"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/detail_celebs_born"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="10dp"
-                            android:textAppearance="@color/colorDangerLight"
-                            android:textSize="16sp" />
-
-                        <TextView
-                            android:id="@+id/detail_celebs_placeOfBirth"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="10dp"
-                            android:textAppearance="@color/colorDangerLight"
-                            android:textSize="16sp" />
-
-                        <Button
-                            android:id="@+id/detail_celebs_favorite_button"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:background="@color/colorSuccess"
-                            android:paddingLeft="20dp"
-                            android:paddingRight="20dp"
-                            android:text="Add to Favorite"
-                            android:textColor="#fff" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:background="#fff"
-                    android:elevation="2dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="5dp"
-                        android:text="Movie Credits"
-                        android:textAppearance="@color/colorDanger"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/detail_celebs_movieCreditsRecyclerView"
-                        android:layout_width="match_parent"
-                        android:layout_height="220dp"
-                        android:layout_marginBottom="20dp"></android.support.v7.widget.RecyclerView>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:id="@+id/detail_movie_user_rating"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
-                    android:background="#fff"
-                    android:elevation="2dp"
-                    android:orientation="horizontal">
+                    android:src="@drawable/ic_add_white_36dp"
+                    android:tint="#fff"
+                    app:layout_constraintLeft_toRightOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/detail_movie_add_wishlist"
+                    app:layout_constraintTop_toBottomOf="@+id/detail_movie_details" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/textView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginBottom="5dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="5dp"
-                            android:text="Personal Details"
-                            android:textAppearance="@color/colorDanger"
-                            android:textSize="20sp"
-                            android:textStyle="bold" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="10dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:paddingBottom="3dp"
-                                    android:paddingTop="5dp"
-                                    android:text="Born"
-                                    android:textAppearance="@color/colorDanger"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:id="@+id/detail_celebs_bornDate"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:padding="5dp"
-                                    android:textAppearance="@color/colorDangerLight"
-                                    android:textSize="14sp" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:paddingBottom="3dp"
-                                    android:paddingTop="5dp"
-                                    android:text="Birth Place"
-                                    android:textAppearance="@color/colorDanger"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:id="@+id/detail_celebs_birthPlace"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:padding="5dp"
-                                    android:textAppearance="@color/colorDangerLight"
-                                    android:textSize="14sp" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:paddingBottom="3dp"
-                                    android:paddingTop="5dp"
-                                    android:text="Also Known As"
-                                    android:textAppearance="@color/colorDanger"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:id="@+id/detail_celebs_alsoKnownAs"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:padding="5dp"
-                                    android:textColor="@color/colorSecondary"
-                                    android:textSize="14sp" />
-                            </LinearLayout>
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/detail_movie_user_rating_textview"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:background="#fff"
-                    android:elevation="2dp"
-                    android:orientation="vertical">
+                    android:layout_marginTop="8dp"
+                    android:text="  Wishlist   "
+                    android:textColor="#00a99d"
+                    app:layout_constraintLeft_toRightOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/detail_movie_add_wishlist_textview"
+                    app:layout_constraintTop_toBottomOf="@+id/detail_movie_user_rating" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="5dp"
-                        android:text="Images"
-                        android:textAppearance="@color/colorDanger"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
+                <ImageView
+                    android:id="@+id/detail_movie_add_wishlist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="25dp"
+                    android:src="@drawable/ic_star_border_white_36dp"
+                    android:tint="#fff"
+                    app:layout_constraintLeft_toRightOf="@+id/detail_movie_user_rating"
+                    app:layout_constraintRight_toLeftOf="@+id/detail_movie_user_watchlist"
+                    app:layout_constraintTop_toBottomOf="@+id/detail_movie_details" />
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/detail_celebs_imagesRecyclerView"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:layout_marginBottom="20dp"></android.support.v7.widget.RecyclerView>
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/detail_movie_add_wishlist_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Rate it  "
+                    android:textColor="#00a99d"
+                    app:layout_constraintLeft_toRightOf="@+id/detail_movie_user_rating_textview"
+                    app:layout_constraintRight_toLeftOf="@+id/detail_movie_user_watchlist_textview"
+                    app:layout_constraintTop_toBottomOf="@+id/detail_movie_add_wishlist" />
 
-            </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+                <ImageView
+                    android:id="@+id/detail_movie_user_watchlist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="25dp"
+                    android:src="@drawable/ic_library_add_white_36dp"
+                    android:tint="#fff"
+                    app:layout_constraintLeft_toRightOf="@id/detail_movie_add_wishlist"
+                    app:layout_constraintRight_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/detail_movie_details" />
+
+                <TextView
+                    android:id="@+id/detail_movie_user_watchlist_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Watchlist   "
+                    android:textColor="#00a99d"
+                    app:layout_constraintLeft_toRightOf="@+id/detail_movie_add_wishlist_textview"
+                    app:layout_constraintRight_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/detail_movie_user_watchlist" />
+            </android.support.constraint.ConstraintLayout>
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/detail_movie_cast"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:paddingBottom="15dp"
+                android:paddingTop="10dp"
+                android:background="#1c1c1c"
+                app:layout_constraintTop_toBottomOf="@+id/detail_movie_head">
+
+                <TextView
+                    android:id="@+id/detail_movie_cast_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="10dp"
+                    android:text="Top Billed Cast"
+                    android:textStyle="bold"
+                    android:textColor="#fff"
+                    android:textSize="21sp"
+                    app:layout_constraintTop_toBottomOf="parent" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/detail_movie_cast_recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    android:background="#000"
+                    app:layout_constraintTop_toBottomOf="@+id/detail_movie_cast_title"></android.support.v7.widget.RecyclerView>
+
+            </android.support.constraint.ConstraintLayout>
+            <!--
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/detail_movie_images"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:paddingBottom="15dp"
+                android:paddingTop="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/detail_movie_cast">
+
+                <TextView
+                    android:id="@+id/detail_movie_images_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="10dp"
+                    android:text="Images"
+                    android:textSize="21sp"
+                    android:paddingLeft="10dp"
+                    android:textStyle="bold"
+                    android:textColor="#fff"
+                    app:layout_constraintTop_toBottomOf="parent" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:background="@color/colorSuccessLight"
+                    app:layout_constraintTop_toBottomOf="@+id/detail_movie_images_title"></android.support.v7.widget.RecyclerView>
+            </android.support.constraint.ConstraintLayout>
+            -->
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/detail_movie_similar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:paddingBottom="15dp"
+                android:paddingTop="10dp"
+                android:background="#1c1c1c"
+                app:layout_constraintTop_toBottomOf="@+id/detail_movie_cast">
+
+                <TextView
+                    android:id="@+id/detail_movie_similar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="10dp"
+                    android:text="Similar Movies"
+                    android:paddingLeft="10dp"
+                    android:textColor="#fff"
+                    android:textStyle="bold"
+                    android:textSize="22sp"
+                    app:layout_constraintTop_toBottomOf="parent" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/detail_movie_similar_recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="240dp"
+                    android:background="#000"
+                    app:layout_constraintTop_toBottomOf="@+id/detail_movie_similar_title"/>
+
+            </android.support.constraint.ConstraintLayout>
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/detail_movie_review"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:paddingBottom="15dp"
+                android:paddingTop="10dp"
+                android:background="#1c1c1c"
+                app:layout_constraintTop_toBottomOf="@+id/detail_movie_similar">
+
+                <TextView
+                    android:id="@+id/detail_movie_review_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="10dp"
+                    android:text="Reviews"
+                    android:textStyle="bold"
+                    android:textColor="#fff"
+                    android:paddingLeft="10dp"
+                    android:textSize="22sp"
+                    app:layout_constraintTop_toBottomOf="parent" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:background="#000"
+                    app:layout_constraintTop_toBottomOf="@+id/detail_movie_review_title"></android.support.v7.widget.RecyclerView>
+            </android.support.constraint.ConstraintLayout>
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v4.widget.NestedScrollView>
+</android.support.design.widget.CoordinatorLayout>

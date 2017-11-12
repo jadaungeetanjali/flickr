@@ -13,9 +13,11 @@ import android.widget.TextView;
 
 import com.example.pc.flickr.MoviesDetails;
 import com.example.pc.flickr.R;
+import com.example.pc.flickr.YoutubeActivity;
 import com.example.pc.flickr.models.CastModel;
 import com.example.pc.flickr.models.ReviewModel;
 import com.example.pc.flickr.models.SimilarItemModel;
+import com.example.pc.flickr.models.VideoModel;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -202,6 +204,71 @@ public class DetailAdapter {
         @Override
         public int getItemCount() {
             return similarMoviesArrayList.size();
+        }
+    }
+
+    public static class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.videoViewHolder> {
+        private ArrayList<VideoModel> videoArrayList;
+        private Context context;
+
+        class videoViewHolder extends RecyclerView.ViewHolder {
+            ImageView videoImageView;
+            TextView videoNameTextView ;
+            ProgressBar videoProgressBar;
+
+            public videoViewHolder(View itemView) {
+                super(itemView);
+                //videoProgressBar = (ProgressBar) itemView.findViewById(R.id.video_progressBar);
+                //videoNameTextView = (TextView) itemView.findViewById(R.id.video_textView);
+                videoImageView = (ImageView) itemView.findViewById(R.id.video_imageView);
+            }
+        }
+
+        public VideoAdapter(ArrayList<VideoModel> arrayList,Context context) {
+            this.videoArrayList = arrayList;
+            this.context = context;
+        }
+
+        @Override
+        public videoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_video_listitem, parent, false); //change layout id
+            return new videoViewHolder(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(final videoViewHolder holder, int position) {
+            final VideoModel videoModel = videoArrayList.get(position);
+            //holder.videoNameTextView.setText(videoModel.getName());
+            Picasso.with(context).load("https://img.youtube.com/vi/"+videoModel.getImageUrl()+"/sddefault.jpg")
+                    .into(holder.videoImageView,new com.squareup.picasso.Callback() {
+
+                        @Override
+                        public void onSuccess() {
+                            //holder.videoProgressBar.setVisibility(View.GONE);
+                            //holder.videoImageView.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onError() {
+
+                        }
+                    });
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Bundle bundle = new Bundle();
+                    //bundle.putString("url",videoModel.getImage());
+                    Intent intent = new Intent(context, YoutubeActivity.class);
+                    intent.putExtras(bundle);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return videoArrayList.size();
         }
     }
 }
