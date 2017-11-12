@@ -120,7 +120,7 @@ public class DetailMovieJsonParser {
             SimilarItemModel similarItemModel = new SimilarItemModel();
             similarItemModel.setSimilarItemId(similarMovies.get(jsonConfig.MOVIE_ID).toString());
             similarItemModel.setSimilarItemimage(similarMovies.get(jsonConfig.MOVIE_IMAGE_URL).toString());
-            similarItemModel.setSimilarItemimage(similarMovies.get(jsonConfig.MOVIE_VOTE_AVERAGE).toString());
+            similarItemModel.setSimilarItemvote(similarMovies.get(jsonConfig.MOVIE_VOTE_AVERAGE).toString());
             similarMoviesArray.add(similarItemModel);
         }
         return similarMoviesArray;

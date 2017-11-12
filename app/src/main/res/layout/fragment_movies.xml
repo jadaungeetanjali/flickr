@@ -340,8 +340,9 @@
                     app:layout_constraintTop_toBottomOf="parent" />
 
                 <android.support.v7.widget.RecyclerView
+                    android:id="@+id/detail_movie_review_recyclerVIew"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
+                    android:layout_height="wrap_content"
                     android:background="#000"
                     app:layout_constraintTop_toBottomOf="@+id/detail_movie_review_title"></android.support.v7.widget.RecyclerView>
             </android.support.constraint.ConstraintLayout>

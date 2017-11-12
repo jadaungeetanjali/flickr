@@ -2,6 +2,7 @@ package com.example.pc.flickr;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.pc.flickr.util.activities.YoutubeConfig;
@@ -24,6 +25,7 @@ public class YoutubeActivity extends YouTubeBaseActivity implements YouTubePlaye
         url = bundle.getString(YoutubeConfig.URL);
         youTubeView = (YouTubePlayerView) findViewById(R.id.youtube_view);
         youTubeView.initialize(YoutubeConfig.YOUTUBE_API_KEY, this);
+        Log.e("video_url",url);
     }
 
     @Override

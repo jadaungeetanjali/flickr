@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textSize="14sp"
-        android:maxHeight="200dp"
+        android:maxHeight="100dp"
         android:textColor="#fff"
         >
     </TextView>

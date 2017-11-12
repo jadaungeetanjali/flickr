@@ -152,7 +152,7 @@ public class DetailAdapter {
                 super(itemView);
                  //change id to similarMovieName
                 similarMovieImageView = (ImageView) itemView.findViewById(R.id.main_child_imageView); //change id to similarMovieImage
-                //similarMovieVoteAverageTextView = (TextView) itemView.findViewById(R.id.main_child);
+                similarMovieVoteAverageTextView = (TextView) itemView.findViewById(R.id.main_child_rating);
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -184,7 +184,7 @@ public class DetailAdapter {
         public void onBindViewHolder(final similarMoviesViewHolder holder, int position) {
             SimilarItemModel SimilarItemModel = similarMoviesArrayList.get(position);
             //holder.similarMovieNameTextView.setText(SimilarItemModel.getSimilarItemimage());
-            //holder.similarMovieVoteAverageTextView.setText(SimilarItemModel.getSimilarItemVoteAverage());
+            holder.similarMovieVoteAverageTextView.setText(SimilarItemModel.getSimilarItemvote());
             Picasso.with(similarMovieContext).load("https://image.tmdb.org/t/p/w500"+SimilarItemModel.getSimilarItemimage())
                     .into(holder.similarMovieImageView,new com.squareup.picasso.Callback() {
 
@@ -257,7 +257,7 @@ public class DetailAdapter {
                 @Override
                 public void onClick(View view) {
                     Bundle bundle = new Bundle();
-                    //bundle.putString("url",videoModel.getImage());
+                    bundle.putString("url",videoModel.getImageUrl());
                     Intent intent = new Intent(context, YoutubeActivity.class);
                     intent.putExtras(bundle);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
