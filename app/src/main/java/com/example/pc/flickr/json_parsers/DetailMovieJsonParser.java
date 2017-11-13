@@ -52,6 +52,7 @@ public class DetailMovieJsonParser {
         detailMovieModel.setVoteAvg(movieObject.get(jsonConfig.VOTE_AVERAGE).toString());
         detailMovieModel.setReleaseDate(movieObject.get(jsonConfig.RELEASE_DATE).toString());
         detailMovieModel.setRuntime(runtime);
+        detailMovieModel.setPosterPath(movieObject.get(jsonConfig.POSTER_PATH).toString());
         detailMovieModel.setReleasedStatus(movieObject.get(jsonConfig.RELEASE_STATUS).toString());
         return detailMovieModel;
     }

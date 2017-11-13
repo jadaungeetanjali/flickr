@@ -15,5 +15,6 @@ public class MovieDetailJsonConfig {
     public static final String RELEASE_DATE = "release_date";
     public static final String RUNTIME = "runtime";
     public static final String RELEASE_STATUS = "status";
+    public static final String POSTER_PATH = "poster_path";
 }
 

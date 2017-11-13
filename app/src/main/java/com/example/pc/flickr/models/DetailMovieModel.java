@@ -14,6 +14,7 @@ public class DetailMovieModel {
     private String releaseDate;
     private String runtime;
     private String releasedStatus;
+    private String posterPath;
 
 
     public void setAdult(String adult) {
@@ -52,6 +53,10 @@ public class DetailMovieModel {
         this.voteAvg = voteAvg;
     }
 
+    public void setPosterPath(String posterPath) {
+        this.posterPath = posterPath;
+    }
+
     public String getAdult() {
         return adult;
     }
@@ -86,5 +91,9 @@ public class DetailMovieModel {
 
     public String getVoteAvg() {
         return voteAvg;
+    }
+
+    public String getPosterPath() {
+        return posterPath;
     }
 }

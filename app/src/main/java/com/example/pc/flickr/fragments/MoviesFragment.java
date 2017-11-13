@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.example.pc.flickr.Adapters.DetailAdapter;
 import com.example.pc.flickr.YoutubeActivity;
 import com.example.pc.flickr.json_parsers.DetailMovieJsonParser;
+import com.example.pc.flickr.json_parsers.DetailTvJsonParser;
 import com.example.pc.flickr.models.DetailItemModel;
 import com.example.pc.flickr.models.DetailMovieModel;
 import com.example.pc.flickr.models.WishListModel;
@@ -177,45 +178,42 @@ public class MoviesFragment extends Fragment {
 
                 //DetailTvJsonParser detailJsonParser = new DetailTvJsonParser();
                 DetailMovieJsonParser detailMovieJsonParser = new DetailMovieJsonParser();
+                DetailTvJsonParser detailTvJsonParser = new DetailTvJsonParser();
                 //final DetailItemModel DetailItemModel;
                 final DetailMovieModel detailMovieModel;
                 switch (type){
+                    case "tv":
+                        Log.e("type",jsonArray.get(0));
+                        detailMovieModel = detailTvJsonParser.jsonTvDetailParser(jsonArray.get(0));
+                        similarMoviesArray = detailTvJsonParser.jsonSimilarParser(jsonArray.get(3));
+                        castArray = detailTvJsonParser.jsonTVCastParser(jsonArray.get(2));
+                        videosArray = detailTvJsonParser.jsonVideoParser(jsonArray.get(4));
+                        break;
                     case "movies":
                         detailMovieModel = detailMovieJsonParser.jsonMovieDetailParser(jsonArray.get(0));
-
-                        overview.setText(detailMovieModel.getOverview());
-                        actionBar.setTitle(detailMovieModel.getTitle());
-                        genre.setText(detailMovieModel.getGeneres());
-                        language.setText(detailMovieModel.getLanguage());
-                        releaseDate.setText(detailMovieModel.getReleaseDate());
-                        runtime.setText(detailMovieModel.getRuntime());
-                        status.setText(detailMovieModel.getReleasedStatus());
-
                         reviewArray = detailMovieJsonParser.jsonMovieReviewsParser(jsonArray.get(2));
                         reviewAdapter = new DetailAdapter.ReviewAdapter(reviewArray);
                         recyclerViewReviews.setAdapter(reviewAdapter);
-
                         castArray = detailMovieJsonParser.jsonMovieCastParser(jsonArray.get(1));
-                        castAdapter = new DetailAdapter.CastAdapter(getContext(),castArray);
-                        recyclerViewCast.setAdapter(castAdapter);
-
                         similarMoviesArray = detailMovieJsonParser.jsonSimilarParser(jsonArray.get(3));
-                        similarMoviesAdapter = new DetailAdapter.SimilarMoviesAdapter(getContext(),similarMoviesArray,type);
-                        recyclerViewSimilar.setAdapter(similarMoviesAdapter);
-
                         videosArray = detailMovieJsonParser.jsonVideoParser(jsonArray.get(4));
-                        videoAdapter = new DetailAdapter.VideoAdapter(videosArray,getContext());
-                        recyclerViewVideo.setAdapter(videoAdapter);
-
                         break;
-                    //case "tv":
-                    //DetailItemModel = detailJsonParser.jsonTvDetailParser(jsonArray.get(0));
-                    //similarMoviesArray = detailJsonParser.jsonTvSimilarParser(jsonArray.get(3));
-                    //    break;
                     default:
                         detailMovieModel = detailMovieJsonParser.jsonMovieDetailParser(jsonArray.get(0));
                 }
-
+                overview.setText(detailMovieModel.getOverview());
+                actionBar.setTitle(detailMovieModel.getTitle());
+                genre.setText(detailMovieModel.getGeneres());
+                language.setText(detailMovieModel.getLanguage());
+                releaseDate.setText(detailMovieModel.getReleaseDate());
+                runtime.setText(detailMovieModel.getRuntime());
+                status.setText(detailMovieModel.getReleasedStatus());
+                castAdapter = new DetailAdapter.CastAdapter(getContext(),castArray);
+                recyclerViewCast.setAdapter(castAdapter);
+                similarMoviesAdapter = new DetailAdapter.SimilarMoviesAdapter(getContext(),similarMoviesArray,type);
+                recyclerViewSimilar.setAdapter(similarMoviesAdapter);
+                videoAdapter = new DetailAdapter.VideoAdapter(videosArray,getContext());
+                recyclerViewVideo.setAdapter(videoAdapter);
                 FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
                 DatabaseReference mWatchListReference = firebaseCurd.getmWatchListReference();
                 DatabaseReference mWishListReference = firebaseCurd.getmWishListReference();
@@ -271,7 +269,7 @@ public class MoviesFragment extends Fragment {
                         FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
                         if (!watchlist) {
                             WishListModel wishListModel = new WishListModel(
-                                    "000", id, type, detailMovieModel.getTitle(), detailMovieModel.getImageUrl(), detailMovieModel.getVoteAvg());
+                                    "000", id, type, detailMovieModel.getTitle(), detailMovieModel.getPosterPath(), detailMovieModel.getVoteAvg());
 
                             firebaseCurd.addWatchListModel(wishListModel);
                             watchListButton.setColorFilter(getResources().getColor(R.color.colorDanger));
@@ -292,7 +290,7 @@ public class MoviesFragment extends Fragment {
 
                         if (!wishlist) {
                             WishListModel wishListModel = new WishListModel(
-                                    "tyagideepu133", id, type, detailMovieModel.getTitle(), detailMovieModel.getImageUrl(), detailMovieModel.getVoteAvg());
+                                    "tyagideepu133", id, type, detailMovieModel.getTitle(), detailMovieModel.getPosterPath(), detailMovieModel.getVoteAvg());
                             FirebaseCurd firebaseCurd = new FirebaseCurd(getActivity());
                             firebaseCurd.addWishListModel(wishListModel);
                             wishListButton.setColorFilter(getResources().getColor(R.color.colorDanger));

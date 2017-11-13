@@ -1,7 +1,10 @@
 package com.example.pc.flickr.json_parsers;
 
+import android.util.Log;
+
 import com.example.pc.flickr.models.CastModel;
 import com.example.pc.flickr.models.DetailItemModel;
+import com.example.pc.flickr.models.DetailMovieModel;
 import com.example.pc.flickr.models.ReviewModel;
 import com.example.pc.flickr.models.SimilarItemModel;
 import com.example.pc.flickr.models.VideoModel;
@@ -34,7 +37,7 @@ public class DetailTvJsonParser {
             JSONObject cast = castList.getJSONObject(i);
             CastModel castModel = new CastModel();
             castModel.setCharacter(cast.get(jsonConfig.CHARACTER).toString());
-            castModel.setId(cast.get(jsonConfig.CAST_ID).toString());
+            castModel.setId(cast.get(jsonConfig.ID).toString());
             castModel.setName(cast.get(jsonConfig.CAST_NAME).toString());
             castModel.setImage(cast.get(jsonConfig.CAST_IMAGE_URL).toString());
             castArray.add(castModel);
@@ -59,32 +62,39 @@ public class DetailTvJsonParser {
         return videoArray;
     }
 
-    public DetailItemModel jsonTvDetailParser(String jsonMovie)throws JSONException {
+    public DetailMovieModel jsonTvDetailParser(String jsonMovie)throws JSONException {
         // fetching data in json
+        DetailMovieModel detailMovieModel = new DetailMovieModel();
         TvDetailJsonConfig jsonConfig = new TvDetailJsonConfig();
         JSONObject movieObject = new JSONObject(jsonMovie);
-        String title = movieObject.get(jsonConfig.SHOW_TITLE).toString();
-        String overview = movieObject.get(jsonConfig.SHOW_OVERVIEW).toString();
-        String vote_average = movieObject.get(jsonConfig.VOTE_AVERAGE).toString();
-        String tagline = movieObject.get(jsonConfig.SHOW_STATUS).toString();
-        String release_date = movieObject.get(jsonConfig.FIRST_AIR_DATE).toString();
-        String language = movieObject.get(jsonConfig.LANGUAGE).toString();
-        String poster = movieObject.get(jsonConfig.IMAGE_URL).toString();
+        JSONArray genresMovies = movieObject.getJSONArray(jsonConfig.GENRES);
+        JSONArray runtimeMovies = movieObject.getJSONArray(jsonConfig.RUNTIME);
+        detailMovieModel.setTitle(movieObject.get(jsonConfig.SHOW_TITLE).toString());
+        detailMovieModel.setOverview(movieObject.get(jsonConfig.SHOW_OVERVIEW).toString());
+        detailMovieModel.setVoteAvg(movieObject.get(jsonConfig.VOTE_AVERAGE).toString());
+        detailMovieModel.setReleasedStatus(movieObject.get(jsonConfig.SHOW_STATUS).toString());
+        detailMovieModel.setReleaseDate(movieObject.get(jsonConfig.FIRST_AIR_DATE).toString());
+        detailMovieModel.setLanguage(movieObject.get(jsonConfig.SHOW_TITLE).toString());
+        detailMovieModel.setPosterPath(movieObject.get(jsonConfig.IMAGE_URL).toString());
+        detailMovieModel.setGeneres(genresMovies.getJSONObject(0).get(jsonConfig.GENRES_NAME).toString());
+        detailMovieModel.setRuntime("2hr20min ");
+        detailMovieModel.setAdult(movieObject.get(jsonConfig.IN_PRODUCTION).toString());
         //creating object of DetailItemModel class to initialise constructor with movieDetails
-        DetailItemModel DetailItemModel=new DetailItemModel(title, overview, vote_average, tagline, release_date, language, poster);
-        return DetailItemModel;
+
+        return detailMovieModel;
     }
     public ArrayList<SimilarItemModel> jsonSimilarParser(String jsonSimilarMovies) throws JSONException {
         ArrayList<SimilarItemModel> similarMoviesArray = new ArrayList<>();
         MoviesSimilarJsonConfig jsonConfig = new MoviesSimilarJsonConfig();
         JSONObject similarMoviesObject = new JSONObject(jsonSimilarMovies);
+        Log.i("similar",jsonSimilarMovies);
         JSONArray similarMoviesList = similarMoviesObject.getJSONArray(jsonConfig.MOVIE_ARRAY);
         for (int i = 0; i < similarMoviesList.length(); i++) {
             JSONObject similarMovies = similarMoviesList.getJSONObject(i);
             SimilarItemModel similarItemModel = new SimilarItemModel();
             similarItemModel.setSimilarItemId(similarMovies.get(jsonConfig.MOVIE_ID).toString());
             similarItemModel.setSimilarItemimage(similarMovies.get(jsonConfig.MOVIE_IMAGE_URL).toString());
-            similarItemModel.setSimilarItemimage(similarMovies.get("vote_average").toString());
+            similarItemModel.setSimilarItemvote(similarMovies.get("vote_average").toString());
             similarMoviesArray.add(similarItemModel);
         }
         return similarMoviesArray;
