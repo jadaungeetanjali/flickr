@@ -49,8 +49,11 @@ public class DetailCelebsJsonParser {
             String movieCreditVoteAverage = movieCredit.get("vote_average").toString();
             String movieCreditPoster = movieCredit.get("poster_path").toString();
             String movieCreditId = movieCredit.get("id").toString();
-            SimilarItemModel SimilarItemModel = new SimilarItemModel();
-            celebMovieCreditArray.add(SimilarItemModel);
+            SimilarItemModel similarItemModel = new SimilarItemModel();
+            similarItemModel.setSimilarItemvote(movieCreditVoteAverage);
+            similarItemModel.setSimilarItemimage(movieCreditPoster);
+            similarItemModel.setSimilarItemId(movieCreditId);
+            celebMovieCreditArray.add(similarItemModel);
         }
         return celebMovieCreditArray;
     }

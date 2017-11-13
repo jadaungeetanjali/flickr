@@ -84,6 +84,9 @@ public class MoreListAdapter extends RecyclerView.Adapter<MoreListAdapter.moreLi
                 if (type.equals("movie")){
                     type2 = "movies";
                 }
+                else if (type.equals("person")){
+                    type2 = "celebs";
+                }
                 else {
                     type2=type;
                 }

@@ -77,7 +77,7 @@ public class DetailTvJsonParser {
         detailMovieModel.setLanguage(movieObject.get(jsonConfig.SHOW_TITLE).toString());
         detailMovieModel.setPosterPath(movieObject.get(jsonConfig.IMAGE_URL).toString());
         detailMovieModel.setGeneres(genresMovies.getJSONObject(0).get(jsonConfig.GENRES_NAME).toString());
-        detailMovieModel.setRuntime("2hr20min ");
+        detailMovieModel.setRuntime("2hr20min");
         detailMovieModel.setAdult(movieObject.get(jsonConfig.IN_PRODUCTION).toString());
         //creating object of DetailItemModel class to initialise constructor with movieDetails
 

@@ -27,43 +27,41 @@ import java.util.ArrayList;
  */
 
 public class CelebAdapters {
-/*
-    public static class CelebsMovieCreditAdapter extends RecyclerView.Adapter<CelebsMovieCreditAdapter.celebsMovieCreditViewHolder> {
-        public ArrayList<SimilarItemModel> celebsMovieCreditArrayList;
-        public Context movieCreditContext;
+
+    public static class CelebsMovieCreditAdapter  extends RecyclerView.Adapter<CelebsMovieCreditAdapter.celebsMovieCreditViewHolder> {
+        public ArrayList<SimilarItemModel> similarMoviesArrayList;
+        public Context similarMovieContext;
         public String type;
 
         class celebsMovieCreditViewHolder extends RecyclerView.ViewHolder {
-            ImageView celebsMovieCreditImageView;
-            TextView celebsMovieCreditNameTextView;
-            TextView celebsMovieCreditVoteAverageTextView;
-            ProgressBar celebsMovieCreditProgressBar;
+            ImageView similarMovieImageView;
+            TextView similarMovieNameTextView ;
+            TextView similarMovieVoteAverageTextView;
+            ProgressBar similarMovieProgressBar;
 
             public celebsMovieCreditViewHolder(View itemView) {
                 super(itemView);
-                celebsMovieCreditNameTextView = (TextView) itemView.findViewById(R.id.main_child_title_textView);
-                celebsMovieCreditImageView = (ImageView) itemView.findViewById(R.id.main_child_imageView);
-                celebsMovieCreditVoteAverageTextView = (TextView) itemView.findViewById(R.id.main_child_vote_textView);
-                celebsMovieCreditProgressBar = (ProgressBar) itemView.findViewById(R.id.main_image_progressBar);
+                //change id to similarMovieName
+                similarMovieImageView = (ImageView) itemView.findViewById(R.id.main_child_imageView); //change id to similarMovieImage
+                similarMovieVoteAverageTextView = (TextView) itemView.findViewById(R.id.main_child_rating);
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-                        Intent intent = new Intent(movieCreditContext, MoviesDetails.class);
+                        Intent intent = new Intent(similarMovieContext,MoviesDetails.class);
                         Bundle mBundle = new Bundle();
-                        SimilarItemModel similarItemModel = celebsMovieCreditArrayList.get(getAdapterPosition());
-                        mBundle.putString("type", "movies");
-                        mBundle.putString("id", similarItemModel.getSimilarItemId());
+                        SimilarItemModel similarItemModel = similarMoviesArrayList.get(getAdapterPosition());
+                        mBundle.putString("type",type);
+                        mBundle.putString("id",similarItemModel.getSimilarItemId());
                         intent.putExtras(mBundle);
-                        movieCreditContext.startActivity(intent);
+                        similarMovieContext.startActivity(intent);
                     }
                 });
             }
         }
 
         public CelebsMovieCreditAdapter(Context context, ArrayList<SimilarItemModel> arrayList, String type) {
-            this.celebsMovieCreditArrayList = arrayList;
-            this.movieCreditContext = context;
+            this.similarMoviesArrayList = arrayList;
+            this.similarMovieContext = context;
             this.type = type;
         }
 
@@ -75,16 +73,16 @@ public class CelebAdapters {
 
         @Override
         public void onBindViewHolder(final celebsMovieCreditViewHolder holder, int position) {
-            SimilarItemModel similarItemModel = celebsMovieCreditArrayList.get(position);
-            holder.celebsMovieCreditNameTextView.setText(similarItemModel.getSimilarItemName());
-            Log.v("output", similarItemModel.getSimilarItemName());
-            holder.celebsMovieCreditVoteAverageTextView.setText(similarItemModel.getSimilarItemVoteAverage());
-            Picasso.with(movieCreditContext).load("https://image.tmdb.org/t/p/w500" + similarItemModel.getSimilarItemimage())
-                    .into(holder.celebsMovieCreditImageView, new com.squareup.picasso.Callback() {
+            SimilarItemModel SimilarItemModel = similarMoviesArrayList.get(position);
+            //holder.similarMovieNameTextView.setText(SimilarItemModel.getSimilarItemimage());
+            holder.similarMovieVoteAverageTextView.setText(SimilarItemModel.getSimilarItemvote());
+            Picasso.with(similarMovieContext).load("https://image.tmdb.org/t/p/w500"+SimilarItemModel.getSimilarItemimage())
+                    .into(holder.similarMovieImageView,new com.squareup.picasso.Callback() {
+
                         @Override
                         public void onSuccess() {
-                            holder.celebsMovieCreditProgressBar.setVisibility(View.GONE);
-                            holder.celebsMovieCreditImageView.setVisibility(View.VISIBLE);
+                            //holder.similarMovieProgressBar.setVisibility(View.GONE);
+                            //holder.similarMovieImageView.setVisibility(View.VISIBLE);
                         }
 
                         @Override
@@ -96,7 +94,7 @@ public class CelebAdapters {
 
         @Override
         public int getItemCount() {
-            return celebsMovieCreditArrayList.size();
+            return similarMoviesArrayList.size();
         }
     }
 
@@ -152,5 +150,4 @@ public class CelebAdapters {
             return celebImageModelArrayList.size();
         }
     }
-*/
 }

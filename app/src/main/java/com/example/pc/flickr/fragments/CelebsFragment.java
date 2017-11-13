@@ -5,9 +5,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,19 +54,20 @@ import static android.content.ContentValues.TAG;
  * A simple {@link Fragment} subclass.
  */
 public class CelebsFragment extends Fragment {
-    /*
+
     private CelebAdapters.CelebsImagesAdapter celebsImagesAdapter;
     private CelebAdapters.CelebsMovieCreditAdapter celebsMovieCreditAdapter;
     RecyclerView recyclerViewCelebMovieCredit;
     RecyclerView recyclerViewCelebImages;
-    public TextView title, biography, dateOfBirth, placeOfBirth, alsoKnownAs, detailDOB, detailPlaceOfBirth;
-    public ImageView profile;
+    public TextView biography, dateOfBirth;
+    public ImageView profile, button;
     public String id, type;
-    private Button button;
     private FetchTask fetchTask;
     private ProgressBar progressBar;
     private LinearLayout mainContainer;
     private Boolean favorite = false, internet;
+    private Toolbar toolbar;
+    private ActionBar actionBar;
 
     public CelebsFragment() {
         // Required empty public constructor
@@ -75,28 +79,27 @@ public class CelebsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_celebs, container, false);
-        title = (TextView) rootView.findViewById(R.id.detail_celebs_mainTitle);
-        biography = (TextView) rootView.findViewById(R.id.detail_celebs_biography);
-        dateOfBirth = (TextView) rootView.findViewById(R.id.detail_celebs_born);
-        placeOfBirth = (TextView) rootView.findViewById(R.id.detail_celebs_placeOfBirth);
-        alsoKnownAs = (TextView) rootView.findViewById(R.id.detail_celebs_alsoKnownAs);
-        detailDOB = (TextView) rootView.findViewById(R.id.detail_celebs_bornDate);
-        detailPlaceOfBirth = (TextView) rootView.findViewById(R.id.detail_celebs_birthPlace);
-        profile = (ImageView) rootView.findViewById(R.id.detail_celebs_profile);
+        toolbar = (Toolbar) rootView.findViewById(R.id.detail_movie_toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        actionBar = (ActionBar) ((AppCompatActivity)getActivity()).getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
-        recyclerViewCelebImages = (RecyclerView) rootView.findViewById(R.id.detail_celebs_imagesRecyclerView);
+
+        biography = (TextView) rootView.findViewById(R.id.detail_celebs_biography_textView);
+        dateOfBirth = (TextView) rootView.findViewById(R.id.detail_celebs_born_textView);
+        profile = (ImageView) rootView.findViewById(R.id.detail_celeb_poster);
+
+        recyclerViewCelebImages = (RecyclerView) rootView.findViewById(R.id.detail_celebs_images_recyclerVIew);
         LinearLayoutManager layoutManagerCelebImages = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewCelebImages.setLayoutManager(layoutManagerCelebImages);
         recyclerViewCelebImages.setItemAnimator(new DefaultItemAnimator());
 
-        recyclerViewCelebMovieCredit = (RecyclerView) rootView.findViewById(R.id.detail_celebs_movieCreditsRecyclerView);
+        recyclerViewCelebMovieCredit = (RecyclerView) rootView.findViewById(R.id.detail_celebs_similar_recyclerView);
         LinearLayoutManager layoutManagerCelebsMovieCredit = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewCelebMovieCredit.setLayoutManager(layoutManagerCelebsMovieCredit);
         recyclerViewCelebMovieCredit.setItemAnimator(new DefaultItemAnimator());
 
-        progressBar = (ProgressBar) rootView.findViewById(R.id.detail_celebs_mainContainer_progressBar);
-        mainContainer = (LinearLayout) rootView.findViewById(R.id.detail_celebs_mainContainer);
-        button = (Button) rootView.findViewById(R.id.detail_celebs_favorite_button);
+        button = (ImageView) rootView.findViewById(R.id.detail_celebs_add_favorite);
 
         Bundle bundle = getArguments();
         type = bundle.getString("type");
@@ -177,13 +180,10 @@ public class CelebsFragment extends Fragment {
             DetailCelebsJsonParser detailCelebsJsonParser = new DetailCelebsJsonParser();
             try {
                 final CelebsModel celebsModel = detailCelebsJsonParser.jsonCelebsParser(jsonArray.get(0));
-                title.setText(celebsModel.getTitle());
+                //title.setText(celebsModel.getTitle());
+                actionBar.setTitle(celebsModel.getTitle());
                 biography.setText(celebsModel.getBiography());
-                dateOfBirth.setText(celebsModel.getDateOfBirth());
-                placeOfBirth.setText(celebsModel.getPlaceOfBirth());
-                detailDOB.setText(celebsModel.getDateOfBirth());
-                detailPlaceOfBirth.setText(celebsModel.getPlaceOfBirth());
-                alsoKnownAs.setText(celebsModel.getAlsoKnownAs());
+                dateOfBirth.setText(celebsModel.getDateOfBirth()+"\n"+celebsModel.getPlaceOfBirth()+" ");
                 Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w500" + celebsModel.getProfile_url()).into(profile);
 
 
@@ -194,15 +194,9 @@ public class CelebsFragment extends Fragment {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         FavoriteModel favoriteModel = dataSnapshot.getValue(FavoriteModel.class);
                         if (favoriteModel != null) {
-                            button.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorDanger));
-                            button.setText("Remove form WatchList");
-                            progressBar.setVisibility(View.GONE);
-                            mainContainer.setVisibility(View.VISIBLE);
                             favorite = true;
                         } else {
                             favorite = false;
-                            progressBar.setVisibility(View.GONE);
-                            mainContainer.setVisibility(View.VISIBLE);
                         }
 
                     }
@@ -226,13 +220,11 @@ public class CelebsFragment extends Fragment {
                             firebaseCurd.addFavoriteModel(favoriteModel);
                             button.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorDanger));
                             Toast.makeText(getContext(), "Added to Favorite", Toast.LENGTH_SHORT).show();
-                            button.setText("Remove form Favorite");
                         } else {
                             DatabaseReference favoriteReference = firebaseCurd.getmFavoriteReference();
                             favoriteReference.child(id).removeValue();
                             button.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorSuccess));
                             Toast.makeText(getContext(), "Removed from Favorite", Toast.LENGTH_SHORT).show();
-                            button.setText("ADD TO Favorite");
                         }
                     }
                 });
@@ -273,5 +265,5 @@ public class CelebsFragment extends Fragment {
         super.onPause();
         if (internet)
             fetchTask.cancel(true);
-    }*/
+    }
 }
