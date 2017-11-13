@@ -53,7 +53,7 @@ public class FirebaseCurd {
         user_id = sharedPref.getString("user_id",null);
         user_name = sharedPref.getString("user_name", null);
         user_email = sharedPref.getString("user_email",null);
-        user_imgUrl = sharedPref.getString("user_imgUrl", null);
+        user_imgUrl = sharedPref.getString("user_image", null);
         mUserReference = mDatabaseReference.child("User").child(user_id);
         mUsersReference = mDatabaseReference.child("User");
         mFriendsReference = mDatabaseReference.child("Friends").child(user_id);

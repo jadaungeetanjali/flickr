@@ -195,6 +195,7 @@ public class CelebsFragment extends Fragment {
                         FavoriteModel favoriteModel = dataSnapshot.getValue(FavoriteModel.class);
                         if (favoriteModel != null) {
                             favorite = true;
+                            button.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorDangerDark));
                         } else {
                             favorite = false;
                         }
@@ -218,12 +219,12 @@ public class CelebsFragment extends Fragment {
                                     id, type, celebsModel.getTitle(), celebsModel.getProfile_url());
 
                             firebaseCurd.addFavoriteModel(favoriteModel);
-                            button.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorDanger));
+                            button.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorDangerDark));
                             Toast.makeText(getContext(), "Added to Favorite", Toast.LENGTH_SHORT).show();
                         } else {
                             DatabaseReference favoriteReference = firebaseCurd.getmFavoriteReference();
                             favoriteReference.child(id).removeValue();
-                            button.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorSuccess));
+                            button.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorWhite));
                             Toast.makeText(getContext(), "Removed from Favorite", Toast.LENGTH_SHORT).show();
                         }
                     }

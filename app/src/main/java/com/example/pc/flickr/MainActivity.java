@@ -34,6 +34,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.Arrays;
 
@@ -78,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
         navHeaderEmail = (TextView) navHeader.findViewById(R.id.main_drawer_email);
         navHeaderImg = (ImageView) navHeader.findViewById(R.id.main_drawer_avatar);
         setUpNavigationView();
-        //navHeaderName.setText("Deepanshu");
         // Navigation Drawer till here......................
 
         Bundle moviesBundle = new Bundle();
@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
                 if (firebaseUser != null) {
                     onSignedInInitialize(firebaseUser.getDisplayName(), firebaseUser.getUid(), firebaseUser.getEmail(), firebaseUser.getPhotoUrl().toString());
-                    addUser(firebaseUser.getUid(),firebaseUser.getDisplayName(),firebaseUser.getEmail(),"");
+                    addUser(firebaseUser.getUid(),firebaseUser.getDisplayName(),firebaseUser.getEmail(),firebaseUser.getPhotoUrl().toString());
                 } else {
                     //onSignedOutCleanup();
                     startActivityForResult(
@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        //loadNavHeader();
+        loadNavHeader();
 
     }
 
@@ -229,7 +229,6 @@ public class MainActivity extends AppCompatActivity {
                         UserModel addUserModel = new UserModel(uid,user_name,email,imgUrl);
                         firebaseCurd.addUserModel(addUserModel);
                     }
-
             }
 
             @Override
@@ -244,8 +243,11 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPref = this.getSharedPreferences("MyPref", 0);
         String user_name = sharedPref.getString("user_name", null);
         String user_email = sharedPref.getString("user_email", null);
+        String user_image = sharedPref.getString("user_image",null);
         navHeaderName.setText(user_name);
         navHeaderEmail.setText(user_email);
+        Picasso.with(this).load(user_image).fit()
+                .into(navHeaderImg);
     }
 
     private Bundle getBundle() {

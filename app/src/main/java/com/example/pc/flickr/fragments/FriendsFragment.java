@@ -111,6 +111,7 @@ public class FriendsFragment extends Fragment {
                 friendEmailTextView = (TextView) itemView.findViewById(R.id.friends_listItem_email_textView);
                 friendsLinearLayout = (LinearLayout) itemView.findViewById(R.id.friends_listItem_linearLayout);
                 removeFriend = (ImageView) itemView.findViewById(R.id.friends_listItem_remove_imageView);
+                friendImageView = (ImageView) itemView.findViewById(R.id.friends_listItem_avatar_imageView);
                 //userListImageViewProgressBar = (ProgressBar) itemView.findViewById(R.id.user_listview_item_poster_progressBar);
             }
         }
@@ -130,6 +131,8 @@ public class FriendsFragment extends Fragment {
             final FriendModel friendModel = arrayList.get(position);
             holder.friendNameTextView.setText(friendModel.getFriendName());
             holder.friendEmailTextView.setText(friendModel.getFriendEmail());
+            Picasso.with(getContext()).load(friendModel.getFriendImgUrl()).fit()
+                    .into(holder.friendImageView);
             /*
             Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w500" + favoriteModel.getImgUrl()).
                     into(holder.userListImageView,new com.squareup.picasso.Callback() {
