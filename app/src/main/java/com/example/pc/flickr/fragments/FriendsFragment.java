@@ -17,12 +17,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.pc.flickr.FriendListActivity;
+import com.example.pc.flickr.activities.FriendListActivity;
 import com.example.pc.flickr.R;
 import com.example.pc.flickr.models.FriendModel;
 import com.example.pc.flickr.services.Connectivity;
 import com.example.pc.flickr.services.FirebaseCurd;
-import com.firebase.ui.auth.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

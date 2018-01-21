@@ -1,4 +1,4 @@
-package com.example.pc.flickr;
+package com.example.pc.flickr.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,8 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -22,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.pc.flickr.R;
 import com.example.pc.flickr.fragments.HorizontalListFragment;
 import com.example.pc.flickr.models.UserModel;
 import com.example.pc.flickr.services.FetchApiService;
@@ -327,4 +326,14 @@ public class MainActivity extends AppCompatActivity {
         mDrawerLayout.setDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) // Press Back Icon
+        {
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 }

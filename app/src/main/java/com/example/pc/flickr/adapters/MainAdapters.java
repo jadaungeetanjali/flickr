@@ -1,4 +1,4 @@
-package com.example.pc.flickr.Adapters;
+package com.example.pc.flickr.adapters;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,7 +8,6 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,11 +17,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.pc.flickr.MoreList;
-import com.example.pc.flickr.MoviesDetails;
+import com.example.pc.flickr.activities.MoreList;
+import com.example.pc.flickr.activities.MoviesDetails;
 import com.example.pc.flickr.R;
 import com.example.pc.flickr.data.MovieDbApiContract;
-import com.example.pc.flickr.fragments.HorizontalListFragment;
 import com.example.pc.flickr.models.ListDataModel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;

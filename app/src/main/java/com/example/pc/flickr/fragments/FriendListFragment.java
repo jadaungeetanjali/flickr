@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.pc.flickr.MoviesDetails;
+import com.example.pc.flickr.activities.MoviesDetails;
 import com.example.pc.flickr.R;
 import com.example.pc.flickr.models.FavoriteModel;
 import com.example.pc.flickr.models.WishListModel;

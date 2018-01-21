@@ -1,10 +1,9 @@
-package com.example.pc.flickr.Adapters;
+package com.example.pc.flickr.adapters;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +11,11 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.pc.flickr.MainActivity;
-import com.example.pc.flickr.MoviesDetails;
+import com.example.pc.flickr.activities.MoviesDetails;
 import com.example.pc.flickr.R;
-import com.example.pc.flickr.fragments.CelebsFragment;
 import com.example.pc.flickr.models.CelebImageModel;
 import com.example.pc.flickr.models.SimilarItemModel;
+import com.example.pc.flickr.util.activities.ActivityConfig;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -50,7 +48,7 @@ public class CelebAdapters {
                         Intent intent = new Intent(similarMovieContext,MoviesDetails.class);
                         Bundle mBundle = new Bundle();
                         SimilarItemModel similarItemModel = similarMoviesArrayList.get(getAdapterPosition());
-                        mBundle.putString("type",type);
+                        mBundle.putString("type", ActivityConfig.MOVIES);
                         mBundle.putString("id",similarItemModel.getSimilarItemId());
                         intent.putExtras(mBundle);
                         similarMovieContext.startActivity(intent);

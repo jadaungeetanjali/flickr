@@ -1,4 +1,4 @@
-package com.example.pc.flickr.Adapters;
+package com.example.pc.flickr.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,9 +11,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.pc.flickr.MoviesDetails;
+import com.example.pc.flickr.activities.MoviesDetails;
 import com.example.pc.flickr.R;
-import com.example.pc.flickr.YoutubeActivity;
+import com.example.pc.flickr.activities.YoutubeActivity;
 import com.example.pc.flickr.models.CastModel;
 import com.example.pc.flickr.models.ReviewModel;
 import com.example.pc.flickr.models.SimilarItemModel;
@@ -21,8 +21,6 @@ import com.example.pc.flickr.models.VideoModel;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-
-import static java.security.AccessController.getContext;
 
 /**
  * Created by PC on 9/29/2017.

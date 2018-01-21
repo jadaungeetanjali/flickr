@@ -1,11 +1,13 @@
-package com.example.pc.flickr;
+package com.example.pc.flickr.activities;
 
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
+import com.example.pc.flickr.R;
 import com.example.pc.flickr.fragments.FriendListFragment;
 
 public class FriendListActivity extends AppCompatActivity {
@@ -69,6 +71,16 @@ public class FriendListActivity extends AppCompatActivity {
             }
         });
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) // Press Back Icon
+        {
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
     private void fragmentTranstion(Fragment fragment) {
         getSupportFragmentManager().beginTransaction().replace(R.id.friends_list_fragment_container, fragment).commit();

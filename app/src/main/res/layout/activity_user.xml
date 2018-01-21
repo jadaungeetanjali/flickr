@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context="com.example.pc.flickr.UserActivity">
+    tools:context="com.example.pc.flickr.activities.UserActivity">
     <android.support.v7.widget.Toolbar
         android:id="@+id/user_toolbar"
         android:layout_width="match_parent"

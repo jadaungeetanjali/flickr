@@ -1,10 +1,12 @@
-package com.example.pc.flickr;
+package com.example.pc.flickr.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.pc.flickr.R;
 import com.example.pc.flickr.util.activities.YoutubeConfig;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
@@ -55,4 +57,14 @@ public class YoutubeActivity extends YouTubeBaseActivity implements YouTubePlaye
     protected YouTubePlayer.Provider getYouTubePlayerProvider() {
         return youTubeView;
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) // Press Back Icon
+        {
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 }

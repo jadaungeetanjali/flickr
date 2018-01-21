@@ -1,8 +1,10 @@
-package com.example.pc.flickr;
+package com.example.pc.flickr.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 
+import com.example.pc.flickr.R;
 import com.example.pc.flickr.fragments.CelebsFragment;
 import com.example.pc.flickr.fragments.MoviesFragment;
 import com.example.pc.flickr.util.activities.ActivityConfig;
@@ -35,5 +37,15 @@ public class MoviesDetails extends AppCompatActivity {
 
 
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) // Press Back Icon
+        {
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 }
 

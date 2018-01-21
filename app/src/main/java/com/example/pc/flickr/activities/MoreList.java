@@ -1,4 +1,4 @@
-package com.example.pc.flickr;
+package com.example.pc.flickr.activities;
 
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -7,11 +7,13 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.pc.flickr.Adapters.MoreListAdapter;
+import com.example.pc.flickr.R;
+import com.example.pc.flickr.adapters.MoreListAdapter;
 import com.example.pc.flickr.json_parsers.MoreListJsonParser;
 import com.example.pc.flickr.models.MoreListModel;
 import com.example.pc.flickr.services.Connectivity;
@@ -188,4 +190,14 @@ public class MoreList extends AppCompatActivity {
         if (internet)
             callMovieData.cancel(true);
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) // Press Back Icon
+        {
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 }

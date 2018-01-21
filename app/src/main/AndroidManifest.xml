@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MoviesDetails">
+            android:name=".activities.MoviesDetails">
         </activity>
 
         <provider
@@ -35,18 +35,18 @@
             android:exported="false" />
 
         <activity
-            android:name=".UserActivity"
+            android:name=".activities.UserActivity"
            >
         </activity>
-        <activity android:name=".MoreList">
+        <activity android:name=".activities.MoreList">
         </activity>
         <activity
-            android:name=".FriendsActivity">
+            android:name=".activities.FriendsActivity">
         </activity>
         <activity
-            android:name=".FriendListActivity">
+            android:name=".activities.FriendListActivity">
         </activity>
-        <activity android:name=".YoutubeActivity"></activity>
+        <activity android:name=".activities.YoutubeActivity"></activity>
     </application>
 
 </manifest>

@@ -1,7 +1,6 @@
 package com.example.pc.flickr.fragments;
 
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,7 +15,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.pc.flickr.FriendListActivity;
 import com.example.pc.flickr.R;
 import com.example.pc.flickr.models.FriendModel;
 import com.example.pc.flickr.models.UserModel;

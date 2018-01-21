@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.pc.flickr.Adapters.MainAdapters;
+import com.example.pc.flickr.adapters.MainAdapters;
 import com.example.pc.flickr.R;
 
 

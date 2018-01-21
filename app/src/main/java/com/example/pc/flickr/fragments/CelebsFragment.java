@@ -15,14 +15,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.pc.flickr.Adapters.CelebAdapters;
+import com.example.pc.flickr.adapters.CelebAdapters;
 import com.example.pc.flickr.services.Connectivity;
 import com.example.pc.flickr.R;
 import com.example.pc.flickr.json_parsers.DetailCelebsJsonParser;

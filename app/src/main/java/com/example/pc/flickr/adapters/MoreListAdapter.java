@@ -1,4 +1,4 @@
-package com.example.pc.flickr.Adapters;
+package com.example.pc.flickr.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,8 +12,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.pc.flickr.MoreList;
-import com.example.pc.flickr.MoviesDetails;
+import com.example.pc.flickr.activities.MoviesDetails;
 import com.example.pc.flickr.R;
 import com.example.pc.flickr.models.MoreListModel;
 import com.squareup.picasso.Picasso;
