@@ -154,7 +154,6 @@ public class MainActivity extends AppCompatActivity {
                                             Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
                                                     new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
                                     .setTheme(R.style.RedTheme)
-                                    .setLogo(R.mipmap.ic_launcher)
                                     .build(),
                             RC_SIGN_IN);
                 }
