@@ -183,7 +183,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingBottom="10dp"
-                    android:text="Similar Movies"
+                    android:text="Credits"
                     android:paddingLeft="10dp"
                     android:textColor="#fff"
                     android:textStyle="bold"
