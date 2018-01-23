@@ -24,6 +24,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -119,6 +120,7 @@ public class FindFragment extends Fragment {
                 friendNameTextView = (TextView) itemView.findViewById(R.id.find_listItem_name_textView);
                 friendEmailTextView = (TextView) itemView.findViewById(R.id.find_listItem_email_textView);
                 addFriendImageView = (ImageView) itemView.findViewById(R.id.find_listItem_remove_imageView);
+                friendImageView = (ImageView) itemView.findViewById(R.id.find_listItem_avatar_imageView);
                 //userListImageViewProgressBar = (ProgressBar) itemView.findViewById(R.id.user_listview_item_poster_progressBar);
             }
         }
@@ -138,21 +140,7 @@ public class FindFragment extends Fragment {
             final UserModel userModel = arrayList.get(position);
             holder.friendNameTextView.setText(userModel.getUserName());
             holder.friendEmailTextView.setText(userModel.getUserEmail());
-            /*
-            Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w500" + favoriteModel.getImgUrl()).
-                    into(holder.userListImageView,new com.squareup.picasso.Callback() {
-
-                        @Override
-                        public void onSuccess() {
-                            holder.userListImageViewProgressBar.setVisibility(View.GONE);
-                            holder.userListImageView.setVisibility(View.VISIBLE);
-                        }
-
-                        @Override
-                        public void onError() {
-
-                        }
-                    });*/
+            Picasso.with(getContext()).load("" + userModel.getUserImgUrl()).into(holder.friendImageView);
             holder.addFriendImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
