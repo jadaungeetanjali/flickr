@@ -87,8 +87,6 @@ public class MoviesFragment extends Fragment {
         status = (TextView) rootView.findViewById(R.id.detail_movie_status);
         language = (TextView) rootView.findViewById(R.id.detail_movie_language);
         runtime = (TextView) rootView.findViewById(R.id.detail_movie_runtime);
-
-        rateitButton = (ImageView) rootView.findViewById(R.id.detail_movie_user_rating);
         wishListButton = (ImageView) rootView.findViewById(R.id.detail_movie_add_wishlist);
         watchListButton = (ImageView) rootView.findViewById(R.id.detail_movie_user_watchlist);
 
@@ -204,6 +202,7 @@ public class MoviesFragment extends Fragment {
                 status.setText(detailMovieModel.getReleasedStatus());
                 castAdapter = new DetailAdapter.CastAdapter(getContext(),castArray);
                 recyclerViewCast.setAdapter(castAdapter);
+                vote_average.setRating(Float.parseFloat(detailMovieModel.getVoteAvg())/2);
                 similarMoviesAdapter = new DetailAdapter.SimilarMoviesAdapter(getContext(),similarMoviesArray,type);
                 recyclerViewSimilar.setAdapter(similarMoviesAdapter);
                 videoAdapter = new DetailAdapter.VideoAdapter(videosArray,getContext());

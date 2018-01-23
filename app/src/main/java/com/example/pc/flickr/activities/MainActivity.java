@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         moviesFragment.setArguments(moviesBundle);
 
         Bundle tvBundle = new Bundle();
-        String[] tvHeading = {ActivityConfig.TOP_RATED, ActivityConfig.POPULAR, ActivityConfig.TOP_RATED, ActivityConfig.ON_THE_AIR};
+        String[] tvHeading = {ActivityConfig.AIRING_TODAY, ActivityConfig.POPULAR, ActivityConfig.TOP_RATED, ActivityConfig.ON_THE_AIR};
         tvBundle.putString(ActivityConfig.TYPE, ActivityConfig.TV_SHOWS);
         tvBundle.putStringArray(ActivityConfig.URL_HEADING, tvHeading);
         final HorizontalListFragment tvFragment = new HorizontalListFragment();
@@ -147,13 +147,17 @@ public class MainActivity extends AppCompatActivity {
                     String username = firebaseUser.getDisplayName();
                     String uid = firebaseUser.getUid();
                     String email = firebaseUser.getEmail();
-                    String photo_url = " ";
+                    String photo_url = "http://www.africanleadershipawards.com/wp-content/uploads/2017/07/no-avatar-user.jpg";
                     Uri photo = firebaseUser.getPhotoUrl();
                     if(photo != null){
                         photo_url = firebaseUser.getPhotoUrl().toString();
                     }
-                    onSignedInInitialize(username, uid, email, photo_url);
-                    addUser(username, uid, email, photo_url);
+                    navHeaderName.setText(username);
+                    navHeaderEmail.setText(email);
+                    Picasso.with(getApplicationContext()).load(photo_url).fit()
+                            .into(navHeaderImg);
+                    onSignedInInitialize(uid, username, email, photo_url);
+                    addUser(uid, username, email, photo_url);
                 } else {
                     //onSignedOutCleanup();
                     startActivityForResult(

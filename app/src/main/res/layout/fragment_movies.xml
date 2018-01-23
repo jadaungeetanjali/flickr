@@ -139,7 +139,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:numStars="3"
+                    android:numStars="5"
                     android:progressTint="#f7931e"
                     app:layout_constraintBottom_toBottomOf="@+id/detail_movie_release_date"
                     app:layout_constraintRight_toLeftOf="parent"
@@ -165,7 +165,7 @@
                     android:src="@drawable/ic_add_white_36dp"
                     android:tint="#fff"
                     app:layout_constraintLeft_toRightOf="parent"
-                    app:layout_constraintRight_toLeftOf="@+id/detail_movie_user_rating"
+                    app:layout_constraintRight_toLeftOf="@+id/detail_movie_user_watchlist"
                     app:layout_constraintTop_toBottomOf="@+id/detail_movie_details" />
 
                 <TextView
@@ -173,35 +173,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="  Wishlist   "
+                    android:text="  Wishlist"
                     android:textColor="#00a99d"
                     app:layout_constraintLeft_toRightOf="parent"
-                    app:layout_constraintRight_toLeftOf="@+id/detail_movie_add_wishlist_textview"
-                    app:layout_constraintTop_toBottomOf="@+id/detail_movie_add_wishlist" />
-
-                <ImageView
-                    android:id="@+id/detail_movie_user_rating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginTop="25dp"
-                    android:src="@drawable/ic_star_border_white_36dp"
-                    android:tint="#fff"
-                    app:layout_constraintLeft_toRightOf="@+id/detail_movie_add_wishlist"
-                    app:layout_constraintRight_toLeftOf="@+id/detail_movie_user_watchlist"
-                    app:layout_constraintTop_toBottomOf="@+id/detail_movie_details" />
-
-                <TextView
-                    android:id="@+id/detail_movie_add_wishlist_textview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Rate it  "
-                    android:textColor="#00a99d"
-                    app:layout_constraintLeft_toRightOf="@+id/detail_movie_user_rating_textview"
                     app:layout_constraintRight_toLeftOf="@+id/detail_movie_user_watchlist_textview"
-                    app:layout_constraintTop_toBottomOf="@+id/detail_movie_user_rating" />
+                    app:layout_constraintTop_toBottomOf="@+id/detail_movie_add_wishlist" />
 
                 <ImageView
                     android:id="@+id/detail_movie_user_watchlist"
@@ -211,7 +187,7 @@
                     android:layout_marginTop="25dp"
                     android:src="@drawable/ic_library_add_white_36dp"
                     android:tint="#fff"
-                    app:layout_constraintLeft_toRightOf="@id/detail_movie_user_rating"
+                    app:layout_constraintLeft_toRightOf="@id/detail_movie_add_wishlist"
                     app:layout_constraintRight_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/detail_movie_details" />
 
@@ -222,7 +198,7 @@
                     android:layout_marginTop="8dp"
                     android:text="Watchlist   "
                     android:textColor="#00a99d"
-                    app:layout_constraintLeft_toRightOf="@+id/detail_movie_add_wishlist_textview"
+                    app:layout_constraintLeft_toRightOf="@+id/detail_movie_user_rating_textview"
                     app:layout_constraintRight_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/detail_movie_user_watchlist" />
             </android.support.constraint.ConstraintLayout>

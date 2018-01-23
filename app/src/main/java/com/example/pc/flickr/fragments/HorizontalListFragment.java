@@ -50,13 +50,11 @@ public class HorizontalListFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        Log.v("lifecycle","onPaused called");
     }
 
     @Override
     public void onStop(){
         super.onStop();
-        Log.v("lifecycle","onStop called");
     }
 
     @Override

@@ -29,23 +29,23 @@
         <item name="colorPrimary">#00a99d</item>
         <item name="colorPrimaryDark">#17968a</item>
         <item name="colorAccent">#00a99d</item>
-
+        <item name="android:windowBackground">@drawable/background</item>
         <item name="colorControlNormal">#00a99d</item>
         <item name="colorControlActivated">#17968a</item>
         <item name="colorControlHighlight">#f7931e</item>
-        <item name="android:textSize">22sp</item>
-    </style>
-    <style name="TextAppearance1">
-        <item name="android:textSize">22sp</item>
     </style>
     <style name="FirebaseUI.AuthMethodPicker.Logo">
+        <item name="android:src">@drawable/ic_action_play_over_video</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:padding">24dp</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:tint">#fff</item>
     </style>
     <style name="FirebaseUI.TextInputEditText.EmailField">
         <item name="android:inputType">textEmailAddress</item>
+        <item name="android:textColor">#fff</item>
     </style>
 
 </resources>

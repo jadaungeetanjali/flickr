@@ -142,9 +142,7 @@ public class FindFragment extends Fragment {
             final UserModel userModel = arrayList.get(position);
             holder.friendNameTextView.setText(userModel.getUserName());
             holder.friendEmailTextView.setText(userModel.getUserEmail());
-            holder.friendImageView.setImageURI(userModel.getUserImgUrl()!=null
-                    ?userModel.getUserImgUrl()
-                    :"http://www.africanleadershipawards.com/wp-content/uploads/2017/07/no-avatar-user.jpg");
+            holder.friendImageView.setImageURI(userModel.getUserImgUrl());
             holder.addFriendImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
