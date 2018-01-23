@@ -23,7 +23,7 @@
             android:icon="@drawable/ic_action_video"
             android:title="@string/nav_friends" />
     </group>
-    <item android:title="User">
+    <item android:title="Privacy">
         <menu>
             <item
                 android:id="@+id/nav_about_sign_out"

@@ -27,6 +27,7 @@ import com.example.pc.flickr.models.UserModel;
 import com.example.pc.flickr.services.FetchApiService;
 import com.example.pc.flickr.services.FirebaseCurd;
 import com.example.pc.flickr.util.activities.ActivityConfig;
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Fresco.initialize(this);
         //Setting up Toolbar for app
         toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);

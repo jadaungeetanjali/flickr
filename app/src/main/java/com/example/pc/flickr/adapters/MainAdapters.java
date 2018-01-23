@@ -22,6 +22,7 @@ import com.example.pc.flickr.activities.MoviesDetails;
 import com.example.pc.flickr.R;
 import com.example.pc.flickr.data.MovieDbApiContract;
 import com.example.pc.flickr.models.ListDataModel;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
@@ -155,12 +156,12 @@ public class MainAdapters {
 
         class MyViewHolder extends RecyclerView.ViewHolder{
             TextView childViewVote;
-            ImageView childImageView;
             ProgressBar progressBar;
+            SimpleDraweeView childImageView;
             public MyViewHolder(View itemview){
                 super(itemview);
                 childViewVote = (TextView) itemview.findViewById(R.id.main_child_rating);
-                childImageView = (ImageView) itemview.findViewById(R.id.main_child_imageView);
+                childImageView = (SimpleDraweeView) itemview.findViewById(R.id.main_child_imageView);
                 itemview.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -209,22 +210,7 @@ public class MainAdapters {
             //final ProgressBar progressBar = holder.progressBar;
             final int radius = 10;
             final int margin = 5;
-            final Transformation transformation = new RoundedCornersTransformation(radius, margin);
-            Picasso.with(context).load("https://image.tmdb.org/t/p/w500"+dataModel.getImg_url())
-                    .into(holder.childImageView,new com.squareup.picasso.Callback() {
-
-                        @Override
-                        public void onSuccess() {
-                            //holder.progressBar.setVisibility(View.GONE);
-                            //holder.childImageView.setVisibility(View.VISIBLE);
-                        }
-
-                        @Override
-                        public void onError() {
-
-                        }
-                    });
-
+            holder.childImageView.setImageURI("https://image.tmdb.org/t/p/w500"+dataModel.getImg_url());
         }
 
         @Override
@@ -236,7 +222,6 @@ public class MainAdapters {
         public void onViewDetachedFromWindow(MyViewHolder holder) {
             super.onViewDetachedFromWindow(holder);
             Picasso.with(context).cancelRequest(holder.childImageView);
-            holder.childImageView.setImageURI(null);
             holder.itemView.invalidate();
             holder.childImageView.invalidate();
         }

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.example.pc.flickr.activities.MoviesDetails;
 import com.example.pc.flickr.R;
 import com.example.pc.flickr.models.MoreListModel;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -28,18 +29,16 @@ public class MoreListAdapter extends RecyclerView.Adapter<MoreListAdapter.moreLi
     public String type;
 
     public static class moreListViewHolder extends RecyclerView.ViewHolder {
-        ImageView moreListImageView;
+        SimpleDraweeView moreListImageView;
         TextView moreListNameTextView;
         TextView moreListReleaseDateTextView;
         TextView moreListRatingTextView;
-        ProgressBar moreListProgressBar;
         public moreListViewHolder(View itemView) {
             super(itemView);
             moreListNameTextView = (TextView) itemView.findViewById(R.id.more_list_name);
-            moreListImageView = (ImageView) itemView.findViewById(R.id.more_list_poster);
+            moreListImageView = (SimpleDraweeView) itemView.findViewById(R.id.more_list_poster);
             moreListReleaseDateTextView = (TextView) itemView.findViewById(R.id.more_list_release_date);
             moreListRatingTextView = (TextView) itemView.findViewById(R.id.more_list_ratings);
-            moreListProgressBar = (ProgressBar) itemView.findViewById(R.id.more_list_poster_progressBar);
         }
     }
 
@@ -61,20 +60,7 @@ public class MoreListAdapter extends RecyclerView.Adapter<MoreListAdapter.moreLi
         holder.moreListNameTextView.setText(moreListModel.getName());
         holder.moreListReleaseDateTextView.setText(moreListModel.getReleaseDate());
         holder.moreListRatingTextView.setText(moreListModel.getRating());
-        Picasso.with(context).load("https://image.tmdb.org/t/p/w500" + moreListModel.getImage())
-                .into(holder.moreListImageView,new com.squareup.picasso.Callback() {
-
-                    @Override
-                    public void onSuccess() {
-                        holder.moreListProgressBar.setVisibility(View.GONE);
-                        holder.moreListImageView.setVisibility(View.VISIBLE);
-                    }
-
-                    @Override
-                    public void onError() {
-
-                    }
-                });
+        holder.moreListImageView.setImageURI("https://image.tmdb.org/t/p/w500" + moreListModel.getImage());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

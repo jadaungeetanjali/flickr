@@ -5,11 +5,12 @@
     android:layout_marginRight="6dp"
     android:layout_marginEnd="6dp"
     android:layout_height="match_parent">
-    <ImageView
+    <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/main_child_imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        />
     <ImageView
         android:id="@+id/main_child_ratingStar"
         android:layout_width="30dp"
