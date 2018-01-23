@@ -2,6 +2,7 @@ package com.example.pc.flickr.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -142,8 +143,16 @@ public class MainActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
                 if (firebaseUser != null) {
-                    onSignedInInitialize(firebaseUser.getDisplayName(), firebaseUser.getUid(), firebaseUser.getEmail(), firebaseUser.getPhotoUrl().toString());
-                    addUser(firebaseUser.getUid(),firebaseUser.getDisplayName(),firebaseUser.getEmail(),firebaseUser.getPhotoUrl().toString());
+                    String username = firebaseUser.getDisplayName();
+                    String uid = firebaseUser.getUid();
+                    String email = firebaseUser.getEmail();
+                    String photo_url = " ";
+                    Uri photo = firebaseUser.getPhotoUrl();
+                    if(photo != null){
+                        photo_url = firebaseUser.getPhotoUrl().toString();
+                    }
+                    onSignedInInitialize(username, uid, email, photo_url);
+                    addUser(username, uid, email, photo_url);
                 } else {
                     //onSignedOutCleanup();
                     startActivityForResult(
@@ -212,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
         editor.putString("user_id", user_id);
         editor.putString("user_email", user_email);
         editor.putString("user_name", user_name);
-        editor.putString("user_image",user_image);
+        editor.putString("user_image",user_image );
         Log.e("user image",user_image);
         editor.apply();
     }
@@ -260,9 +269,6 @@ public class MainActivity extends AppCompatActivity {
             case 2:
                 bundle.putString(ActivityConfig.TYPE, ActivityConfig.FAVORITE);
                 return bundle;
-            case 3:
-                bundle.putString(ActivityConfig.TYPE, ActivityConfig.RATING);
-                return bundle;
         }
         return bundle;
     }
@@ -281,9 +287,6 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.nav_favorite:
                         navItemIndex = 2;
-                        break;
-                    case R.id.nav_rating:
-                        navItemIndex = 3;
                         break;
                     case R.id.nav_friends:
                         Intent intent = new Intent(MainActivity.this,FriendsActivity.class);
