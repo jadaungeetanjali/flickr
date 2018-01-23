@@ -20,6 +20,7 @@ import com.example.pc.flickr.models.FriendModel;
 import com.example.pc.flickr.models.UserModel;
 import com.example.pc.flickr.services.Connectivity;
 import com.example.pc.flickr.services.FirebaseCurd;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -111,8 +112,9 @@ public class FindFragment extends Fragment {
         private ArrayList<UserModel> arrayList;
 
         class findViewHolder extends RecyclerView.ViewHolder {
-            ImageView friendImageView, addFriendImageView;
+            ImageView addFriendImageView;
             TextView friendNameTextView, friendEmailTextView;
+            SimpleDraweeView friendImageView;
 
             //ProgressBar userListImageViewProgressBar;
             public findViewHolder(View itemView) {
@@ -120,7 +122,7 @@ public class FindFragment extends Fragment {
                 friendNameTextView = (TextView) itemView.findViewById(R.id.find_listItem_name_textView);
                 friendEmailTextView = (TextView) itemView.findViewById(R.id.find_listItem_email_textView);
                 addFriendImageView = (ImageView) itemView.findViewById(R.id.find_listItem_remove_imageView);
-                friendImageView = (ImageView) itemView.findViewById(R.id.find_listItem_avatar_imageView);
+                friendImageView = (SimpleDraweeView) itemView.findViewById(R.id.find_listItem_avatar_imageView);
                 //userListImageViewProgressBar = (ProgressBar) itemView.findViewById(R.id.user_listview_item_poster_progressBar);
             }
         }
@@ -140,7 +142,9 @@ public class FindFragment extends Fragment {
             final UserModel userModel = arrayList.get(position);
             holder.friendNameTextView.setText(userModel.getUserName());
             holder.friendEmailTextView.setText(userModel.getUserEmail());
-            Picasso.with(getContext()).load("" + userModel.getUserImgUrl()).into(holder.friendImageView);
+            holder.friendImageView.setImageURI(userModel.getUserImgUrl()!=null
+                    ?userModel.getUserImgUrl()
+                    :"http://www.africanleadershipawards.com/wp-content/uploads/2017/07/no-avatar-user.jpg");
             holder.addFriendImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
